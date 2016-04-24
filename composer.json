@@ -8,7 +8,7 @@
     "require": {
         "php": ">= 5.5",
         "ganbarodigital/php-http-status": "^1.0",
-        "ganbarodigital/php-mv-exception-helpers": "^v1.2016042401"
+        "ganbarodigital/php-mv-exception-helpers": "^v1.2016042403"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.6",
