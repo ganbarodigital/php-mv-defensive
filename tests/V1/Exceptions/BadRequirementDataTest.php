@@ -46,6 +46,8 @@ namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
+use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
 use stdClass;
@@ -110,12 +112,55 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $obj = new BadRequirementData($method);
+        $unit = new BadRequirementData($method);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof RuntimeException);
+        $this->assertTrue($unit instanceof RuntimeException);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testIsHttpStatusProvider()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $method = __METHOD__;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new BadRequirementData($method);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($unit instanceof HttpStatusProvider);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testMapsToUnprocessableEntity()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $method = __METHOD__;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new BadRequirementData($method);
+        $httpStatus = $unit->getHttpStatus();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($httpStatus instanceof UnprocessableEntityStatus);
     }
 
     /**
@@ -126,10 +171,10 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "Bad requirement data passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest->testCanCreateFromBadRequirementData()@144 by ReflectionMethod->invokeArgs(); must be an array of parameters to the requirement; array received";
+        $expectedMessage = "Bad requirement data passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest->testCanCreateFromBadRequirementData()@189 by ReflectionMethod->invokeArgs(); must be an array of parameters to the requirement; array received";
         $expectedData = [
-            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest', 'testCanCreateFromBadRequirementData', '->', __FILE__, 144),
-            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest->testCanCreateFromBadRequirementData()@144',
+            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest', 'testCanCreateFromBadRequirementData', '->', __FILE__, 189),
+            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest->testCanCreateFromBadRequirementData()@189',
             'caller' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
             'callerName' => 'ReflectionMethod->invokeArgs()',
             'badData' => [],
