@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: index.html
 pageflow_prev_text: Exceptions List
-pageflow_next_url: BadRequirementData.html
-pageflow_next_text: BadRequirementData Class
+pageflow_next_url: BadRequirements.html
+pageflow_next_text: BadRequirements Class
 ---
 
 # BadRequirement
@@ -51,6 +51,20 @@ class BadRequirement
      * @return BadRequirements
      */
     public static function newFromRequirement($requirement, $callerFilter = null);
+
+    /**
+     * what was the data that we used to create the printable message?
+     *
+     * @return array
+     */
+    public function getMessageData();
+
+    /**
+     * what was the format string we used to create the printable message?
+     *
+     * @return string
+     */
+    public function getMessageFormat();
 
     /**
      * which HTTP status code do we map onto?

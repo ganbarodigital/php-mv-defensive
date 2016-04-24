@@ -13,7 +13,7 @@ Not yet in a tagged release
 
 ## Description
 
-`BadRequirementData` is an exception. It is thrown when
+`BadRequirementData` is an exception. It is thrown when data passed into `RequireAllOf` or `RequireAnyOneOf` isn't an array.
 
 ## Public Interface
 
@@ -49,6 +49,20 @@ class BadRequirementData
      * @return BadRequirementData
      */
     public static function newFromRequirementData($badData, $callerFilter = null);
+
+    /**
+     * what was the data that we used to create the printable message?
+     *
+     * @return array
+     */
+    public function getMessageData();
+
+    /**
+     * what was the format string we used to create the printable message?
+     *
+     * @return string
+     */
+    public function getMessageFormat();
 
     /**
      * which HTTP status code do we map onto?
@@ -93,7 +107,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 try {
     throw BadRequirementData::newFromRequirementData([]);
 }
-catch(UnitTestHelpersException $e) {
+catch(DefensiveException $e) {
     // ...
 }
 ```
