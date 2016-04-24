@@ -15,4 +15,6 @@ pageflow_next_text: Contributing
 * Added a way to catch all exceptions thrown by this library
   * Added `DefensiveException`
 * Added a way to apply a list of requirements to a piece of data
-  - Added `BadRequirementData`
+  - Added `BadRequirement` exception
+  - Added `BadRequirements` exception
+  - Added `BadRequirementData` exception
