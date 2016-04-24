@@ -10,4 +10,7 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### New
+
+* Added a way to catch all exceptions thrown by this library
+  * Added `DefensiveException`
