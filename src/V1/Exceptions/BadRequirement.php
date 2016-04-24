@@ -78,7 +78,7 @@ class BadRequirement extends ParameterisedException implements DefensiveExceptio
         $callers = FilterBacktraceForTwoCodeCallers::from($trace, $callerFilter);
 
         // what is the bad data we've had?
-        $type = GetPrintableType::of($requirement);
+        $type = GetPrintableType::of($requirement, GetPrintableType::FLAG_CLASSNAME);
 
         // put it all together
         $exceptionData = [
