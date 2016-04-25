@@ -2,9 +2,9 @@
 currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: BadRequirement.html
-pageflow_prev_text: BadRequirement Class
+pageflow_prev_text: BadRequirement class
 pageflow_next_url: BadRequirementData.html
-pageflow_next_text: BadRequirementData Class
+pageflow_next_text: BadRequirementData class
 ---
 
 # BadRequirements
@@ -68,7 +68,8 @@ class BadRequirements
 
     /**
      * which HTTP status code do we map onto?
-     * @return UnprocessableEntityStatusProvider
+     *
+     * @return UnprocessableEntityStatus
      */
     public function getHttpStatus();
 }
@@ -82,6 +83,9 @@ class BadRequirements
 Call `BadRequirements::newFromRequirementsList()` to create a new throwable exception:
 
 ```php
+// how to import
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+
 throw BadRequirements::newFromRequirementsList(null);
 ```
 

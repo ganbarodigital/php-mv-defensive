@@ -18,5 +18,6 @@ Class | Description
 [`BadRequirement`](BadRequirement.html) | thrown when you pass something that isn't a requirement into one of the [Requirements](../Requirements/index.html) classes
 [`BadRequirements`](BadRequirements.html) | thrown when you pass something that isn't a requirements list into one of the [Requirements](../Requirements/index.html) classes
 [`BadRequirementData`](BadRequirementData.html) | thrown when you pass bad data into one of the [Requirements](../Requirements/index.html) classes
+[`UnsupportedType`](UnsupportedType.html) | thrown when you pass the wrong data type into one of the [Requirements](../Requirements/index.html) classes
 
 Click on the name of an exception to see full details.

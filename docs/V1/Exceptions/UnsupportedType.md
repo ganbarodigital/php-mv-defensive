@@ -1,13 +1,11 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadRequirements.html
-pageflow_prev_text: BadRequirements class
-pageflow_next_url: UnsupportedType.html
-pageflow_next_text: UnsupportedType class
+pageflow_prev_url: BadRequirementData.html
+pageflow_prev_text: BadRequirementData class
 ---
 
-# BadRequirementData
+# UnsupportedType
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,42 +13,46 @@ Not yet in a tagged release
 
 ## Description
 
-`BadRequirementData` is an exception. It is thrown when data passed into `RequireAllOf` or `RequireAnyOneOf` isn't an array.
+`UnsupportedType` is an exception. It is thrown when a variable of the wrong data type is passed into a method.
 
 ## Public Interface
 
-`BadRequirementData` has the following public interface:
+`UnsupportedType` has the following public interface:
 
 ```php
-// BadRequirementData lives in this namespace
+// our namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedType as BaseUnsupportedType;
 use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
 
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 
-class BadRequirementData
-  extends ParameterisedException
+class UnsupportedType
+  extends BaseUnsupportedType
   implements DefensiveException, HttpStatusProvider
 {
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;
 
     /**
-     * creates a new exception about data we could not use as input parameters
-     * for a single Requirement object
+     * create a new exception
      *
-     * @param  mixed $badData
-     *         the data we could not accept
+     * @param  mixed $var
+     *         the variable that has the unsupported type
+     * @param  string $fieldOrVarName
+     *         the name of the input field, PHP variable or function/method
+     *         parameter that contains $data
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final exception message?
      * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
-     * @return BadRequirementData
+     *         are there any namespaces we want to filter out of the call stack?
+     * @return UnsupportedType
+     *         an fully-built exception for you to throw
      */
-    public static function newFromRequirementData($badData, $callerFilter = null);
+    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null);
 
     /**
      * what was the data that we used to create the printable message?
@@ -80,38 +82,38 @@ class BadRequirementData
 
 ### Creating Exceptions To Throw
 
-Call `BadRequirementData::newFromRequirementData()` to create a new throwable exception:
+Call `UnsupportedType::newFromVar()` to create a new throwable exception:
 
 ```php
 // how to import
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 
-throw BadRequirementData::newFromRequirementData([]);
+throw UnsupportedType::newFromVar($data, '\$data');
 ```
 
 ### Catching The Exception
 
-`BadRequirementData` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
+`UnsupportedType` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
 
 ```php
-// example 1: we catch only BadRequirementData exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+// example 1: we catch only UnsupportedType exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw UnsupportedType::newFromVar($data, '\$data');
 }
-catch(BadRequirementData $e) {
+catch(UnsupportedType $e) {
     // ...
 }
 ```
 
 ```php
 // example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw UnsupportedType::newFromVar($data, '\$data');
 }
 catch(DefensiveException $e) {
     // ...
@@ -121,11 +123,11 @@ catch(DefensiveException $e) {
 ```php
 // example 3: catch all exceptions where there was a problem with the
 // parameter(s) passed into the method
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\HttpStatus\Specifications\RequestError;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw UnsupportedType::newFromVar($data, '\$data');
 }
 catch(RequestError $e) {
     $httpStatus = $e->getHttpStatus();
@@ -135,11 +137,11 @@ catch(RequestError $e) {
 
 ```php
 // example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw UnsupportedType::newFromVar($data, '\$data');
 }
 catch(HttpStatusProvider $e) {
     $httpStatus = $e->getHttpStatus();
@@ -149,11 +151,11 @@ catch(HttpStatusProvider $e) {
 
 ```php
 // example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use RuntimeException;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw UnsupportedType::newFromVar($data, '\$data');
 }
 catch(RuntimeException $e) {
     // ...
@@ -166,5 +168,5 @@ None at this time.
 
 ## See Also
 
-* [`ParameterisedException` class](http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/ParameterisedException.html)
+* [`UnsupportedType` class](http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/UnsupportedType.html)
 * [`HttpStatusProvider` interface](http://ganbarodigital.github.io/php-http-status/httpStatusProviders.html)

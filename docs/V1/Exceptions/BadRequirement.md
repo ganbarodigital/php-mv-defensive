@@ -4,7 +4,7 @@ currentItem: exceptions
 pageflow_prev_url: index.html
 pageflow_prev_text: Exceptions List
 pageflow_next_url: BadRequirements.html
-pageflow_next_text: BadRequirements Class
+pageflow_next_text: BadRequirements class
 ---
 
 # BadRequirement
@@ -22,15 +22,15 @@ Not yet in a tagged release
 `BadRequirement` has the following public interface:
 
 ```php
+// BadRequirement lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Exceptions;
+
 // our base class and interface(s)
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
 use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
 
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
-
-// how to import
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 
 class BadRequirement
   extends ParameterisedException
@@ -68,7 +68,8 @@ class BadRequirement
 
     /**
      * which HTTP status code do we map onto?
-     * @return UnprocessableEntityStatusProvider
+     *
+     * @return UnprocessableEntityStatus
      */
     public function getHttpStatus();
 }
@@ -82,6 +83,9 @@ class BadRequirement
 Call `BadRequirement::newFromRequirement()` to create a new throwable exception:
 
 ```php
+// how to import
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
+
 throw BadRequirement::newFromRequirement([]);
 ```
 
