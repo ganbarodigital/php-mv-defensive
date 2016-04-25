@@ -198,4 +198,28 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedMessage, $actualMessage);
         $this->assertEquals($expectedData, $actualData);
     }
+
+    /**
+     * @covers ::newFromRequirementsList
+     */
+    public function testNewFromRequirementsListWillProvideADefaultSetOfCallerFilters()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // we only look for a small amount of data here, because filenames
+        // and line numbers could easily change in the future
+        $expectedThrownBy = new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = BadRequirements::newFromRequirementsList([]);
+        $actualData = $unit->getMessageData();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedThrownBy, $actualData['thrownBy']);
+    }
 }
