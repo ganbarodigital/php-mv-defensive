@@ -171,7 +171,7 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "Bad requirement passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest->testCanCreateFromBadRequirement()@189 by ReflectionMethod->invokeArgs(); must be callable";
+        $expectedMessage = "Bad requirement passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest->testCanCreateFromBadRequirement()@189 by ReflectionMethod->invokeArgs(); must be instance of Requirement";
         $expectedData = [
             'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest', 'testCanCreateFromBadRequirement', '->', __FILE__, 189),
             'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest->testCanCreateFromBadRequirement()@189',

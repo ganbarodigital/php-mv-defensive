@@ -89,7 +89,7 @@ class BadRequirement extends ParameterisedException implements DefensiveExceptio
             "badRequirement" => $requirement,
             "badRequirementType" => $type,
         ];
-        $msg = "Bad requirement passed into %thrownByName\$s by %callerName\$s; must be callable";
+        $msg = "Bad requirement passed into %thrownByName\$s by %callerName\$s; must be instance of Requirement";
 
         // all done
         return new static($msg, $exceptionData);
