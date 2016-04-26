@@ -18,6 +18,8 @@ pageflow_next_text: Contributing
   - Added `UnsupportedType` exception
   - Added `UnsupportedValue` exception
 * Added a way to apply a list of requirements to a piece of data
+  - Added `Requirement` interface
+  - Added `RequireAllOf` customisable function object
   - Added `BadRequirement` exception
   - Added `BadRequirements` exception
   - Added `BadRequirementData` exception
