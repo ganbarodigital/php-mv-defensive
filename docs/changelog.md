@@ -23,4 +23,4 @@ pageflow_next_text: Contributing
   - Added `RequireAnyOneOf` customisable function objects
   - Added `BadRequirement` exception
   - Added `BadRequirements` exception
-  - Added `BadRequirementData` exception
+  - Added `BadRequirementArgs` exception

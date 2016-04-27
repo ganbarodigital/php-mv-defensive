@@ -7,7 +7,7 @@ pageflow_next_url: UnsupportedType.html
 pageflow_next_text: UnsupportedType class
 ---
 
-# BadRequirementData
+# BadRequirementArgs
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,14 +15,14 @@ Not yet in a tagged release
 
 ## Description
 
-`BadRequirementData` is an exception. It is thrown when data passed into `RequireAllOf` or `RequireAnyOneOf` isn't an array.
+`BadRequirementArgs` is an exception. It is thrown when data passed into `RequireAllOf` or `RequireAnyOneOf` isn't an array.
 
 ## Public Interface
 
-`BadRequirementData` has the following public interface:
+`BadRequirementArgs` has the following public interface:
 
 ```php
-// BadRequirementData lives in this namespace
+// BadRequirementArgs lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
@@ -32,7 +32,7 @@ use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 
-class BadRequirementData
+class BadRequirementArgs
   extends ParameterisedException
   implements DefensiveException, HttpStatusProvider
 {
@@ -43,14 +43,14 @@ class BadRequirementData
      * creates a new exception about data we could not use as input parameters
      * for a single Requirement object
      *
-     * @param  mixed $badData
+     * @param  mixed $badArgs
      *         the data we could not accept
      * @param  array|null $callerFilter
      *         a list of classnames or partial namespaces to avoid
      *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
-     * @return BadRequirementData
+     * @return BadRequirementArgs
      */
-    public static function newFromRequirementData($badData, $callerFilter = null);
+    public static function newFromRequirementArgs($badArgs, $callerFilter = null);
 
     /**
      * what was the data that we used to create the printable message?
@@ -80,38 +80,38 @@ class BadRequirementData
 
 ### Creating Exceptions To Throw
 
-Call `BadRequirementData::newFromRequirementData()` to create a new throwable exception:
+Call `BadRequirementArgs::newFromRequirementArgs()` to create a new throwable exception:
 
 ```php
 // how to import
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 
-throw BadRequirementData::newFromRequirementData([]);
+throw BadRequirementArgs::newFromRequirementArgs([]);
 ```
 
 ### Catching The Exception
 
-`BadRequirementData` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
+`BadRequirementArgs` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
 
 ```php
-// example 1: we catch only BadRequirementData exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+// example 1: we catch only BadRequirementArgs exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
-catch(BadRequirementData $e) {
+catch(BadRequirementArgs $e) {
     // ...
 }
 ```
 
 ```php
 // example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(DefensiveException $e) {
     // ...
@@ -121,11 +121,11 @@ catch(DefensiveException $e) {
 ```php
 // example 3: catch all exceptions where there was a problem with the
 // parameter(s) passed into the method
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\HttpStatus\Specifications\RequestError;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(RequestError $e) {
     $httpStatus = $e->getHttpStatus();
@@ -135,11 +135,11 @@ catch(RequestError $e) {
 
 ```php
 // example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(HttpStatusProvider $e) {
     $httpStatus = $e->getHttpStatus();
@@ -149,11 +149,11 @@ catch(HttpStatusProvider $e) {
 
 ```php
 // example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use RuntimeException;
 
 try {
-    throw BadRequirementData::newFromRequirementData([]);
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(RuntimeException $e) {
     // ...

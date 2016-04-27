@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: BadRequirement.html
 pageflow_prev_text: BadRequirement class
-pageflow_next_url: BadRequirementData.html
-pageflow_next_text: BadRequirementData class
+pageflow_next_url: BadRequirementArgs.html
+pageflow_next_text: BadRequirementArgs class
 ---
 
 # BadRequirements

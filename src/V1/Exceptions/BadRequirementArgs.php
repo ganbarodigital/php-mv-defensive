@@ -50,7 +50,7 @@ use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
 use GanbaroDigital\HttpStatus\StatusProviders\RequestError\UnprocessableEntityStatusProvider;
 use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
 
-class BadRequirementData extends ParameterisedException implements DefensiveException, HttpStatusProvider
+class BadRequirementArgs extends ParameterisedException implements DefensiveException, HttpStatusProvider
 {
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;
@@ -66,7 +66,7 @@ class BadRequirementData extends ParameterisedException implements DefensiveExce
      *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
      * @return BadRequirementData
      */
-    public static function newFromRequirementData($badData, $callerFilter = null)
+    public static function newFromRequirementArgs($badArgs, $callerFilter = null)
     {
         // do we need to provide a filter?
         if (!is_array($callerFilter)) {
@@ -77,8 +77,8 @@ class BadRequirementData extends ParameterisedException implements DefensiveExce
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
         $callers = FilterBacktraceForTwoCodeCallers::from($trace, $callerFilter);
 
-        // what is the bad data we've had?
-        $type = GetPrintableType::of($badData, GetPrintableType::FLAG_CLASSNAME);
+        // what kind of data did we get instead of an array?
+        $type = GetPrintableType::of($badArgs, GetPrintableType::FLAG_CLASSNAME);
 
         // put it all together
         $exceptionData = [
@@ -86,10 +86,10 @@ class BadRequirementData extends ParameterisedException implements DefensiveExce
             "thrownByName" => $callers[0]->getCaller(),
             "caller" => $callers[1],
             "callerName" => $callers[1]->getCaller(),
-            "badData" => $badData,
-            "badDataType" => $type,
+            "badArgs" => $badArgs,
+            "badArgsType" => $type,
         ];
-        $msg = "Bad requirement data passed into %thrownByName\$s by %callerName\$s; must be an array of parameters to the requirement; %badDataType\$s received";
+        $msg = "Bad requirement arguments passed into %thrownByName\$s by %callerName\$s; must be an array of parameters to the requirement; %badArgsType\$s received";
         return new static($msg, $exceptionData);
     }
 }

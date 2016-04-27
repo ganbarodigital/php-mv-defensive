@@ -45,7 +45,7 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Specifications\Requirement;
 
@@ -59,7 +59,7 @@ class RequireAllOf implements Requirement
     static public $DEFAULT_EXCEPTIONS = [
         'BadRequirement' => [ BadRequirement::class, 'newFromRequirement' ],
         'BadRequirements' => [ BadRequirements::class, 'newFromRequirementsList' ],
-        'BadRequirementData' => [ BadRequirementData::class, 'newFromRequirementData' ],
+        'BadRequirementArgs' => [ BadRequirementArgs::class, 'newFromRequirementData' ],
         'UnsupportedType' => [ UnsupportedType::class, 'newFromVar' ],
     ];
 

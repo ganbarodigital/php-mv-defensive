@@ -43,7 +43,7 @@
 
 namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
@@ -53,9 +53,9 @@ use RuntimeException;
 use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs
  */
-class BadRequirementDataTest extends PHPUnit_Framework_TestCase
+class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -70,12 +70,12 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementData($method);
+        $unit = new BadRequirementArgs($method);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(BadRequirementData::class, $unit);
+        $this->assertInstanceOf(BadRequirementArgs::class, $unit);
     }
 
     /**
@@ -91,7 +91,7 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementData($method);
+        $unit = new BadRequirementArgs($method);
 
         // ----------------------------------------------------------------
         // test the results
@@ -112,7 +112,7 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementData($method);
+        $unit = new BadRequirementArgs($method);
 
         // ----------------------------------------------------------------
         // test the results
@@ -133,7 +133,7 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementData($method);
+        $unit = new BadRequirementArgs($method);
 
         // ----------------------------------------------------------------
         // test the results
@@ -154,7 +154,7 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementData($method);
+        $unit = new BadRequirementArgs($method);
         $httpStatus = $unit->getHttpStatus();
 
         // ----------------------------------------------------------------
@@ -164,21 +164,21 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::newFromRequirementData
+     * @covers ::newFromRequirementArgs
      */
-    public function testCanCreateFromBadRequirementData()
+    public function testCanCreateFromBadRequirementArgs()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "Bad requirement data passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest->testCanCreateFromBadRequirementData()@189 by ReflectionMethod->invokeArgs(); must be an array of parameters to the requirement; array received";
+        $expectedMessage = "Bad requirement arguments passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementArgsTest->testCanCreateFromBadRequirementArgs()@189 by ReflectionMethod->invokeArgs(); must be an array of parameters to the requirement; NULL received";
         $expectedData = [
-            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest', 'testCanCreateFromBadRequirementData', '->', __FILE__, 189),
-            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementDataTest->testCanCreateFromBadRequirementData()@189',
+            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementArgsTest', 'testCanCreateFromBadRequirementArgs', '->', __FILE__, 189),
+            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementArgsTest->testCanCreateFromBadRequirementArgs()@189',
             'caller' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
             'callerName' => 'ReflectionMethod->invokeArgs()',
-            'badData' => [],
-            'badDataType' => 'array',
+            'badArgs' => null,
+            'badArgsType' => 'NULL',
         ];
 
         // ----------------------------------------------------------------
@@ -186,8 +186,8 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
 
         // we have to pass in an empty filter here, because the default filter
         // filters out 'Exceptions', which is one of our namespaces
-        $unit = BadRequirementData::newFromRequirementData([],[]);
-        $this->assertInstanceOf(BadRequirementData::class, $unit);
+        $unit = BadRequirementArgs::newFromRequirementArgs(null,[]);
+        $this->assertInstanceOf(BadRequirementArgs::class, $unit);
 
         $actualMessage = $unit->getMessage();
         $actualData = $unit->getMessageData();
@@ -200,7 +200,7 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::newFromRequirementData
+     * @covers ::newFromRequirementArgs
      */
     public function testNewFromRequirementDataWillProvideADefaultSetOfCallerFilters()
     {
@@ -214,7 +214,7 @@ class BadRequirementDataTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = BadRequirementData::newFromRequirementData([]);
+        $unit = BadRequirementArgs::newFromRequirementArgs([]);
         $actualData = $unit->getMessageData();
 
         // ----------------------------------------------------------------
