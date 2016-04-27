@@ -10,7 +10,7 @@ pageflow_next_text: Installation
 
 ## Copyright Notice
 
-Copyright (c) 2016-present, Ganbaro Digital Ltd.
+Copyright (c) 2015-present, Ganbaro Digital Ltd.
 Registered in England and Wales. Company Number 9394118.
 
 All rights reserved.
