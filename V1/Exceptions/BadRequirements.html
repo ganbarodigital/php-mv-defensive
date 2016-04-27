@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Defensive Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-defensive/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Defensive Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers to improve the robustness of your code</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-defensive/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-defensive/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Contracts/index.html">Contracts</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="BadRequirement.html">Prev: BadRequirement class</a></li>
+                                                      <li><a href="BadRequirementData.html">Next: BadRequirementData class</a></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="badrequirements">BadRequirements</h1>
+<div class="callout warning">
+<p>Not yet in a tagged release</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>BadRequirements</code> is an exception. It is thrown when the list of requirements passed into <code>RequireAllOf</code> or <code>RequireAnyOneOf</code> isn't an actual list.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>BadRequirements</code> has the following public interface:</p>
+<pre><code class="language-php">// BadRequirements lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Exceptions;
+
+// our base class and interface(s)
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
+use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+
+// return types from our method(s)
+use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
+
+class BadRequirements
+  extends ParameterisedException
+  implements DefensiveException, HttpStatusProvider
+{
+    // we map onto HTTP 422
+    use UnprocessableEntityStatusProvider;
+
+    /**
+     * create a new exception from the requirements list that has been
+     * rejected
+     *
+     * @param  mixed $list
+     *         the requirements list that has been rejected
+     * @param  array|null $callerFilter
+     *         a list of classnames or partial namespaces to avoid
+     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
+     * @return BadRequirements
+     */
+    public static function newFromRequirementsList($list, $callerFilter = null);
+
+    /**
+     * what was the data that we used to create the printable message?
+     *
+     * @return array
+     */
+    public function getMessageData();
+
+    /**
+     * what was the format string we used to create the printable message?
+     *
+     * @return string
+     */
+    public function getMessageFormat();
+
+    /**
+     * which HTTP status code do we map onto?
+     *
+     * @return UnprocessableEntityStatus
+     */
+    public function getHttpStatus();
+}
+</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<h3 id="creating-exceptions-to-throw">Creating Exceptions To Throw</h3>
+<p>Call <code>BadRequirements::newFromRequirementsList()</code> to create a new throwable exception:</p>
+<pre><code class="language-php">// how to import
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+
+throw BadRequirements::newFromRequirementsList(null);</code></pre>
+<h3 id="catching-the-exception">Catching The Exception</h3>
+<p><code>BadRequirements</code> extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.</p>
+<pre><code class="language-php">// example 1: we catch only BadRequirements exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+
+try {
+    throw BadRequirements::newFromRequirementsList(null);
+}
+catch(BadRequirements $e) {
+    // ...
+}</code></pre>
+<pre><code class="language-php">// example 2: catch all exceptions thrown by the Defensive Library
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
+
+try {
+    throw BadRequirements::newFromRequirementsList(null);
+}
+catch(DefensiveException $e) {
+    // ...
+}</code></pre>
+<pre><code class="language-php">// example 3: catch all exceptions where there was a problem with the
+// parameter(s) passed into the method
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+use GanbaroDigital\HttpStatus\Specifications\RequestError;
+
+try {
+    throw BadRequirements::newFromRequirementsList(null);
+}
+catch(RequestError $e) {
+    $httpStatus = $e-&gt;getHttpStatus();
+    // ...
+}</code></pre>
+<pre><code class="language-php">// example 4: catch all exceptions that map onto a HTTP status
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+
+try {
+    throw BadRequirements::newFromRequirementsList(null);
+}
+catch(HttpStatusProvider $e) {
+    $httpStatus = $e-&gt;getHttpStatus();
+    // ...
+}</code></pre>
+<pre><code class="language-php">// example 5: catch all runtime exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+use RuntimeException;
+
+try {
+    throw BadRequirements::newFromRequirementsList(null);
+}
+catch(RuntimeException $e) {
+    // ...
+}</code></pre>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/ParameterisedException.html"><code>ParameterisedException</code> class</a></li>
+<li><a href="http://ganbarodigital.github.io/php-http-status/httpStatusProviders.html"><code>HttpStatusProvider</code> interface</a></li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="BadRequirement.html">Prev: BadRequirement class</a></li>
+                                                      <li><a href="BadRequirementData.html">Next: BadRequirementData class</a></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.
+                                            Find Defensive Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-defensive">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/ishi.js"></script>
+    </body>
+</html>

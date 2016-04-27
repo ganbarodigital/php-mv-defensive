@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Defensive Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-defensive/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Defensive Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers to improve the robustness of your code</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-defensive/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-defensive/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Contracts/index.html">Contracts</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Overview</a></li>
+                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="requireallof">RequireAllOf</h1>
+<div class="callout warning">
+<p>Not yet in a tagged release</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>RequireAllOf</code> allows you to apply a list of requirements to a piece of data. If any of the requirements are not met, an exception is thrown.</p>
+<p><code>RequireAllOf</code> is a customisable function object.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>RequireAllOf</code> has the following public interface:</p>
+<pre><code class="language-php">// RequireAllOf lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Requirements;
+
+// RequireAllOf is a Requirement
+use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+
+class RequireAllOf implements Requirement
+{
+    /**
+     * create a Requirement that is ready to execute
+     *
+     * @param array $requirements
+     *        a list of the requirements to apply
+     * @param array $exception
+     *        the functions to call when we want to throw an exception
+     * @return RequireAllOf
+     */
+    public static function apply($requirements, $exceptions = null);
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * @param  mixed $data
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @param  array|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return void
+     */
+    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * @param  mixed $data
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @param  array|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = "value", $exceptions = null);
+}</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<h3 id="applying-requirements">Applying Requirements</h3>
+<p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
+<pre><code class="language-php">$requirements = [
+    // a list of objects that implement the 'Requirement' interface
+];
+RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
+<p>Use <code>RequireAllOf</code> to enforce robustness in your library's public API:</p>
+<pre><code class="language-php">function doSomething($arg1)
+{
+    // robustness!
+    $requirements = [
+        new RequireIndexable(),
+        new RequireNotEmpty()
+    ];
+    RequireAllOf::apply($requirements)-&gt;to($arg1, '\$arg1');
+
+    // if we get here, then $arg1 is good
+}</code></pre>
+<p>If any of the requirements aren't met, the requirement will throw an exception.</p>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Overview</a></li>
+                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.
+                                            Find Defensive Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-defensive">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/ishi.js"></script>
+    </body>
+</html>
