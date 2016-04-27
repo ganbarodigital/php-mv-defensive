@@ -1,13 +1,11 @@
 ---
 currentSection: v1
 currentItem: requirements
-pageflow_prev_url: index.html
-pageflow_prev_text: Overview
-pageflow_next_url: RequireAnyOneOf.html
-pageflow_next_text: RequireAnyOneOf class
+pageflow_prev_url: RequireAllOf.html
+pageflow_prev_text: RequireAllOf class
 ---
 
-# RequireAllOf
+# RequireAnyOneOf
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,22 +13,22 @@ Not yet in a tagged release
 
 ## Description
 
-`RequireAllOf` allows you to apply a list of requirements to a piece of data. If any of the requirements are not met, an exception is thrown.
+`RequireAnyOneOf` allows you to apply a list of requirements to a piece of data. If none of the requirements are met, an exception is thrown.
 
-`RequireAllOf` is a customisable function object.
+`RequireAnyOneOf` is a customisable function object.
 
 ## Public Interface
 
-`RequireAllOf` has the following public interface:
+`RequireAnyOneOf` has the following public interface:
 
 ```php
-// RequireAllOf lives in this namespace
+// RequireAnyOneOf lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-// RequireAllOf is a Requirement
+// RequireAnyOneOf is a Requirement
 use GanbaroDigital\Defensive\V1\Specifications\Requirement;
 
-class RequireAllOf implements Requirement
+class RequireAnyOneOf implements Requirement
 {
     /**
      * create a Requirement that is ready to execute
@@ -39,12 +37,12 @@ class RequireAllOf implements Requirement
      *        a list of the requirements to apply
      * @param array $exception
      *        the functions to call when we want to throw an exception
-     * @return RequireAllOf
+     * @return RequireAnyOneOf
      */
     public static function apply($requirements, $exceptions = null);
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if none of our requirements are met
      *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
@@ -57,7 +55,7 @@ class RequireAllOf implements Requirement
     public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if none of our requirements are met
      *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
@@ -81,26 +79,26 @@ Use the `::apply()->to()` pattern:
 $requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireAllOf::apply($requirements)->to($data, '\$data');
+RequireAnyOneOf::apply($requirements)->to($data, '\$data');
 ```
 
-Use `RequireAllOf` to enforce robustness in your library's public API:
+Use `RequireAnyOneOf` to enforce robustness in your library's public API:
 
 ```php
 function doSomething($arg1)
 {
     // robustness!
     $requirements = [
-        new RequireIndexable(),
-        new RequireNotEmpty()
+        new RequireString(),
+        new RequireNull()
     ];
-    RequireAllOf::apply($requirements)->to($arg1, '\$arg1');
+    RequireAnyOneOf::apply($requirements)->to($arg1, '\$arg1');
 
     // if we get here, then $arg1 is good
 }
 ```
 
-If any of the requirements aren't met, the requirement will throw an exception.
+If none of the requirements are met, `RequireAnyOneOf` will throw an exception.
 
 ## Notes
 

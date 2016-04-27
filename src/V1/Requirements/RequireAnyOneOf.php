@@ -47,9 +47,10 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementData;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
 use GanbaroDigital\Defensive\V1\Specifications\Requirement;
 
-class RequireAllOf implements Requirement
+class RequireAnyOneOf implements Requirement
 {
     /**
      * our list of default exceptions to use
@@ -60,8 +61,15 @@ class RequireAllOf implements Requirement
         'BadRequirement' => [ BadRequirement::class, 'newFromRequirement' ],
         'BadRequirements' => [ BadRequirements::class, 'newFromRequirementsList' ],
         'BadRequirementData' => [ BadRequirementData::class, 'newFromRequirementData' ],
-        'UnsupportedType' => [ UnsupportedType::class, 'newFromVar' ],
+        'UnsupportedValue' => [ UnsupportedValue::class, 'newFromVar' ]
     ];
+
+    /**
+     * the requirements to apply
+     *
+     * @var array<Requirement>
+     */
+    private $requirements = [];
 
     /**
      * create a Requirement that is ready to execute
@@ -110,7 +118,7 @@ class RequireAllOf implements Requirement
     }
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if none of our requirements are met
      *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
@@ -126,7 +134,7 @@ class RequireAllOf implements Requirement
     }
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if none of our requirements are met
      *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
@@ -151,8 +159,17 @@ class RequireAllOf implements Requirement
             // ask the requirement if it has been met
             //
             // it is the responsibility of the requirement to throw an exception
-            // if the requirement is not met
-            call_user_func_array($requirement, $args);
+            // if the requirement has not been met
+            try {
+                call_user_func_array($requirement, $args);
+                return;
+            }
+            catch (\Exception $e) {
+                // requirement not met ... continue
+            }
         }
+
+        // if we get here, our requirements are not met :(
+        throw $exceptions['UnsupportedValue']($data, $fieldOrVarName);
     }
 }

@@ -20,6 +20,8 @@ Interface | Description
 ------|------------
 [`Requirement`](Requirement.html) | interface for all requirements to implement
 
+Click on the name of an interface to see full details.
+
 ## Available Classes
 
 Class | Description
@@ -28,4 +30,4 @@ Class | Description
 [`RequireAllOf`](RequireAllOf.html) | a value must meet all the requirements in the list
 [`RequireAnyOneOf`](RequireAnyOneOf.html) | a value must meet at least one of the requirements in the list
 
-Click on the name of an exception to see full details.
+Click on the name of a class to see full details.
