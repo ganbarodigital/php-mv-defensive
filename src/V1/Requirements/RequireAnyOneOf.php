@@ -62,6 +62,13 @@ class RequireAnyOneOf implements Requirement
     private $requirements = [];
 
     /**
+     * the exceptions to use
+     *
+     * @var FactoryList
+     */
+    private $exceptions;
+
+    /**
      * create a Requirement that is ready to execute
      *
      * @param array $requirements
@@ -75,6 +82,7 @@ class RequireAnyOneOf implements Requirement
         if (!is_array($exceptions)) {
             $exceptions = new DefensiveExceptions;
         }
+        $this->exceptions = $exceptions;
 
         // we do not use Reflections RequireTraversable here because then
         // Reflections cannot depend upon this library
@@ -114,13 +122,11 @@ class RequireAnyOneOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", FactoryList $exceptions = null)
+    public function __invoke($data, $fieldOrVarName = "value")
     {
-        return $this->to($data, $fieldOrVarName, $exceptions);
+        return $this->to($data, $fieldOrVarName);
     }
 
     /**
@@ -130,19 +136,12 @@ class RequireAnyOneOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", FactoryList $exceptions = null)
+    public function to($data, $fieldOrVarName = "value")
     {
-        // make sure we have exceptions to use
-        if (!is_array($exceptions)) {
-            $exceptions = new DefensiveExceptions;
-        }
-
         // what are we passing into our requirements?
-        $args = [$data, $fieldOrVarName, $exceptions];
+        $args = [$data, $fieldOrVarName];
 
         // are any of our requirements met?
         foreach ($this->requirements as $requirement) {
@@ -160,6 +159,6 @@ class RequireAnyOneOf implements Requirement
         }
 
         // if we get here, our requirements are not met :(
-        throw $exceptions['UnsupportedValue::newFromVar']($data, $fieldOrVarName);
+        throw $this->exceptions['UnsupportedValue::newFromVar']($data, $fieldOrVarName);
     }
 }

@@ -54,11 +54,9 @@ interface Requirement
      *         the data to be examined
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", FactoryList $exceptions = null);
+    public function __invoke($data, $fieldOrVarName = "value");
 
     /**
      * throws exception if our requirement is not met
@@ -67,9 +65,7 @@ interface Requirement
      *         the data to be examined
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", FactoryList $exceptions = null);
+    public function to($data, $fieldOrVarName = "value");
 }
