@@ -94,4 +94,34 @@ class BadRequirements
         $msg = "Bad requirements passed into %thrownByName\$s by %callerName\$s; must be an array of callables";
         return new static($msg, $exceptionData);
     }
+
+    /**
+     * create a new exception when we've been given an empty list to work with
+     *
+     * @param  array|null $callerFilter
+     *         a list of classnames or partial namespaces to avoid
+     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
+     * @return BadRequirements
+     */
+    public static function newFromEmptyList($callerFilter = null)
+    {
+        // do we need to provide a filter?
+        if (!is_array($callerFilter)) {
+            $callerFilter = FilterCodeCaller::$DEFAULT_PARTIALS;
+        }
+
+        // who called us?
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $callers = FilterBacktraceForTwoCodeCallers::from($trace, $callerFilter);
+
+        // put it all together
+        $exceptionData = [
+            "thrownBy" => $callers[0],
+            "thrownByName" => $callers[0]->getCaller(),
+            "caller" => $callers[1],
+            "callerName" => $callers[1]->getCaller(),
+        ];
+        $msg = "Bad requirements passed into %thrownByName\$s by %callerName\$s; empty array provided";
+        return new static($msg, $exceptionData);
+    }
 }

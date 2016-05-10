@@ -72,19 +72,8 @@ class RequireAllOf implements Requirement
         }
         $this->exceptions = $exceptions;
 
-        // we do not use Reflections RequireTraversable here because then
-        // Reflections cannot depend upon this library
-        if (!is_array($requirements)) {
-            throw $exceptions['BadRequirements']($requirements);
-        }
-        if (empty($requirements)) {
-            throw $exceptions['BadRequirements']($requirements);
-        }
-        foreach ($requirements as $requirement) {
-            if (!$requirement instanceof Requirement) {
-                throw $exceptions['BadRequirement']($requirement);
-            }
-        }
+        // robustness
+        RequireValidRequirements::apply($exceptions)->to($requirements);
 
         // we're good (for now)
         $this->requirements = $requirements;

@@ -20,7 +20,8 @@ pageflow_next_text: Contributing
 * Added a way to apply a list of requirements to a piece of data
   - Added `Requirement` interface
   - Added `RequireAllOf` customisable function object
-  - Added `RequireAnyOneOf` customisable function objects
+  - Added `RequireAnyOneOf` customisable function object
+  - Added `RequireValidRequirements` customisable function object
   - Added `BadRequirement` exception
   - Added `BadRequirements` exception
   - Added `BadRequirementArgs` exception

@@ -45,109 +45,86 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
-use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireAnyOneOf implements Requirement
+class RequireValidRequirements implements Requirement
 {
     /**
-     * the requirements to apply
-     *
-     * @var array<Requirement>
-     */
-    private $requirements = [];
-
-    /**
-     * the exceptions to use
+     * the exceptions we should throw
      *
      * @var FactoryList
      */
-    private $exceptions;
+    protected $exceptions;
 
     /**
      * create a Requirement that is ready to execute
      *
-     * @param array $requirements
-     *        a list of the requirements to apply
-     * @param FactoryList|null $exceptions
-     *        the functions to call when we want to throw an exception
+     * @param  FactoryList|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return RequireValidRequirements
      */
-    public function __construct($requirements, FactoryList $exceptions = null)
+    public function __construct(FactoryList $exceptions = null)
     {
         // make sure we have exceptions to use
-        if (!is_array($exceptions)) {
+        if ($exceptions === null) {
             $exceptions = new DefensiveExceptions;
         }
         $this->exceptions = $exceptions;
+    }
 
-        // robustness
-        RequireValidRequirements::apply()->to($requirements);
-
-        // we're good (for now)
-        $this->requirements = $requirements;
+    /**
+     * make sure that we have a list of valid requirements to work with
+     *
+     * @param array $requirements
+     *        the list of requirements to check
+     * @param string $fieldOrVarName
+     *        what is the name of $data in the calling code?
+     * @return void
+     */
+    public function __invoke($requirements, $fieldOrVarName = "value")
+    {
+        return $this->to($requirements, $fieldOrVarName);
     }
 
     /**
      * create a Requirement that is ready to execute
      *
+     * @param  FactoryList|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return RequireValidRequirements
+     */
+    public static function apply(FactoryList $exceptions = null)
+    {
+        return new static($exceptions);
+    }
+
+    /**
+     * make sure that we have a list of valid requirements to work with
+     *
      * @param array $requirements
-     *        a list of the requirements to apply
-     * @param FactoryList $exceptions
-     *        the functions to call when we want to throw an exception
-     */
-    public static function apply($requirements, FactoryList $exceptions = null)
-    {
-        return new static($requirements, $exceptions);
-    }
-
-    /**
-     * throws exception if none of our requirements are met
-     *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *        the list of requirements to check
+     * @param string $fieldOrVarName
+     *        what is the name of $data in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value")
+    public function to($requirements, $fieldOrVarName = "value")
     {
-        return $this->to($data, $fieldOrVarName);
-    }
-
-    /**
-     * throws exception if none of our requirements are met
-     *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function to($data, $fieldOrVarName = "value")
-    {
-        // what are we passing into our requirements?
-        $args = [$data, $fieldOrVarName];
-
-        // are any of our requirements met?
-        foreach ($this->requirements as $requirement) {
-            // ask the requirement if it has been met
-            //
-            // it is the responsibility of the requirement to throw an exception
-            // if the requirement has not been met
-            try {
-                call_user_func_array($requirement, $args);
-                return;
-            }
-            catch (\Exception $e) {
-                // requirement not met ... continue
+        // we do not use Reflections RequireTraversable here because then
+        // Reflections cannot depend upon this library
+        if (!is_array($requirements)) {
+            throw $this->exceptions['BadRequirements::newFromRequirementsList']($requirements, $fieldOrVarName);
+        }
+        if (empty($requirements)) {
+            throw $this->exceptions['BadRequirements::newFromEmptyList']($requirements, $fieldOrVarName);
+        }
+        foreach ($requirements as $requirement) {
+            if (!$requirement instanceof Requirement) {
+                throw $this->exceptions['BadRequirement::newFromRequirement']($requirement, $fieldOrVarName);
             }
         }
-
-        // if we get here, our requirements are not met :(
-        throw $this->exceptions['UnsupportedValue::newFromVar']($data, $fieldOrVarName);
     }
 }

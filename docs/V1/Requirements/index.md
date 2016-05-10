@@ -29,5 +29,6 @@ Class | Description
 [`ComposableRequirement`](ComposableRequirement.html) | convert a partial requirement into one that could be composable
 [`RequireAllOf`](RequireAllOf.html) | a value must meet all the requirements in the list
 [`RequireAnyOneOf`](RequireAnyOneOf.html) | a value must meet at least one of the requirements in the list
+[`RequireValidRequirements`](RequireValidRequirements.html) | a value must be a list of requirements
 
 Click on the name of a class to see full details.

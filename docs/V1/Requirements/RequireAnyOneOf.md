@@ -3,6 +3,8 @@ currentSection: v1
 currentItem: requirements
 pageflow_prev_url: RequireAllOf.html
 pageflow_prev_text: RequireAllOf class
+pageflow_next_url: RequireValidRequirements.html
+pageflow_next_text: RequireValidRequirements class
 ---
 
 # RequireAnyOneOf
