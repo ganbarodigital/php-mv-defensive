@@ -34,14 +34,16 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Specifications
+ * @package   Defensive/V1/Interfaces
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigital\Defensive\V1\Specifications;
+namespace GanbaroDigital\Defensive\V1\Interfaces;
+
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 interface Requirement
 {
@@ -52,11 +54,11 @@ interface Requirement
      *         the data to be examined
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
+     * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+    public function __invoke($data, $fieldOrVarName = "value", FactoryList $exceptions = null);
 
     /**
      * throws exception if our requirement is not met
@@ -65,9 +67,9 @@ interface Requirement
      *         the data to be examined
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
+     * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null);
+    public function to($data, $fieldOrVarName = "value", FactoryList $exceptions = null);
 }
