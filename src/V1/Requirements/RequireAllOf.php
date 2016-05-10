@@ -43,39 +43,25 @@
 
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 class RequireAllOf implements Requirement
 {
-    /**
-     * our list of default exceptions to use
-     *
-     * @var array
-     */
-    static public $DEFAULT_EXCEPTIONS = [
-        'BadRequirement' => [ BadRequirement::class, 'newFromRequirement' ],
-        'BadRequirements' => [ BadRequirements::class, 'newFromRequirementsList' ],
-        'BadRequirementArgs' => [ BadRequirementArgs::class, 'newFromRequirementData' ],
-        'UnsupportedType' => [ UnsupportedType::class, 'newFromVar' ],
-    ];
-
     /**
      * create a Requirement that is ready to execute
      *
      * @param array $requirements
      *        a list of the requirements to apply
-     * @param array $exception
+     * @param FactoryList|null $exceptions
      *        the functions to call when we want to throw an exception
      */
-    public function __construct($requirements, $exceptions = null)
+    public function __construct($requirements, FactoryList $exceptions = null)
     {
         // make sure we have exceptions to use
         if (!is_array($exceptions)) {
-            $exceptions = self::$DEFAULT_EXCEPTIONS;
+            $exceptions = new DefensiveExceptions;
         }
 
         // we do not use Reflections RequireTraversable here because then
@@ -101,10 +87,10 @@ class RequireAllOf implements Requirement
      *
      * @param array $requirements
      *        a list of the requirements to apply
-     * @param array $exception
+     * @param FactoryList|null $exception
      *        the functions to call when we want to throw an exception
      */
-    public static function apply($requirements, $exceptions = null)
+    public static function apply($requirements, FactoryList $exceptions = null)
     {
         return new static($requirements, $exceptions);
     }
@@ -116,11 +102,11 @@ class RequireAllOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
+     * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null)
+    public function __invoke($data, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         return $this->to($data, $fieldOrVarName, $exceptions);
     }
@@ -132,15 +118,15 @@ class RequireAllOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
+     * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null)
+    public function to($data, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         // make sure we have exceptions to use
         if (!is_array($exceptions)) {
-            $exceptions = self::$DEFAULT_EXCEPTIONS;
+            $exceptions = new DefensiveExceptions;
         }
 
         // what are we passing into our requirements?

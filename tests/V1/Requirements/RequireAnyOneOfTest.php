@@ -45,9 +45,10 @@ namespace GanbaroDigitalTest\Defensive\V1\Requirements;
 
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Requirements\RequireAnyOneOf;
-use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use PHPUnit_Framework_TestCase;
 use stdClass;
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 /**
  * @coversDefaultClass GanbaroDigital\Defensive\V1\Requirements\RequireAnyOneOf
@@ -286,12 +287,12 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
 
 class RequireAnyOneOfTest_RequireNull implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", $exceptions = null)
+    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         return $this->to($item, $fieldOrVarName, $exceptions);
     }
 
-    public function to($item, $fieldOrVarName = "value", $exceptions = null)
+    public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         if (!is_null($item)) {
             throw new \RuntimeException("item is not null");
@@ -301,12 +302,12 @@ class RequireAnyOneOfTest_RequireNull implements Requirement
 
 class RequireAnyOneOfTest_RequireNumeric implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", $exceptions = null)
+    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         return $this->to($item, $fieldOrVarName, $exceptions);
     }
 
-    public function to($item, $fieldOrVarName = "value", $exceptions = null)
+    public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         if(!is_numeric($item)) {
             throw new \RuntimeException("item is not numeric");
@@ -316,12 +317,12 @@ class RequireAnyOneOfTest_RequireNumeric implements Requirement
 
 class RequireAnyOneOfTest_RequireString implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", $exceptions = null)
+    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         return $this->to($item, $fieldOrVarName, $exceptions);
     }
 
-    public function to($item, $fieldOrVarName = "value", $exceptions = null)
+    public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
         if (!is_string($item)) {
             throw new \RuntimeException("item is not a string");

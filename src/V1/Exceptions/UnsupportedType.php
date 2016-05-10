@@ -45,6 +45,8 @@ namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedType as BaseUnsupportedType;
 
-class UnsupportedType extends BaseUnsupportedType implements DefensiveException
+class UnsupportedType
+  extends BaseUnsupportedType
+  implements DefensiveException
 {
 }

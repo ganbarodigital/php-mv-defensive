@@ -45,6 +45,8 @@ namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue as BaseUnsupportedValue;
 
-class UnsupportedValue extends BaseUnsupportedValue implements DefensiveException
+class UnsupportedValue
+  extends BaseUnsupportedValue
+  implements DefensiveException
 {
 }

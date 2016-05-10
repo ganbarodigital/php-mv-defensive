@@ -46,11 +46,13 @@ namespace GanbaroDigital\Defensive\V1\Exceptions;
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterBacktraceForTwoCodeCallers;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RequestError\UnprocessableEntityStatusProvider;
 use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
 
-class BadRequirementArgs extends ParameterisedException implements DefensiveException, HttpStatusProvider
+class BadRequirementArgs
+  extends ParameterisedException
+  implements DefensiveException, HttpRequestErrorException
 {
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;

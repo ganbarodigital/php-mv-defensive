@@ -46,7 +46,7 @@ namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpStatusProvider;
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
