@@ -26,7 +26,7 @@ Use `RequireValidRequirements` to ensure that you have a list that only contains
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
 // RequireValidRequirements is a Requirement
-use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
 class RequireValidRequirements implements Requirement
 {
