@@ -25,3 +25,5 @@ pageflow_next_text: Contributing
   - Added `BadRequirement` exception
   - Added `BadRequirements` exception
   - Added `BadRequirementArgs` exception
+* Added a way to make any `callable` into a `Requirement`
+  - Added `ComposableRequirement` customisable function object
