@@ -11,7 +11,7 @@ pageflow_next_text: BadRequirement class
 
 These are the exceptions that this library can throw.
 
-## Available Classes
+## Exceptions List
 
 Class | Description
 ------|------------
@@ -20,5 +20,9 @@ Class | Description
 [`BadRequirementArgs`](BadRequirementArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Requirements](../Requirements/index.html) classes
 [`UnsupportedType`](UnsupportedType.html) | thrown when you pass the wrong data type into one of the [Requirements](../Requirements/index.html) classes
 [`UnsupportedValue`](UnsupportedValue.html) | thrown when you pass in a parameter that has the right data type, but a value that can't be accepted
+
+## Exceptions Container
+
+[`DefensiveExceptions`](DefensiveExceptions.html) provides a full list of exception factories as a [`FactoryList`](http://ganbarodigital.github.io/php-mv-di-containers/V1/Interfaces/FactoryList.html).
 
 Click on the name of an exception to see full details.

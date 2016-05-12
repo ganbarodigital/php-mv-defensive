@@ -3,6 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: UnsupportedType.html
 pageflow_prev_text: UnsupportedType class
+pageflow_next_url: DefensiveExceptions.html
+pageflow_next_text: DefensiveExceptions class
 ---
 
 # UnsupportedValue

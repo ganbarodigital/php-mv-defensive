@@ -27,3 +27,5 @@ pageflow_next_text: Contributing
   - Added `BadRequirementArgs` exception
 * Added a way to make any `callable` into a `Requirement`
   - Added `ComposableRequirement` customisable function object
+* Added a factory container for this library's methods
+  - Added `DefensiveExceptions` DI container
