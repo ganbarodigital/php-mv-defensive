@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadRequirementData.html
-pageflow_prev_text: BadRequirementData class
+pageflow_prev_url: ContractFailed.html
+pageflow_prev_text: ContractFailed class
 pageflow_next_url: UnsupportedValue.html
 pageflow_next_text: UnsupportedValue class
 ---
