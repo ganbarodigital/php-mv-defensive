@@ -27,14 +27,14 @@ namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue as BaseUnsupportedValue;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 
 class UnsupportedValue
   extends BaseUnsupportedValue
-  implements DefensiveException, HttpStatusProvider
+  implements DefensiveException, HttpRequestErrorException
 {
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;
@@ -126,12 +126,12 @@ catch(DefensiveException $e) {
 // example 3: catch all exceptions where there was a problem with the
 // parameter(s) passed into the method
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
-use GanbaroDigital\HttpStatus\Specifications\RequestError;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 try {
     throw UnsupportedValue::newFromVar($data, '\$data');
 }
-catch(RequestError $e) {
+catch(HttpRequestErrorException $e) {
     $httpStatus = $e->getHttpStatus();
     // ...
 }
@@ -140,12 +140,12 @@ catch(RequestError $e) {
 ```php
 // example 4: catch all exceptions that map onto a HTTP status
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
-use GanbaroDigital\HttpStatus\Specifications\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
     throw UnsupportedValue::newFromVar($data, '\$data');
 }
-catch(HttpStatusProvider $e) {
+catch(HttpException $e) {
     $httpStatus = $e->getHttpStatus();
     // ...
 }
@@ -171,4 +171,4 @@ None at this time.
 ## See Also
 
 * [`UnsupportedValue` class](http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/UnsupportedValue.html)
-* [`HttpStatusProvider` interface](http://ganbarodigital.github.io/php-http-status/httpStatusProviders.html)
+* [mapping exceptions onto HTTP status codes](http://ganbarodigital.github.io/php-http-status/usage/http-exceptions.html)
