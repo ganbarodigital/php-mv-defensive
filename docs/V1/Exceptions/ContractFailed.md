@@ -120,12 +120,12 @@ catch(DefensiveException $e) {
 // example 3: catch all exceptions where there was an unexpected problem
 // at runtime
 use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
-use GanbaroDigital\HttpStatus\Interfaces\RuntimeError;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 
 try {
     throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
 }
-catch(RuntimeError $e) {
+catch(HttpRuntimeErrorException $e) {
     $httpStatus = $e->getHttpStatus();
     // ...
 }
