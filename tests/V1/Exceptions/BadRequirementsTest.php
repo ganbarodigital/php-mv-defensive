@@ -47,6 +47,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 use GanbaroDigital\HttpStatus\Interfaces\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
@@ -75,13 +76,13 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($unit instanceof BadRequirements);
+        $this->assertInstanceOf(BadRequirements::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testIsDefensiveException()
+    public function test_is_DefensiveException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -96,13 +97,13 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($unit instanceof DefensiveException);
+        $this->assertInstanceOf(DefensiveException::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testIsRuntimeException()
+    public function test_is_RuntimeException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -117,13 +118,13 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($unit instanceof RuntimeException);
+        $this->assertInstanceOf(RuntimeException::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testIsHttpStatusProvider()
+    public function test_is_HttpRequestErrorException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -138,13 +139,13 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($unit instanceof HttpStatusProvider);
+        $this->assertInstanceOf(HttpRequestErrorException::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testMapsToUnprocessableEntity()
+    public function test_maps_to_HTTP_422_UnprocessableEntity()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -160,7 +161,7 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($httpStatus instanceof UnprocessableEntityStatus);
+        $this->assertInstanceOf(UnprocessableEntityStatus::class, $httpStatus);
     }
 
     /**
@@ -171,10 +172,29 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "Bad requirements passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->testCanCreateFromBadRequirementsList()@189 by ReflectionMethod->invokeArgs(); must be an array of callables";
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = BadRequirements::newFromRequirementsList(true);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadRequirements::class, $unit);
+    }
+
+    /**
+     * @covers ::newFromRequirementsList
+     */
+    public function test_newFromRequirementsList_states_that_list_must_contain_callables()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedMessage = "Bad requirements passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->test_newFromRequirementsList_states_that_list_must_contain_callables()@209 by ReflectionMethod->invokeArgs(); must be an array of callables";
         $expectedData = [
-            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest', 'testCanCreateFromBadRequirementsList', '->', __FILE__, 189),
-            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->testCanCreateFromBadRequirementsList()@189',
+            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest', 'test_newFromRequirementsList_states_that_list_must_contain_callables', '->', __FILE__, 209),
+            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->test_newFromRequirementsList_states_that_list_must_contain_callables()@209',
             'caller' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
             'callerName' => 'ReflectionMethod->invokeArgs()',
             'badRequirements' => true,
@@ -202,7 +222,7 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::newFromRequirementsList
      */
-    public function testNewFromRequirementsListWillProvideADefaultSetOfCallerFilters()
+    public function test_newFromRequirementsList_will_provide_a_default_set_of_caller_filters()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -221,5 +241,47 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertEquals($expectedThrownBy, $actualData['thrownBy']);
+    }
+
+    /**
+     * @covers ::newFromEmptyList
+     */
+    public function testCanCreateFromEmptyRequirementsList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = BadRequirements::newFromEmptyList();
+        $actualData = $unit->getMessageData();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadRequirements::class, $unit);
+    }
+
+    /**
+     * @covers ::newFromEmptyList
+     */
+    public function test_newFromEmptyList_states_that_list_cannot_be_empty()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedMessage = "Bad requirements passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->test_newFromEmptyList_states_that_list_cannot_be_empty()@279 by ReflectionMethod->invokeArgs(); empty array provided";
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = BadRequirements::newFromEmptyList([]);
+        $actualMessage = $unit->getMessage();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedMessage, $actualMessage);
     }
 }

@@ -89,6 +89,14 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 throw BadRequirements::newFromRequirementsList(null);
 ```
 
+Call `BadRequirements::newFromEmptyList()` if the requirements list is an empty array:
+
+```php
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
+
+throw BadRequirements::newFromEmptyList();
+```
+
 ### Catching The Exception
 
 `BadRequirements` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
@@ -159,6 +167,47 @@ catch(RuntimeException $e) {
     // ...
 }
 ```
+
+## Class Contract
+
+Here is the contract for this class:
+
+    GanbaroDigital\Defensive\V1\Exceptions\BadRequirements
+     [x] Can instantiate
+     [x] is DefensiveException
+     [x] is RuntimeException
+     [x] is HttpRequestErrorException
+     [x] maps to HTTP 422 UnprocessableEntity
+     [x] Can create from bad requirements list
+     [x] newFromRequirementsList states that list must contain callables
+     [x] newFromRequirementsList will provide a default set of caller filters
+     [x] Can create from empty requirements list
+     [x] newFromEmptyList states that list cannot be empty
+
+Class contracts are built from this class's unit tests.
+
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+
+<div class="callout info" markdown="1">
+Future releases of this class may add to this contract. New additions may include:
+
+* clarifying existing behaviour (e.g. stricter contract around input or return types)
+* add new behaviours (e.g. extra class methods)
+</div>
+
+<div class="callout warning" markdown="1">
+When you use this class, you can only rely on the behaviours documented by this contract.
+
+If you:
+
+* find other ways to use this class,
+* or depend on behaviours that are not covered by a unit test,
+* or depend on undocumented internal states of this class,
+
+... your code may not work in the future.
+</div>
 
 ## Notes
 
