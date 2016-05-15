@@ -28,7 +28,7 @@ Not yet in a tagged release
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
 // RequireAllOf is a Requirement
-use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
 class RequireAllOf implements Requirement
 {

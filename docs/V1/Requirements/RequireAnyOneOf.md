@@ -28,7 +28,7 @@ Not yet in a tagged release
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
 // RequireAnyOneOf is a Requirement
-use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
 class RequireAnyOneOf implements Requirement
 {
