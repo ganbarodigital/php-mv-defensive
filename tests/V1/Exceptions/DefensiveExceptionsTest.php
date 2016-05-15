@@ -53,7 +53,7 @@ use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
  */
 class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
 {
