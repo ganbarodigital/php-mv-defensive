@@ -43,25 +43,47 @@
 
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
-use GanbaroDigital\DIContainers\V1\FactoryList\Containers\FactoryListContainer;
+use GanbaroDigital\Defensive\V1\Contracts\UnreachableCode;
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
+use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
+use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
 
-class DefensiveExceptions extends FactoryListContainer
+class UnreachableCodeExecuted
+  extends ParameterisedException
+  implements DefensiveException, HttpRuntimeErrorException
 {
-    public function __construct()
+    // we map onto HTTP 500
+    use UnexpectedErrorStatusProvider;
+
+    /**
+     * creates a new exception about unreachable code that has, in fact,
+     * been executed
+     *
+     * @return UnreachableCodeExecuted
+     */
+    public static function newAlert()
     {
-        // the exceptions that our library throws
-        $ourExceptions = [
-            'BadRequirement::newFromRequirement' => [ BadRequirement::class, 'newFromRequirement' ],
-            'BadRequirementArgs::newFromRequirementArgs' => [ BadRequirementArgs::class, 'newFromRequirementArgs' ],
-            'BadRequirements::newFromRequirementsList' => [ BadRequirements::class, 'newFromRequirementsList' ],
-            'BadRequirements::newFromEmptyList' => [ BadRequirements::class, 'newFromEmptyList' ],
-            'ContractFailed::newFromBadValue' => [ ContractFailed::class, 'newFromBadValue' ],
-            'UnreachableCodeExecuted::newAlert' => [ UnreachableCodeExecuted::class, 'newAlert' ],
-            'UnsupportedType::newFromVar' => [ UnsupportedType::class, 'newFromVar' ],
-            'UnsupportedValue::newFromVar' => [ UnsupportedValue::class, 'newFromVar' ],
+        // who called us?
+        //
+        // we want to filter out only the absolute minimum:
+        // - ourselves
+        // - a convenience class in the `Contract` namespace
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $callerFilter = [
+            self::class,
+            static::class,
+            UnreachableCode::class,
+        ];
+        $caller = FilterCodeCaller::from($trace);
+
+        // putting it all together
+        $msg = "unreachable code executed at %callerName\$s";
+        $exceptionData = [
+            "caller" => $caller,
+            "callerName" => $caller->getCaller(),
         ];
 
-        // build it
-        parent::__construct($ourExceptions);
+        return new static($msg, $exceptionData);
     }
 }

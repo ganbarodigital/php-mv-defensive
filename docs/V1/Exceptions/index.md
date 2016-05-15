@@ -19,6 +19,7 @@ Class | Description
 [`BadRequirements`](BadRequirements.html) | thrown when you pass something that isn't a requirements list into one of the [Requirements](../Requirements/index.html) classes
 [`BadRequirementArgs`](BadRequirementArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Requirements](../Requirements/index.html) classes
 [`ContractFailed`](ContractFailed.html) | thrown when a contract's assertion evaluates to `false`
+[`UnreachableCodeExecuted`](UnreachableCodeExecuted.html) | thrown when `switch` or `if` / `else` logic reaches a branch that should never happen
 [`UnsupportedType`](UnsupportedType.html) | thrown when you pass the wrong data type into one of the [Requirements](../Requirements/index.html) classes
 [`UnsupportedValue`](UnsupportedValue.html) | thrown when you pass in a parameter that has the right data type, but a value that can't be accepted
 

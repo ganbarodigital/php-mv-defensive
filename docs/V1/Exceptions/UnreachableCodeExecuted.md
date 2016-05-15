@@ -1,13 +1,13 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadRequirements.html
-pageflow_prev_text: BadRequirements class
-pageflow_next_url: UnreachableCodeExecuted.html
-pageflow_next_text: UnreachableCodeExecuted class
+pageflow_prev_url: ContractFailed.html
+pageflow_prev_text: ContractFailed class
+pageflow_next_url: UnsupportedType.html
+pageflow_next_text: UnsupportedType class
 ---
 
-# ContractFailed
+# UnreachableCodeExecuted
 
 <div class="callout warning">
 Not yet in a tagged release
@@ -15,14 +15,14 @@ Not yet in a tagged release
 
 ## Description
 
-`ContractFailed` is an exception. It is thrown when one of the contract assertions evaluates to `false`.
+`UnreachableCodeExecuted` is an exception. Throw this exception whenever your `switch` statements or `if` / `else` statements have branches that should never be executed.
 
 ## Public Interface
 
-`ContractFailed` has the following public interface:
+`UnreachableCodeExecuted` has the following public interface:
 
 ```php
-// ContractFailed lives in this namespace
+// UnreachableCodeExecuted lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base classes and interfaces
@@ -31,10 +31,10 @@ use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
 
-// return type(s) for our methods
+// our return type(s)
 use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
 
-class ContractFailed
+class UnreachableCodeExecuted
   extends ParameterisedException
   implements DefensiveException, HttpRuntimeErrorException
 {
@@ -42,15 +42,12 @@ class ContractFailed
     use UnexpectedErrorStatusProvider;
 
     /**
-     * create a new exception when a value fails a contract
+     * creates a new exception about unreachable code that has, in fact,
+     * been executed
      *
-     * @param  mixed $value
-     *         the value that failed the contract
-     * @param  string|null $reason
-     *         details about the contract that failed
-     * @return ContractFailed
+     * @return UnreachableCodeExecuted
      */
-    public static function newFromBadValue($value, $reason = null);
+    public static function newAlert();
 
     /**
      * what was the data that we used to create the printable message?
@@ -77,26 +74,56 @@ class ContractFailed
 
 ## How To Use
 
-### Creating Exceptions To Throw
+### Alerting About Unreachable Code
 
-Call `ContractFailed::newFromBadValue()` to create a new throwable exception:
+Use `UnreachableCodeExecuted` to detect when a `switch` statement is missing one or more `case` clauses:
 
 ```php
-use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 
-throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
+switch($state) {
+    case DirectDebit::STATE_CREATED:
+        // ...
+        break;
+    case DirectDebit::STATE_SUBMITTED:
+        // ...
+        break;
+    default:
+        // if we get here, our direct debit is in a state that we have
+        // no support for
+        throw UnreachableCodeExecuted::newAlert();
+}
 ```
+
+or when an `if` / `else` statement reaches a branch that should never happen:
+
+```php
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
+
+if ($state === DirectDebit::STATE_CREATED) {
+    // ...
+}
+else if ($state === DirectDebit::STATE_SUBMITTED) {
+    // ...
+}
+else {
+    // if we get here, our direct debit is in an unsupported state
+    throw UnreachableCodeExecuted::newAlert();
+}
+```
+
+You should use `UnreachableCodeExecuted` as a placeholder. When you have the time, go back and define an explicit exception for each error where you've used `UnreachableCodeExecuted`. This will make your code even easier to support.
 
 ### Catching The Exception
 
-`ContractFailed` implements a rich set of classes and interfaces. You can use any of these to `catch` this exception.
+`UnreachableCodeExecuted` implements a rich set of classes and interfaces. You can use any of these to `catch` this exception.
 
 ```php
-// example 1: we catch only ContractFailed exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
+// example 1: we catch only UnreachableCodeExecuted exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 
 try {
-    throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
+    throw UnreachableCodeExecuted::newAlert();
 }
 catch(BadRequirements $e) {
     // ...
@@ -105,11 +132,11 @@ catch(BadRequirements $e) {
 
 ```php
 // example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
+    throw UnreachableCodeExecuted::newAlert();
 }
 catch(DefensiveException $e) {
     // ...
@@ -119,11 +146,11 @@ catch(DefensiveException $e) {
 ```php
 // example 3: catch all exceptions where there was an unexpected problem
 // at runtime
-use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 
 try {
-    throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
+    throw UnreachableCodeExecuted::newAlert();
 }
 catch(HttpRuntimeErrorException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -133,11 +160,11 @@ catch(HttpRuntimeErrorException $e) {
 
 ```php
 // example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
+    throw UnreachableCodeExecuted::newAlert();
 }
 catch(HttpException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -147,11 +174,11 @@ catch(HttpException $e) {
 
 ```php
 // example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\ContractFailed;
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 use RuntimeException;
 
 try {
-    throw ContractFailed::newFromBadValue(null, '\$arg1 cannot be null');
+    throw UnreachableCodeExecuted::newAlert();
 }
 catch(RuntimeException $e) {
     // ...
@@ -162,14 +189,16 @@ catch(RuntimeException $e) {
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Exceptions\ContractFailed
+    GanbaroDigital\Defensive\Exceptions\UnreachableCodeExecuted
      [x] Can instantiate
      [x] Is defensive exception
      [x] is ParameterisedException
      [x] is HttpRuntimeErrorException
      [x] maps to HTTP 500 UnexpectedError
      [x] Is runtime exception
-     [x] Can create from bad value
+     [x] Can raise new alert
+     [x] New alert message includes caller details
+     [x] New alert data includes caller details
 
 Class contracts are built from this class's unit tests.
 

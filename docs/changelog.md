@@ -31,3 +31,4 @@ pageflow_next_text: Contributing
   - Added `DefensiveExceptions` DI container
 * Added support for design-by-contract enforcement
   - Added `ContractFailed` exception
+  - Added `UnreachableCodeExecuted` exception
