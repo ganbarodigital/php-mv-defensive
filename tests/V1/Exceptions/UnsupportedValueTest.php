@@ -41,7 +41,7 @@
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigital\Defensive\V1\Exceptions;
+namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
