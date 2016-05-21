@@ -1,0 +1,70 @@
+---
+template:
+    url: https://github.com/ganbarodigital/couscous-gd-docs
+
+include:
+    - docs
+
+exclude:
+    - review
+    - src
+    - tests
+    - vendor
+
+baseUrl: http://ganbarodigital.github.io/php-mv-defensive
+
+github:
+    user: ganbarodigital
+    repo: php-mv-defensive
+
+title: Defensive Library for PHP
+subTitle: Easy-to-use collection of helpers to improve the robustness of your code
+
+menu:
+    overview:
+        text: Overview
+        relativeUrl: index.html
+
+        items:
+            home:
+                text: Home
+                relativeUrl: index.html
+            license:
+                text: License
+                relativeUrl: license.html
+            installation:
+                text: Installation
+                relativeUrl: installation.html
+            multivariant:
+                text: Multi-Variant
+                relativeUrl: multivariant.html
+            changelog:
+                text: Changelog
+                relativeUrl: changelog.html
+            contributing:
+                text: Contributing
+                relativeUrl: contributing.html
+            codeofconduct:
+                text: Code of Conduct
+                relativeUrl: code-of-conduct.html
+            authors:
+                text: Authors
+                relativeUrl: authors.html
+
+    v1:
+        text: Version 1.x
+        relativeUrl: V1/index.html
+
+        items:
+            home:
+                text: Introduction
+                relativeUrl: V1/index.html
+            exceptions:
+                text: Exceptions
+                relativeUrl: V1/Exceptions/index.html
+            interfaces:
+                text: Interfaces
+                relativeUrl: V1/Interfaces/index.html
+            requirements:
+                text: Requirements
+                relativeUrl: V1/Requirements/index.html
