@@ -53,146 +53,93 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: Exceptions List</a></li>
-                                                      <li><a href="BadRequirements.html">Next: BadRequirements class</a></li>
+                                    <li><a href="UnsupportedValue.html">Prev: UnsupportedValue class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="badrequirement">BadRequirement</h1>
+                <h1 id="defensiveexceptions">DefensiveExceptions</h1>
 <div class="callout info">
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>BadRequirement</code> is an exception. It is thrown when one of the requirements passed into <code>RequireAllOf</code> or <code>RequireAnyOneOf</code> isn't callable.</p>
+<p><code>DefensiveExceptions</code> is a <a href="http://ganbarodigital.github.io/php-mv-di-containers/V1/Interfaces/FactoryList.html"><code>FactoryList</code></a>. It provides factory methods for all exceptions that the <em>Defensive Library</em> can throw.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>BadRequirement</code> has the following public interface:</p>
-<pre><code class="language-php">// BadRequirement lives in this namespace
+<p><code>DefensiveExceptions</code> has the following public interface.</p>
+<pre><code class="language-php">// DefensiveExceptions lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
-// our base class and interface(s)
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
-use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
+// our base classes and interfaces
+use GanbaroDigital\DIContainers\V1\FactoryList\Containers\FactoryListContainer;
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-// return types from our method(s)
-use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
-
-class BadRequirement
-  extends ParameterisedException
-  implements DefensiveException, HttpRequestErrorException
+class DefensiveExceptions extends FactoryListContainer
 {
-    // we map onto HTTP 422
-    use UnprocessableEntityStatusProvider;
+    public function __construct();
 
     /**
-     * create a new exception from the requirement that has been
-     * rejected
-     *
-     * @param  mixed $requirement
-     *         the requirement that has been rejected
-     * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
-     * @return BadRequirements
-     */
-    public static function newFromRequirement($requirement, $callerFilter = null);
-
-    /**
-     * what was the data that we used to create the printable message?
+     * return the full list of factories as a real PHP array
      *
      * @return array
+     * @inheritedFrom FactoryList
      */
-    public function getMessageData();
-
-    /**
-     * what was the format string we used to create the printable message?
-     *
-     * @return string
-     */
-    public function getMessageFormat();
-
-    /**
-     * which HTTP status code do we map onto?
-     *
-     * @return UnprocessableEntityStatus
-     */
-    public function getHttpStatus();
-}
-</code></pre>
+    public function getList();
+}</code></pre>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="creating-exceptions-to-throw">Creating Exceptions To Throw</h3>
-<p>Call <code>BadRequirement::newFromRequirement()</code> to create a new throwable exception:</p>
-<pre><code class="language-php">// how to import
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
+<h3 id="construction">Construction</h3>
+<p>Here's how to build a new instance of <code>DefensiveExceptions</code>.</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 
-throw BadRequirement::newFromRequirement([]);</code></pre>
-<h3 id="catching-the-exception">Catching The Exception</h3>
-<p><code>BadRequirement</code> extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.</p>
-<pre><code class="language-php">// example 1: we catch only BadRequirement exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
+$diContainer = new DefensiveExceptions;</code></pre>
+<h3 id="creating-a-new-exception">Creating A New Exception</h3>
+<p>Treat <code>DefensiveExceptions</code> as a PHP array that contains factory methods. Each factory's name is the same <em>class::method</em> that you would use to call the exception's factory directly.</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 
-try {
-    throw BadRequirement::newFromRequirement([]);
-}
-catch(BadRequirement $e) {
-    // ...
-}</code></pre>
-<pre><code class="language-php">// example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
+$diContainer = new DefensiveExceptions;
 
-try {
-    throw BadRequirement::newFromRequirement([]);
-}
-catch(DefensiveException $e) {
-    // ...
-}</code></pre>
-<pre><code class="language-php">// example 3: catch all exceptions where there was a problem with the
-// parameter(s) passed into the method
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
-
-try {
-    throw BadRequirement::newFromRequirement([]);
-}
-catch(HttpRequestErrorException $e) {
-    $httpStatus = $e-&gt;getHttpStatus();
-    // ...
-}</code></pre>
-<pre><code class="language-php">// example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\HttpStatus\Interfaces\HttpException;
-
-try {
-    throw BadRequirement::newFromRequirement([]);
-}
-catch(HttpException $e) {
-    $httpStatus = $e-&gt;getHttpStatus();
-    // ...
-}</code></pre>
-<pre><code class="language-php">// example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use RuntimeException;
-
-try {
-    throw BadRequirement::newFromRequirement([]);
-}
-catch(RuntimeException $e) {
-    // ...
-}</code></pre>
+throw $diContainer['BadRequirement::newFromRequirement'](false);</code></pre>
+<h2 id="class-contract">Class Contract</h2>
+<p>Here is the contract for this class:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
+ [x] Can instantiate
+ [x] Is factory list
+ [x] has factory for BadRequirement newFromRequirement
+ [x] has factory for BadRequirementArgs newFromRequirementArgs
+ [x] has factory for BadRequirements newFromRequirementsList
+ [x] has factory for BadRequirements newFromEmptyList
+ [x] has factory for UnreachableCodeExecuted newAlert
+ [x] has factory for UnsupportedType newFromVar
+ [x] has factory for UnsupportedValue newFromVar</code></pre>
+<p>Class contracts are built from this class's unit tests.</p>
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this class may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra class methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this class,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this class,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
-<h2 id="see-also">See Also</h2>
-<ul>
-<li><a href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/ParameterisedException.html"><code>ParameterisedException</code> class</a></li>
-<li><a href="http://ganbarodigital.github.io/php-http-status/usage/http-exceptions.html">mapping exceptions onto HTTP status codes</a></li>
-</ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: Exceptions List</a></li>
-                                                      <li><a href="BadRequirements.html">Next: BadRequirements class</a></li>
+                                    <li><a href="UnsupportedValue.html">Prev: UnsupportedValue class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>

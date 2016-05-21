@@ -39,13 +39,13 @@
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Contracts/index.html">Contracts</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
                                     </li>
                                                                     <li class="current">
                                         <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -54,14 +54,14 @@
                         <nav class="pageflow">
               <ul>
                                     <li><a href="RequireAllOf.html">Prev: RequireAllOf class</a></li>
-                                                      <li></li>
+                                                      <li><a href="RequireValidRequirements.html">Next: RequireValidRequirements class</a></li>
                                 </ul>
             </nav>
             
             <article>
                 <h1 id="requireanyoneof">RequireAnyOneOf</h1>
-<div class="callout warning">
-<p>Not yet in a tagged release</p>
+<div class="callout info">
+<p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
 <p><code>RequireAnyOneOf</code> allows you to apply a list of requirements to a piece of data. If none of the requirements are met, an exception is thrown.</p>
@@ -72,7 +72,7 @@
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
 // RequireAnyOneOf is a Requirement
-use GanbaroDigital\Defensive\V1\Specifications\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
 class RequireAnyOneOf implements Requirement
 {
@@ -144,7 +144,7 @@ RequireAnyOneOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
                         <nav class="pageflow">
               <ul>
                                     <li><a href="RequireAllOf.html">Prev: RequireAllOf class</a></li>
-                                                      <li></li>
+                                                      <li><a href="RequireValidRequirements.html">Next: RequireValidRequirements class</a></li>
                                 </ul>
             </nav>
                     </main>

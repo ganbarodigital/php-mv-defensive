@@ -41,11 +41,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
-                                    </li>
                                                                     <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -53,98 +53,137 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="InvokeableRequirement.html">Prev: InvokeableRequirement trait</a></li>
-                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                    <li><a href="index.html">Prev: Interfaces</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requireallof">RequireAllOf</h1>
+                <h1 id="requirement">Requirement</h1>
 <div class="callout info">
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>RequireAllOf</code> allows you to apply a list of requirements to a piece of data. If any of the requirements are not met, an exception is thrown.</p>
-<p><code>RequireAllOf</code> is a customisable function object.</p>
+<p><code>Requirement</code> is an interface. It is the base interface that all requirements extend.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>RequireAllOf</code> has the following public interface:</p>
-<pre><code class="language-php">// RequireAllOf lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Requirements;
-
-// RequireAllOf is a Requirement
+<p><code>Requirement</code> has the following public interface:</p>
+<pre><code class="language-php">// Requirement lives in this namespace
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
-class RequireAllOf implements Requirement
+interface Requirement
 {
     /**
-     * create a Requirement that is ready to execute
-     *
-     * @param array $requirements
-     *        a list of the requirements to apply
-     * @param array $exception
-     *        the functions to call when we want to throw an exception
-     * @return RequireAllOf
-     */
-    public static function apply($requirements, $exceptions = null);
-
-    /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if our requirement is not met
      *
      * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     *         the data to be examined
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+    public function __invoke($data, $fieldOrVarName = "value");
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if our requirement is not met
      *
      * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     *         the data to be examined
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null);
+    public function to($data, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="applying-requirements">Applying Requirements</h3>
-<p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
-<pre><code class="language-php">$requirements = [
-    // a list of objects that implement the 'Requirement' interface
-];
-RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
-<p>Use <code>RequireAllOf</code> to enforce robustness in your library's public API:</p>
-<pre><code class="language-php">function doSomething($arg1)
-{
-    // robustness!
-    $requirements = [
-        new RequireIndexable(),
-        new RequireNotEmpty()
-    ];
-    RequireAllOf::apply($requirements)-&gt;to($arg1, '\$arg1');
-
-    // if we get here, then $arg1 is good
-}</code></pre>
-<p>If any of the requirements aren't met, the requirement will throw an exception.</p>
-<h2 id="notes">Notes</h2>
-<p>None at this time.</p>
-<h2 id="see-also">See Also</h2>
+<h3 id="the-apply-gtto-pattern">The Apply-&gt;To Pattern</h3>
+<p>Every <code>Requirement</code> implements the <code>Requirement::apply()-&gt;to()</code> pattern:</p>
 <ul>
-<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+<li>add <code>implements Requirement</code> to your class</li>
+<li>add <code>use InvokeableRequirement</code> to your class. Saves you having to implement <code>__invoke()</code> yourself.</li>
+<li>add a <code>public static function apply()</code> method to your class, and a corresponding <code>__construct()</code> method. <code>apply()</code> takes any extra parameters needed to customise the requirement, and returns a new instance of your class.</li>
+<li>add a <code>public function to()</code> method to your class. This method inspects <code>$data</code>. If you're not happy with <code>$data</code>, throw an exception.</li>
 </ul>
+<p>For example, here's a simple min / max requirement:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Requirements;
+use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
+
+class RequireInRange implements Requirement
+{
+    // save us having to declare __invoke() ourselves
+    use InvokeableRequirement;
+
+    /**
+     * minimum acceptable value in our range
+     */
+    private $min;
+
+    /**
+     * maximum acceptable value in our range
+     */
+    private $max;
+
+    /**
+     * constructor. used to create a customised requirement
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     */
+    public function __construct($min, $max)
+    {
+        $this-&gt;min = $min;
+        $this-&gt;max = $max;
+    }
+
+    /**
+     * generates a Requirement
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     * @return Requirement
+     *         returns a requirement to use
+     */
+    public static function apply($min, $max)
+    {
+        return new static($min, $max);
+    }
+
+    /**
+     * make sure that $data is within the require range
+     * throws an exception if it is not
+     *
+     * @param  int $data
+     *         the value to check
+     * @param  string $fieldOrVarName
+     *         the name of $data in the caller's code
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = 'value')
+    {
+        if ($data &lt; $this-&gt;min) {
+            throw new RuntimeException($fieldOrVarName . ' cannot be less than ' . $this-&gt;min);
+        }
+        if ($data &gt; $this-&gt;max) {
+            throw new RuntimeException($fieldOrVarName . ' cannot be more than ' . $this-&gt;max);
+        }
+    }
+}</code></pre>
+<p>To use this example requirement, you would do:</p>
+<pre><code class="language-php">// $data must be &gt;=10, and &lt;=20
+RequireInRange::apply(10, 20)-&gt;to($data);</code></pre>
+<h2 id="notes">Notes</h2>
+<ol>
+<li>We have <code>__invoke()</code> in the interface to make it easy to work with lists of requirements.</li>
+</ol>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="InvokeableRequirement.html">Prev: InvokeableRequirement trait</a></li>
-                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                    <li><a href="index.html">Prev: Interfaces</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>

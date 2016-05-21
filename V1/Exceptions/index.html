@@ -38,14 +38,14 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Contracts/index.html">Contracts</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
-                                    </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -62,7 +62,7 @@
                 <h1 id="exceptions">Exceptions</h1>
 <h2 id="purpose">Purpose</h2>
 <p>These are the exceptions that this library can throw.</p>
-<h2 id="available-classes">Available Classes</h2>
+<h2 id="exceptions-list">Exceptions List</h2>
 <table>
 <thead>
 <tr>
@@ -80,8 +80,12 @@
 <td>thrown when you pass something that isn't a requirements list into one of the <a href="../Requirements/index.html">Requirements</a> classes</td>
 </tr>
 <tr>
-<td><a href="BadRequirementData.html"><code>BadRequirementData</code></a></td>
-<td>thrown when you pass bad data into one of the <a href="../Requirements/index.html">Requirements</a> classes</td>
+<td><a href="BadRequirementArgs.html"><code>BadRequirementArgs</code></a></td>
+<td>thrown when you pass something that isn't a list of arguments into one of the <a href="../Requirements/index.html">Requirements</a> classes</td>
+</tr>
+<tr>
+<td><a href="UnreachableCodeExecuted.html"><code>UnreachableCodeExecuted</code></a></td>
+<td>thrown when <code>switch</code> or <code>if</code> / <code>else</code> logic reaches a branch that should never happen</td>
 </tr>
 <tr>
 <td><a href="UnsupportedType.html"><code>UnsupportedType</code></a></td>
@@ -93,6 +97,8 @@
 </tr>
 </tbody>
 </table>
+<h2 id="exceptions-container">Exceptions Container</h2>
+<p><a href="DefensiveExceptions.html"><code>DefensiveExceptions</code></a> provides a full list of exception factories as a <a href="http://ganbarodigital.github.io/php-mv-di-containers/V1/Interfaces/FactoryList.html"><code>FactoryList</code></a>.</p>
 <p>Click on the name of an exception to see full details.</p>
             </article>
 

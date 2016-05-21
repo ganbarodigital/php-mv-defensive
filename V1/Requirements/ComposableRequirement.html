@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Defensive Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-defensive/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Defensive Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers to improve the robustness of your code</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-defensive/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-defensive/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Overview</a></li>
+                                                      <li><a href="InvokeableRequirement.html">Next: InvokeableRequirement trait</a></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="composablerequirement">ComposableRequirement</h1>
+<div class="callout info">
+<p>Since v1.2016052101</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>ComposableRequirement</code> will turn any <code>callable</code> into a <code>Requirement</code>.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>ComposableRequirement</code> has the following public interface:</p>
+<pre><code class="language-php">// ComposableRequirement lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Requirements;
+
+// ComposableRequirement is a Requirement
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+
+// our parameter and return types
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+
+class ComposableRequirement implements Requirement
+{
+    /**
+     * build a composable requirement
+     *
+     * we take a partial requirement (a requirement that needs multiple
+     * parameters), plus the extra parameters, so that it can be called
+     * from our RequireAllOf and RequireAnyOneOf classes
+     *
+     * @param  callable $requirement
+     *         the partial requirement that we are wrapping
+     * @param  array $extra
+     *         the extra param(s) to pass into the underlying requirement
+     * @param  FactoryList|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return Requirement
+     *         the requirement you can use
+     */
+    public function __construct($requirement, $extra, FactoryList $exceptions = null);
+
+    /**
+     * build a composable requirement
+     *
+     * we take a partial requirement (a requirement that needs multiple
+     * parameters), plus the extra parameters, so that it can be called
+     * from our RequireAllOf and RequireAnyOneOf classes
+     *
+     * @param  callable $requirement
+     *         the partial requirement that we are wrapping
+     * @param  array $extra
+     *         the extra param(s) to pass into the underlying requirement
+     * @param  FactoryList|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return Requirement
+     *         the requirement you can use
+     */
+    public static function apply($requirement, $extra, FactoryList $exceptions = null);
+
+    /**
+     * throws exception if our underlying requirement isn't met
+     *
+     * @param  mixed $data
+     *         the data to be examined by our underlying requirement
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our underlying requirement isn't met
+     *
+     * @param  mixed $data
+     *         the data to be examined by our underlying requirement
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function __invoke($data, $fieldOrVarName = "value");
+}</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<h3 id="creating-a-composable-requirement">Creating A Composable Requirement</h3>
+<p>A <code>Requirement</code> can only take two input parameters:</p>
+<ul>
+<li>the data to check</li>
+<li>the name of the variable or input field being checked (to use in error messages)</li>
+</ul>
+<p>That works well for simple 'is / is not' checks. But many checks are actually 'is in' checks - range checks, or making sure the input data exists in a dataset. That's where <code>ComposableRequirement</code> can be useful.</p>
+<p>Let's take a simple integer range check:</p>
+<pre><code class="language-php">// a simple test to make sure a value falls into an acceptable range
+//
+// we can't use this as a Requirement, because it needs too many input params
+function minMaxCheck($data, $minValue, $maxValue, $fieldOrVarName) {
+    if ($data &lt; $minValue) {
+        throw new RuntimeException("$fieldOrVarName cannot be less than $minValue");
+    }
+    if ($data &gt; $maxValue) {
+        throw new RuntimeException("$fieldOrVarName cannot be greater than $maxValue");
+    }
+};</code></pre>
+<p>We can take <code>minMaxCheck</code> and use <code>ComposableRequirement</code> to apply it to data:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement;
+
+// the data we will check
+$data = 15;
+
+// is $data in the range 10..20?
+ComposableRequirement::apply(minMaxCheck, [10, 20])-&gt;to($data, '\$data');</code></pre>
+<p>The <code>::apply()-&gt;to()</code> pattern helps make your code more readable.</p>
+<p>The real benefit of <code>ComposableRequirement</code> comes when you want to use <code>minMaxCheck</code> in a list of requirements:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Requirements\RequireAllOf;
+use GanbaroDigital\Reflection\V1\Requirements\RequireInteger;
+
+// putting all of the requirements into a single list like this
+// makes your code very easy to read and reason about
+$requirements = [
+    new RequireInteger,
+    new ComposableRequirement(minMaxCheck, [10, 20]),
+];
+
+// the data to check
+$data = 15;
+
+RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
+<p>You can wrap any <code>callable</code> as a <code>ComposableRequirement</code> as long as:</p>
+<ul>
+<li>the first input parameter must be the data to check</li>
+<li>any extra parameters come next</li>
+<li>the final parameter can be the name of the variable or field being checked</li>
+</ul>
+<h2 id="class-contract">Class Contract</h2>
+<p>Here is the contract for this class:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement
+ [x] Can instantiate
+ [x] Is requirement
+ [x] Can use as object
+ [x] Can call statically
+ [x] Must provide a callable
+ [x] Must provide array of extra parameters
+ [x] Array of extra parameters can be empty</code></pre>
+<p>Class contracts are built from this class's unit tests.</p>
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this class may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra class methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this class,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this class,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Overview</a></li>
+                                                      <li><a href="InvokeableRequirement.html">Next: InvokeableRequirement trait</a></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.
+                                            Find Defensive Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-defensive">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/ishi.js"></script>
+    </body>
+</html>

@@ -53,86 +53,116 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="InvokeableRequirement.html">Prev: InvokeableRequirement trait</a></li>
-                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                    <li><a href="RequireAnyOneOf.html">Prev: RequireAnyOneOf class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requireallof">RequireAllOf</h1>
+                <h1 id="requirevalidrequirements">RequireValidRequirements</h1>
 <div class="callout info">
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>RequireAllOf</code> allows you to apply a list of requirements to a piece of data. If any of the requirements are not met, an exception is thrown.</p>
-<p><code>RequireAllOf</code> is a customisable function object.</p>
+<p>Use <code>RequireValidRequirements</code> to ensure that you have a list that only contains valid requirements. If this requirement is not met, an exception is thrown.</p>
+<p><code>RequireValidRequirements</code> is a customisable function object.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>RequireAllOf</code> has the following public interface:</p>
-<pre><code class="language-php">// RequireAllOf lives in this namespace
+<p><code>RequireValidRequirements</code> has the following public interface:</p>
+<pre><code class="language-php">// RequireValidRequirements lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-// RequireAllOf is a Requirement
+// RequireValidRequirements is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
-class RequireAllOf implements Requirement
+class RequireValidRequirements implements Requirement
 {
     /**
      * create a Requirement that is ready to execute
      *
+     * @param  FactoryList|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return RequireValidRequirements
+     */
+    public function __construct(FactoryList $exceptions = null);
+
+    /**
+     * make sure that we have a list of valid requirements to work with
+     *
      * @param array $requirements
-     *        a list of the requirements to apply
-     * @param array $exception
-     *        the functions to call when we want to throw an exception
-     * @return RequireAllOf
-     */
-    public static function apply($requirements, $exceptions = null);
-
-    /**
-     * throws exceptions if any of our requirements are not met
-     *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
+     *        the list of requirements to check
+     * @param string $fieldOrVarName
+     *        what is the name of $data in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+    public function __invoke($requirements, $fieldOrVarName = "value");
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * create a Requirement that is ready to execute
      *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
+     * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
+     * @return RequireValidRequirements
+     */
+    public static function apply(FactoryList $exceptions = null);
+
+    /**
+     * make sure that we have a list of valid requirements to work with
+     *
+     * @param array $requirements
+     *        the list of requirements to check
+     * @param string $fieldOrVarName
+     *        what is the name of $data in the calling code?
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null);
+    public function to($requirements, $fieldOrVarName = "value");
 }</code></pre>
+<h2 id="requirements-enforced">Requirements Enforced</h2>
+<p><code>RequireValidRequirements</code> enforces the following:</p>
+<ol>
+<li><code>$requirements</code> must be an array</li>
+<li><code>$requirements</code> cannot be empty</li>
+<li>every value in <code>$requirements</code> must implement the <code>Requirement</code> interface</li>
+</ol>
+<p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="applying-requirements">Applying Requirements</h3>
 <p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
 <pre><code class="language-php">$requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
-<p>Use <code>RequireAllOf</code> to enforce robustness in your library's public API:</p>
-<pre><code class="language-php">function doSomething($arg1)
-{
-    // robustness!
-    $requirements = [
-        new RequireIndexable(),
-        new RequireNotEmpty()
-    ];
-    RequireAllOf::apply($requirements)-&gt;to($arg1, '\$arg1');
-
-    // if we get here, then $arg1 is good
-}</code></pre>
-<p>If any of the requirements aren't met, the requirement will throw an exception.</p>
+RequireValidRequirements::apply()-&gt;to($requirements, '\$requirements');</code></pre>
+<p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
+<h2 id="class-contract">Class Contract</h2>
+<p>Here is the contract for this class:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements
+ [x] Can instantiate
+ [x] Is requirement
+ [x] Can use as object
+ [x] Can call statically
+ [x] Must provide list of requirements
+ [x] List of requirements cannot be empty
+ [x] List of requirements can contain only requirements</code></pre>
+<p>Class contracts are built from this class's unit tests.</p>
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this class may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra class methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this class,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this class,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
 <h2 id="see-also">See Also</h2>
@@ -143,8 +173,8 @@ RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="InvokeableRequirement.html">Prev: InvokeableRequirement trait</a></li>
-                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                    <li><a href="RequireAnyOneOf.html">Prev: RequireAnyOneOf class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>

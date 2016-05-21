@@ -39,13 +39,13 @@
                                         <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Contracts/index.html">Contracts</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
-                                    </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -54,20 +54,19 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="BaseExceptions/index.html">Next: Base Exceptions</a></li>
+                                                      <li><a href="Exceptions/index.html">Next: Exceptions</a></li>
                                 </ul>
             </nav>
             
             <article>
                 <h1 id="version-1x">Version 1.x</h1>
 <h2 id="introduction">Introduction</h2>
-<p>Version 1 was written to replace <code>ganbarodigital/php-exceptions</code>. That's a library based on an approach to exception handling that Stuart first introduced on the <strong>php|cruise</strong> back in 2004. It had a good run, but after 12 years we can now do better :)</p>
+<p>Version 1 was written to replace <code>ganbarodigital/php-defensive</code>. It offers pretty much the same functionality as that library did, just with an improved interface.</p>
 <h2 id="key-ideas">Key Ideas</h2>
 <p>The key ideas in Version 1 are:</p>
 <ul>
-<li>Provide base exceptions for other libraries to use. Previously, Stuart provided traits. PHP doesn't see traits as a type hint. This limits what you can do in <code>try/catch</code> blocks.</li>
-<li>Use <code>newFromXXX()</code> style factory methods on exceptions. They allow us to create the same exception from different circumstances. Some people also find them more friendly to use.</li>
-<li>Use <a href="http://ganbarodigital.github.io/php-http-status/HttpStatus.html">HttpStatus value objects</a> to map exceptions to HTTP status codes.  Previously, Stuart was using the exception's <code>code</code> property for this. That's fine in most cases, as most exceptions typically do not use the <code>code</code> property. This way makes it crystal clear which HTTP status an exception maps onto, and it frees up the <code>code</code> property just in case anyone does need to use it for their own error codes.</li>
+<li><code>Requirement::apply()-&gt;to()</code> pattern - apply the requirement to a value. If the requirement isn't met, throw an exception.</li>
+<li><em>composable requirements</em> - each <code>Requirement</code> now takes one parameter (the value being checked). This allows us to build lists of requirements to apply to a value.</li>
 </ul>
 <h2 id="components">Components</h2>
 <p>Version 1 ships with the following components:</p>
@@ -80,12 +79,16 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="BaseExceptions/index.html"><code>GanbaroDigital\ExceptionHelpers\V1\BaseExceptions</code></a></td>
-<td>base classes to build your own exceptions from</td>
+<td><a href="Exceptions/index.html"><code>GanbaroDigital\Defensive\V1\Exceptions</code></a></td>
+<td>exceptions thrown by this library</td>
 </tr>
 <tr>
-<td><a href="Callers/index.html"><code>GanbaroDigital\ExceptionHelpers\V1\Callers</code></a></td>
-<td>work out who has thrown an exception</td>
+<td><a href="Interfaces/index.html"><code>GanbaroDigital\Defensive\V1\Interfaces</code></a></td>
+<td>interfaces defined by this library</td>
+</tr>
+<tr>
+<td><a href="Requirements/index.html"><code>GanbaroDigital\Defensive\V1\Requirements</code></a></td>
+<td>enforce robustness checks</td>
 </tr>
 </tbody>
 </table>
@@ -95,7 +98,7 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="BaseExceptions/index.html">Next: Base Exceptions</a></li>
+                                                      <li><a href="Exceptions/index.html">Next: Exceptions</a></li>
                                 </ul>
             </nav>
                     </main>

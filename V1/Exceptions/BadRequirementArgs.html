@@ -53,53 +53,49 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="UnreachableCodeExecuted.html">Prev: UnreachableCodeExecuted class</a></li>
-                                                      <li><a href="UnsupportedValue.html">Next: UnsupportedValue class</a></li>
+                                    <li><a href="BadRequirements.html">Prev: BadRequirements class</a></li>
+                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="unsupportedtype">UnsupportedType</h1>
+                <h1 id="badrequirementargs">BadRequirementArgs</h1>
 <div class="callout info">
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>UnsupportedType</code> is an exception. It is thrown when a variable of the wrong data type is passed into a method.</p>
+<p><code>BadRequirementArgs</code> is an exception. It is thrown when data passed into <code>RequireAllOf</code> or <code>RequireAnyOneOf</code> isn't an array.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>UnsupportedType</code> has the following public interface:</p>
-<pre><code class="language-php">// our namespace
+<p><code>BadRequirementArgs</code> has the following public interface:</p>
+<pre><code class="language-php">// BadRequirementArgs lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedType as BaseUnsupportedType;
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 
-class UnsupportedType
-  extends BaseUnsupportedType
+class BadRequirementArgs
+  extends ParameterisedException
   implements DefensiveException, HttpRequestErrorException
 {
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;
 
     /**
-     * create a new exception
+     * creates a new exception about data we could not use as input parameters
+     * for a single Requirement object
      *
-     * @param  mixed $var
-     *         the variable that has the unsupported type
-     * @param  string $fieldOrVarName
-     *         the name of the input field, PHP variable or function/method
-     *         parameter that contains $data
-     * @param  int|null $typeFlags
-     *         do we want any extra type information in the final exception message?
+     * @param  mixed $badArgs
+     *         the data we could not accept
      * @param  array|null $callerFilter
-     *         are there any namespaces we want to filter out of the call stack?
-     * @return UnsupportedType
-     *         an fully-built exception for you to throw
+     *         a list of classnames or partial namespaces to avoid
+     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
+     * @return BadRequirementArgs
      */
-    public static function newFromVar($var, $fieldOrVarName, $typeFlags = null, $callerFilter = null);
+    public static function newFromRequirementArgs($badArgs, $callerFilter = null);
 
     /**
      * what was the data that we used to create the printable message?
@@ -125,61 +121,61 @@ class UnsupportedType
 </code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="creating-exceptions-to-throw">Creating Exceptions To Throw</h3>
-<p>Call <code>UnsupportedType::newFromVar()</code> to create a new throwable exception:</p>
+<p>Call <code>BadRequirementArgs::newFromRequirementArgs()</code> to create a new throwable exception:</p>
 <pre><code class="language-php">// how to import
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 
-throw UnsupportedType::newFromVar($data, '\$data');</code></pre>
+throw BadRequirementArgs::newFromRequirementArgs([]);</code></pre>
 <h3 id="catching-the-exception">Catching The Exception</h3>
-<p><code>UnsupportedType</code> extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.</p>
-<pre><code class="language-php">// example 1: we catch only UnsupportedType exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+<p><code>BadRequirementArgs</code> extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.</p>
+<pre><code class="language-php">// example 1: we catch only BadRequirementArgs exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 
 try {
-    throw UnsupportedType::newFromVar($data, '\$data');
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
-catch(UnsupportedType $e) {
+catch(BadRequirementArgs $e) {
     // ...
 }</code></pre>
 <pre><code class="language-php">// example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw UnsupportedType::newFromVar($data, '\$data');
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(DefensiveException $e) {
     // ...
 }</code></pre>
 <pre><code class="language-php">// example 3: catch all exceptions where there was a problem with the
 // parameter(s) passed into the method
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 try {
-    throw UnsupportedType::newFromVar($data, '\$data');
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
-catch(RequestError $e) {
+catch(HttpRequestErrorException $e) {
     $httpStatus = $e-&gt;getHttpStatus();
     // ...
 }</code></pre>
 <pre><code class="language-php">// example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw UnsupportedType::newFromVar($data, '\$data');
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(HttpException $e) {
     $httpStatus = $e-&gt;getHttpStatus();
     // ...
 }</code></pre>
 <pre><code class="language-php">// example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use RuntimeException;
 
 try {
-    throw UnsupportedType::newFromVar($data, '\$data');
+    throw BadRequirementArgs::newFromRequirementArgs([]);
 }
 catch(RuntimeException $e) {
     // ...
@@ -188,15 +184,15 @@ catch(RuntimeException $e) {
 <p>None at this time.</p>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/UnsupportedType.html"><code>UnsupportedType</code> class</a></li>
+<li><a href="http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/ParameterisedException.html"><code>ParameterisedException</code> class</a></li>
 <li><a href="http://ganbarodigital.github.io/php-http-status/usage/http-exceptions.html">mapping exceptions onto HTTP status codes</a></li>
 </ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="UnreachableCodeExecuted.html">Prev: UnreachableCodeExecuted class</a></li>
-                                                      <li><a href="UnsupportedValue.html">Next: UnsupportedValue class</a></li>
+                                    <li><a href="BadRequirements.html">Prev: BadRequirements class</a></li>
+                                                      <li><a href="UnsupportedType.html">Next: UnsupportedType class</a></li>
                                 </ul>
             </nav>
                     </main>

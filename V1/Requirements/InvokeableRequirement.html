@@ -53,40 +53,25 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="InvokeableRequirement.html">Prev: InvokeableRequirement trait</a></li>
-                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                    <li><a href="ComposableRequirement.html">Prev: ComposableRequirement class</a></li>
+                                                      <li><a href="RequireAllOf.html">Next: RequireAllOf class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requireallof">RequireAllOf</h1>
+                <h1 id="invokeablerequirement">InvokeableRequirement</h1>
 <div class="callout info">
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>RequireAllOf</code> allows you to apply a list of requirements to a piece of data. If any of the requirements are not met, an exception is thrown.</p>
-<p><code>RequireAllOf</code> is a customisable function object.</p>
+<p><code>InvokeableRequirement</code> is a trait. It implements the <code>__invoke()</code> method of the <a href="../Interfaces/Requirement.html"><code>Requirement</code></a> interface for you.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>RequireAllOf</code> has the following public interface:</p>
-<pre><code class="language-php">// RequireAllOf lives in this namespace
+<p><code>InvokeableRequirement</code> has the following public interface:</p>
+<pre><code class="language-php">// InvokeableRequirement lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-// RequireAllOf is a Requirement
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
-
-class RequireAllOf implements Requirement
+trait InvokeableRequirement
 {
-    /**
-     * create a Requirement that is ready to execute
-     *
-     * @param array $requirements
-     *        a list of the requirements to apply
-     * @param array $exception
-     *        the functions to call when we want to throw an exception
-     * @return RequireAllOf
-     */
-    public static function apply($requirements, $exceptions = null);
-
     /**
      * throws exceptions if any of our requirements are not met
      *
@@ -99,40 +84,106 @@ class RequireAllOf implements Requirement
      * @return void
      */
     public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
-
-    /**
-     * throws exceptions if any of our requirements are not met
-     *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
-     * @return void
-     */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="applying-requirements">Applying Requirements</h3>
-<p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
-<pre><code class="language-php">$requirements = [
-    // a list of objects that implement the 'Requirement' interface
-];
-RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
-<p>Use <code>RequireAllOf</code> to enforce robustness in your library's public API:</p>
-<pre><code class="language-php">function doSomething($arg1)
-{
-    // robustness!
-    $requirements = [
-        new RequireIndexable(),
-        new RequireNotEmpty()
-    ];
-    RequireAllOf::apply($requirements)-&gt;to($arg1, '\$arg1');
+<h3 id="for-convenience">For Convenience</h3>
+<p>Use <code>InvokeableRequirement</code> in your own classes to save on typing and code duplication.</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Requirements;
+use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
 
-    // if we get here, then $arg1 is good
+class RequireInRange implements Requirement
+{
+    // save us having to declare __invoke() ourselves
+    use InvokeableRequirement;
+
+    /**
+     * minimum acceptable value in our range
+     */
+    private $min;
+
+    /**
+     * maximum acceptable value in our range
+     */
+    private $max;
+
+    /**
+     * constructor. used to create a customised requirement
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     */
+    public function __construct($min, $max)
+    {
+        $this-&gt;min = $min;
+        $this-&gt;max = $max;
+    }
+
+    /**
+     * generates a Requirement
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     * @return Requirement
+     *         returns a requirement to use
+     */
+    public static function apply($min, $max)
+    {
+        return new static($min, $max);
+    }
+
+    /**
+     * make sure that $data is within the require range
+     * throws an exception if it is not
+     *
+     * @param  int $data
+     *         the value to check
+     * @param  string $fieldOrVarName
+     *         the name of $data in the caller's code
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = 'value')
+    {
+        if ($data &lt; $this-&gt;min) {
+            throw new RuntimeException($fieldOrVarName . ' cannot be less than ' . $this-&gt;min);
+        }
+        if ($data &gt; $this-&gt;max) {
+            throw new RuntimeException($fieldOrVarName . ' cannot be more than ' . $this-&gt;max);
+        }
+    }
 }</code></pre>
-<p>If any of the requirements aren't met, the requirement will throw an exception.</p>
+<h2 id="trait-contract">Trait Contract</h2>
+<p>Here is the contract for this trait:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement
+ [x] Can instantiate class that uses trait
+ [x] is part of Requirement interface
+ [x] calls enclosing classes to method
+ [x] passes data to enclosing classes to method
+ [x] passes fieldOrVarName to enclosing classes to method</code></pre>
+<p>Trait contracts are built from this trait's unit tests.</p>
+<div class="callout success">
+Future releases of this trait will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this trait may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra trait methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this trait, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this trait,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this trait,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
 <h2 id="see-also">See Also</h2>
@@ -143,8 +194,8 @@ RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="InvokeableRequirement.html">Prev: InvokeableRequirement trait</a></li>
-                                                      <li><a href="RequireAnyOneOf.html">Next: RequireAnyOneOf class</a></li>
+                                    <li><a href="ComposableRequirement.html">Prev: ComposableRequirement class</a></li>
+                                                      <li><a href="RequireAllOf.html">Next: RequireAllOf class</a></li>
                                 </ul>
             </nav>
                     </main>

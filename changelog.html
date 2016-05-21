@@ -73,6 +73,13 @@
             <article>
                 <h1 id="changelog">CHANGELOG</h1>
 <h2 id="develop-branch">develop branch</h2>
+<p>Nothing yet.</p>
+<h2 id="v12016052101">v1.2016052101</h2>
+<p>Released Sat 21st May 2016.</p>
+<ul>
+<li>initial release</li>
+<li>feature release</li>
+</ul>
 <h3 id="new">New</h3>
 <ul>
 <li>Added a way to catch all exceptions thrown by this library
@@ -87,11 +94,25 @@
 <li>Added a way to apply a list of requirements to a piece of data
 <ul>
 <li>Added <code>Requirement</code> interface</li>
+<li>Added <code>InvokeableRequirement</code> convenience trait</li>
 <li>Added <code>RequireAllOf</code> customisable function object</li>
-<li>Added <code>RequireAnyOneOf</code> customisable function objects</li>
+<li>Added <code>RequireAnyOneOf</code> customisable function object</li>
+<li>Added <code>RequireValidRequirements</code> customisable function object</li>
 <li>Added <code>BadRequirement</code> exception</li>
 <li>Added <code>BadRequirements</code> exception</li>
-<li>Added <code>BadRequirementData</code> exception</li>
+<li>Added <code>BadRequirementArgs</code> exception</li>
+</ul></li>
+<li>Added a way to make any <code>callable</code> into a <code>Requirement</code>
+<ul>
+<li>Added <code>ComposableRequirement</code> customisable function object</li>
+</ul></li>
+<li>Added a factory container for this library's methods
+<ul>
+<li>Added <code>DefensiveExceptions</code> DI container</li>
+</ul></li>
+<li>Added support for catching impossible logic errors
+<ul>
+<li>Added <code>UnreachableCodeExecuted</code> exception</li>
 </ul></li>
 </ul>
             </article>
