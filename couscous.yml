@@ -59,9 +59,12 @@ menu:
             home:
                 text: Introduction
                 relativeUrl: V1/index.html
-            requirements:
-                text: Requirements
-                relativeUrl: V1/Requirements/index.html
             exceptions:
                 text: Exceptions
                 relativeUrl: V1/Exceptions/index.html
+            interfaces:
+                text: Interfaces
+                relativeUrl: V1/Interfaces/index.html
+            requirements:
+                text: Requirements
+                relativeUrl: V1/Requirements/index.html
