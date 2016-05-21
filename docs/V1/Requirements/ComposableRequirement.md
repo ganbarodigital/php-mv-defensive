@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: requirements
 pageflow_prev_url: index.html
 pageflow_prev_text: Overview
-pageflow_next_url: RequireAllOf.html
-pageflow_next_text: RequireAllOf class
+pageflow_next_url: InvokeableRequirement.html
+pageflow_next_text: InvokeableRequirement trait
 ---
 # ComposableRequirement
 

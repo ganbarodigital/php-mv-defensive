@@ -19,6 +19,7 @@ pageflow_next_text: Contributing
   - Added `UnsupportedValue` exception
 * Added a way to apply a list of requirements to a piece of data
   - Added `Requirement` interface
+  - Added `InvokeableRequirement` convenience trait
   - Added `RequireAllOf` customisable function object
   - Added `RequireAnyOneOf` customisable function object
   - Added `RequireValidRequirements` customisable function object
