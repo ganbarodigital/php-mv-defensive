@@ -17,7 +17,7 @@ In a normal library, when you install it via `composer`, you get one version of 
 
 In a _multi-variant_ library, the library includes all of the different versions. You get version 1.x, version 2.x and version 3.x (and so on) installed at the same time. Each version of the library has its own _namespace_. Your code can use multiple versions at the same time.
 
-The _Exception Helpers Library_ uses these namespaces:
+The _Defensive Library_ uses these namespaces:
 
 * `GanbaroDigital\Defensive\V1` - version 1.x of the library
 * `GanbaroDigital\Defensive\V2` - reserved for version 2.x of the library
