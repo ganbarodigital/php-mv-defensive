@@ -10,6 +10,15 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016052101
+
+Released Sat 21st May 2016.
+
+* initial release
+* feature release
+
 ### New
 
 * Added a way to catch all exceptions thrown by this library

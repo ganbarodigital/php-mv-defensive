@@ -7,8 +7,8 @@ pageflow_prev_text: Interfaces
 
 # Requirement
 
-<div class="callout warning">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016052101
 </div>
 
 ## Description

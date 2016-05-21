@@ -8,6 +8,12 @@ pageflow_next_text: InvokeableRequirement trait
 ---
 # ComposableRequirement
 
+<div class="callout info" markdown="1">
+Since v1.2016052101
+</div>
+
+## Description
+
 `ComposableRequirement` will turn any `callable` into a `Requirement`.
 
 ## Public Interface
