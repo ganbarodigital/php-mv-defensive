@@ -55,7 +55,6 @@ class DefensiveExceptions extends FactoryListContainer
             'BadRequirementArgs::newFromRequirementArgs' => [ BadRequirementArgs::class, 'newFromRequirementArgs' ],
             'BadRequirements::newFromRequirementsList' => [ BadRequirements::class, 'newFromRequirementsList' ],
             'BadRequirements::newFromEmptyList' => [ BadRequirements::class, 'newFromEmptyList' ],
-            'ContractFailed::newFromBadValue' => [ ContractFailed::class, 'newFromBadValue' ],
             'UnreachableCodeExecuted::newAlert' => [ UnreachableCodeExecuted::class, 'newAlert' ],
             'UnsupportedType::newFromVar' => [ UnsupportedType::class, 'newFromVar' ],
             'UnsupportedValue::newFromVar' => [ UnsupportedValue::class, 'newFromVar' ],

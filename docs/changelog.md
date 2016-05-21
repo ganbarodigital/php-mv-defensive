@@ -29,6 +29,5 @@ pageflow_next_text: Contributing
   - Added `ComposableRequirement` customisable function object
 * Added a factory container for this library's methods
   - Added `DefensiveExceptions` DI container
-* Added support for design-by-contract enforcement
-  - Added `ContractFailed` exception
+* Added support for catching impossible logic errors
   - Added `UnreachableCodeExecuted` exception

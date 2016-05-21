@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: BadRequirement.html
 pageflow_prev_text: BadRequirement class
-pageflow_next_url: ContractFailed.html
-pageflow_next_text: ContractFailed class
+pageflow_next_url: UnreachableCodeExecuted.html
+pageflow_next_text: UnreachableCodeExecuted class
 ---
 
 # BadRequirements

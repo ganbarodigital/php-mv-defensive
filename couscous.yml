@@ -59,9 +59,6 @@ menu:
             home:
                 text: Introduction
                 relativeUrl: V1/index.html
-            contracts:
-                text: Contracts
-                relativeUrl: V1/Contracts/index.html
             requirements:
                 text: Requirements
                 relativeUrl: V1/Requirements/index.html
