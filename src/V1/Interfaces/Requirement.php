@@ -43,8 +43,6 @@
 
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
-use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
-
 interface Requirement
 {
     /**
