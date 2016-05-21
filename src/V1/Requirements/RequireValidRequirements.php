@@ -53,6 +53,9 @@ use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 class RequireValidRequirements implements Requirement
 {
+    // saves us having to declare ::__invoke() ourselves
+    use InvokeableRequirement;
+
     /**
      * the exceptions we should throw
      *
@@ -74,20 +77,6 @@ class RequireValidRequirements implements Requirement
             $exceptions = new DefensiveExceptions;
         }
         $this->exceptions = $exceptions;
-    }
-
-    /**
-     * make sure that we have a list of valid requirements to work with
-     *
-     * @param array $requirements
-     *        the list of requirements to check
-     * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($requirements, $fieldOrVarName = "value")
-    {
-        return $this->to($requirements, $fieldOrVarName);
     }
 
     /**

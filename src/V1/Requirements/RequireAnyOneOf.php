@@ -54,6 +54,9 @@ use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 class RequireAnyOneOf implements Requirement
 {
+    // saves us having to declare ::__invoke() ourselves
+    use InvokeableRequirement;
+
     /**
      * the requirements to apply
      *
@@ -102,20 +105,6 @@ class RequireAnyOneOf implements Requirement
     public static function apply($requirements, FactoryList $exceptions = null)
     {
         return new static($requirements, $exceptions);
-    }
-
-    /**
-     * throws exception if none of our requirements are met
-     *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($data, $fieldOrVarName = "value")
-    {
-        return $this->to($data, $fieldOrVarName);
     }
 
     /**

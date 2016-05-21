@@ -51,6 +51,9 @@ use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 class ComposableRequirement implements Requirement
 {
+    // saves us having to declare ::__invoke() ourselves
+    use InvokeableRequirement;
+
     /**
      * the partial requirement that we are converting into a
      * composable requirement
@@ -129,20 +132,6 @@ class ComposableRequirement implements Requirement
     public static function apply($requirement, $extra, FactoryList $exceptions = null)
     {
         return new static($requirement, $extra, $exceptions);
-    }
-
-    /**
-     * throws exception if our underlying requirement isn't met
-     *
-     * @param  mixed $data
-     *         the data to be examined by our underlying requirement
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($data, $fieldOrVarName = "value")
-    {
-        return $this->to($data, $fieldOrVarName);
     }
 
     /**
