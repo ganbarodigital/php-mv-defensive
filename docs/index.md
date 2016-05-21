@@ -13,10 +13,9 @@ Ganbaro Digital's _Defensive Library_ provides an easy-to-use collection of help
 
 ## Goals
 
-The _Defensive Library_'s purpose is to collect robustness tools and approaches:
+The _Defensive Library_'s purpose is to collect robustness tools and approaches.
 
-* Programming by contract - checking inputs and outputs to prove that an algorithm works as intended
-* Programming by requirement - throwing exceptions if inputs don't meet a stated requirement
+If you're looking to check your code's correctness, you'll want our [Contracts Library](https://ganbarodigital.github.io/php-mv-contracts).
 
 ## Design Constraints
 
