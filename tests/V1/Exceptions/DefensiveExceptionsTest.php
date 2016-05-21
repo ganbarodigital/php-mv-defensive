@@ -44,13 +44,14 @@
 namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
-use PHPUnit_Framework_TestCase;
+use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
-use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\UnsupportedValue;
+use PHPUnit_Framework_TestCase;
 
 /**
  * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
@@ -181,6 +182,28 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertInstanceOf(BadRequirements::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_UnreachableCodeExecuted_newAlert()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['UnreachableCodeExecuted::newAlert'];
+        $exception = $factory();
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(UnreachableCodeExecuted::class, $exception);
     }
 
     /**

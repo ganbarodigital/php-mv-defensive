@@ -76,6 +76,7 @@ Here is the contract for this class:
      [x] has factory for BadRequirementArgs newFromRequirementArgs
      [x] has factory for BadRequirements newFromRequirementsList
      [x] has factory for BadRequirements newFromEmptyList
+     [x] has factory for UnreachableCodeExecuted newAlert
      [x] has factory for UnsupportedType newFromVar
      [x] has factory for UnsupportedValue newFromVar
 
