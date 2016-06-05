@@ -202,14 +202,14 @@ class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::newFromRequirementArgs
      */
-    public function testNewFromRequirementDataWillProvideADefaultSetOfCallerFilters()
+    public function test_NewFromRequirementData_WillProvideAnEmptySetOfCallerFilters()
     {
         // ----------------------------------------------------------------
         // setup your test
 
         // we only look for a small amount of data here, because filenames
         // and line numbers could easily change in the future
-        $expectedThrownBy = new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null);
+        $expectedThrownBy = new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 5);
 
         // ----------------------------------------------------------------
         // perform the change

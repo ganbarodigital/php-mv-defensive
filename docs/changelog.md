@@ -10,7 +10,9 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Fixes
+
+Updated to support removal of `FilterCodeCaller::$DEFAULT_PARTIALS` from `ganbarodigital/php-mv-exception-helpers`
 
 ## v1.2016052101
 
