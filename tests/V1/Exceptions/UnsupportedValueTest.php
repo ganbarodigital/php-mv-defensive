@@ -127,8 +127,8 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCaller = [
-            'ReflectionMethod',
-            'invokeArgs',
+            __CLASS__,
+            __FUNCTION__,
         ];
 
         // ----------------------------------------------------------------
@@ -154,11 +154,12 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedMessage = "ReflectionMethod->invokeArgs(): 'value' contains an unsupported value";
+        $callerFilter = [ __CLASS__ ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = UnsupportedValue::newFromVar(null, 'value');
+        $unit = UnsupportedValue::newFromVar(null, 'value', null, $callerFilter);
 
         // ----------------------------------------------------------------
         // test the results

@@ -163,8 +163,8 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCaller = [
-            'ReflectionMethod',
-            'invokeArgs',
+            __CLASS__,
+            __FUNCTION__,
         ];
 
         // ----------------------------------------------------------------
@@ -190,11 +190,12 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedMessage = "ReflectionMethod->invokeArgs(): 'value' cannot be type 'NULL'";
+        $callerFilter = [ __CLASS__ ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = UnsupportedType::newFromVar(null, 'value');
+        $unit = UnsupportedType::newFromVar(null, 'value', null, $callerFilter);
 
         // ----------------------------------------------------------------
         // test the results

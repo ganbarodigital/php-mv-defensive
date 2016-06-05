@@ -180,7 +180,7 @@ Here is the contract for this class:
      [x] maps to HTTP 422 UnprocessableEntity
      [x] Can create from bad requirements list
      [x] newFromRequirementsList states that list must contain callables
-     [x] newFromRequirementsList will provide a default set of caller filters
+     [x] newFromRequirementsList will provide an empty set of caller filters
      [x] Can create from empty requirements list
      [x] newFromEmptyList states that list cannot be empty
 

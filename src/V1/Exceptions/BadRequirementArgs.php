@@ -65,14 +65,14 @@ class BadRequirementArgs
      *         the data we could not accept
      * @param  array|null $callerFilter
      *         a list of classnames or partial namespaces to avoid
-     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
+     *         if null, we use an empty list
      * @return BadRequirementData
      */
     public static function newFromRequirementArgs($badArgs, $callerFilter = null)
     {
         // do we need to provide a filter?
         if (!is_array($callerFilter)) {
-            $callerFilter = FilterCodeCaller::$DEFAULT_PARTIALS;
+            $callerFilter = [];
         }
 
         // who called us?
