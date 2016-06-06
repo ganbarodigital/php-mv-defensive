@@ -70,7 +70,7 @@ class RequireAllOf implements Requirement
     public function __construct($requirements, FactoryList $exceptions = null)
     {
         // make sure we have exceptions to use
-        if (!is_array($exceptions)) {
+        if ($exceptions === null) {
             $exceptions = new DefensiveExceptions;
         }
         $this->exceptions = $exceptions;

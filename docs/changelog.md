@@ -12,6 +12,16 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016060601
+
+Released Mon 6th June 2016.
+
+### Fixes
+
+* Support overriding default exceptions factory list
+  - Updated `RequireAllOf`
+  - Updated `RequireAnyOneOf`
+
 ## v1.2016060501
 
 Released Sun 5th June 2016.
