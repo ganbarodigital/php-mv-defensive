@@ -10,7 +10,11 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Fixes
+
+* Support overriding default exceptions factory list
+  - Updated `RequireAllOf`
+  - Updated `RequireAnyOneOf`
 
 ## v1.2016060501
 
