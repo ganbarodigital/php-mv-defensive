@@ -10,6 +10,12 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+Nothing yet.
+
+## v1.2016060601
+
+Released Mon 6th June 2016.
+
 ### Fixes
 
 * Support overriding default exceptions factory list
