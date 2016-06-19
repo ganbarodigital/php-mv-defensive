@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/Exceptions
+ * @package   Defensive/V1/Exceptions
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
@@ -43,19 +43,20 @@
 
 namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 use GanbaroDigital\ExceptionHelpers\V1\Callers\Values\CodeCaller;
 use GanbaroDigital\HttpStatus\Interfaces\HttpStatusProvider;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
 use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList
  */
-class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
+class EmptyRequirementsListTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -70,12 +71,12 @@ class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementArgs($method);
+        $unit = new EmptyRequirementsList($method);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(BadRequirementArgs::class, $unit);
+        $this->assertInstanceOf(EmptyRequirementsList::class, $unit);
     }
 
     /**
@@ -91,7 +92,7 @@ class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementArgs($method);
+        $unit = new EmptyRequirementsList($method);
 
         // ----------------------------------------------------------------
         // test the results
@@ -112,18 +113,18 @@ class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementArgs($method);
+        $unit = new EmptyRequirementsList($method);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($unit instanceof RuntimeException);
+        $this->assertInstanceOf(RuntimeException::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function test_is_HttpStatusProvider()
+    public function test_is_HttpRequestErrorException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -133,18 +134,18 @@ class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementArgs($method);
+        $unit = new EmptyRequirementsList($method);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($unit instanceof HttpStatusProvider);
+        $this->assertInstanceOf(HttpRequestErrorException::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function test_maps_to_UnprocessableEntity()
+    public function test_maps_to_HTTP_422_UnprocessableEntity()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -154,37 +155,56 @@ class BadRequirementArgsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new BadRequirementArgs($method);
+        $unit = new EmptyRequirementsList($method);
         $httpStatus = $unit->getHttpStatus();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($httpStatus instanceof UnprocessableEntityStatus);
+        $this->assertInstanceOf(UnprocessableEntityStatus::class, $httpStatus);
     }
 
     /**
      * @covers ::newFromVar
      */
-    public function testCanCreateFromBadRequirementArgs()
+    public function testCanCreateFromEmptyRequirementsListList()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@186: must be an array of parameters to the requirement; NULL received';
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = EmptyRequirementsList::newFromVar(true, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(EmptyRequirementsList::class, $unit);
+    }
+
+    /**
+     * @covers ::newFromVar
+     */
+    public function test_exception_states_that_list_must_not_be_empty()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . "()@206: array cannot be empty";
         $expectedData = [
-            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 186),
-            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementArgsTest->testCanCreateFromBadRequirementArgs()@186',
-            'dataType' => 'NULL',
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 206),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . "()@206",
+            'dataType' => "boolean<true>",
             'fieldOrVarName' => '$data',
-            'fieldOrVar' => null,
+            'fieldOrVar' => true,
         ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = BadRequirementArgs::newFromVar(null, '$data');
-        $this->assertInstanceOf(BadRequirementArgs::class, $unit);
+        $unit = EmptyRequirementsList::newFromVar(true, '$data');
+        $this->assertInstanceOf(EmptyRequirementsList::class, $unit);
 
         $actualMessage = $unit->getMessage();
         $actualData = $unit->getMessageData();

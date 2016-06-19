@@ -137,6 +137,6 @@ class RequireAnyOneOf implements Requirement
         }
 
         // if we get here, our requirements are not met :(
-        throw $this->exceptions['UnsupportedValue::newFromVar']($data, $fieldOrVarName);
+        throw $this->exceptions['UnsupportedValue::newFromInputParameter']($data, $fieldOrVarName);
     }
 }

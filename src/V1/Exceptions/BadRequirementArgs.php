@@ -57,41 +57,6 @@ class BadRequirementArgs
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;
 
-    /**
-     * creates a new exception about data we could not use as input parameters
-     * for a single Requirement object
-     *
-     * @param  mixed $badData
-     *         the data we could not accept
-     * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use an empty list
-     * @return BadRequirementData
-     */
-    public static function newFromRequirementArgs($badArgs, $callerFilter = null)
-    {
-        // do we need to provide a filter?
-        if (!is_array($callerFilter)) {
-            $callerFilter = [];
-        }
-
-        // who called us?
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $callers = FilterBacktraceForTwoCodeCallers::from($trace, $callerFilter);
-
-        // what kind of data did we get instead of an array?
-        $type = GetPrintableType::of($badArgs, GetPrintableType::FLAG_CLASSNAME);
-
-        // put it all together
-        $exceptionData = [
-            "thrownBy" => $callers[0],
-            "thrownByName" => $callers[0]->getCaller(),
-            "caller" => $callers[1],
-            "callerName" => $callers[1]->getCaller(),
-            "badArgs" => $badArgs,
-            "badArgsType" => $type,
-        ];
-        $msg = "Bad requirement arguments passed into %thrownByName\$s by %callerName\$s; must be an array of parameters to the requirement; %badArgsType\$s received";
-        return new static($msg, $exceptionData);
-    }
+    // our format string
+    static protected $defaultFormat = "must be an array of parameters to the requirement; %dataType\$s received";
 }

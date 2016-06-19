@@ -102,10 +102,10 @@ class ComposableRequirement implements Requirement
 
         // robustness!
         if (!is_callable($requirement)) {
-            throw $this->exceptions['BadRequirement::newFromRequirement']($requirement);
+            throw $this->exceptions['BadRequirement::newFromInputParameter']($requirement, '$requirement');
         }
         if (!is_array($extra)) {
-            throw $this->exceptions['BadRequirementArgs::newFromRequirementArgs']($extra);
+            throw $this->exceptions['BadRequirementArgs::newFromInputParameter']($extra, '$extra');
         }
 
         // remember what we have

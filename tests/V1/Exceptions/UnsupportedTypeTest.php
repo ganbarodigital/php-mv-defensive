@@ -78,7 +78,7 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsDefensiveException()
+    public function test_is_DefensiveException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -99,7 +99,7 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsRuntimeException()
+    public function test_is_RuntimeException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -115,91 +115,5 @@ class UnsupportedTypeTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertTrue($unit instanceof RuntimeException);
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::newFromVar
-     * @dataProvider provideListOfPhpTypes
-     */
-    public function testAutomaticallyHandlesTypesPassedIn($item, $expectedType)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = UnsupportedType::newFromVar($item, '\$item');
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $actualData = $unit->getMessageData();
-        $this->assertEquals($expectedType, $actualData['dataType']);
-    }
-
-    public function provideListOfPhpTypes()
-    {
-        return [
-            [ null, 'NULL' ],
-            [ true, 'boolean<true>' ],
-            [ false, 'boolean<false>' ],
-            [ [ 'alfred' ], 'array' ],
-            [ 3.1415927, 'double<3.1415927>' ],
-            [ 100, 'integer<100>' ],
-            [ new \stdClass, 'object<stdClass>' ],
-            [ "hello, world!", 'string<hello, world!>' ]
-        ];
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::newFromVar
-     */
-    public function testAutomaticallyWorksOutWhoIsThrowingTheException()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $expectedCaller = [
-            __CLASS__,
-            __FUNCTION__,
-        ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = UnsupportedType::newFromVar(null, 'value');
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $actualData = $unit->getMessageData();
-        $this->assertEquals($expectedCaller[0], $actualData['caller']->getClass());
-        $this->assertEquals($expectedCaller[1], $actualData['caller']->getMethod());
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::newFromVar
-     */
-    public function testAutomaticallyAddsThrowerDetailsIntoExceptionMessage()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $expectedMessage = "ReflectionMethod->invokeArgs(): 'value' cannot be type 'NULL'";
-        $callerFilter = [ __CLASS__ ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = UnsupportedType::newFromVar(null, 'value', null, $callerFilter);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedMessage, $unit->getMessage());
     }
 }

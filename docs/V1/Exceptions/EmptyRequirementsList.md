@@ -1,13 +1,13 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadRequirements.html
-pageflow_prev_text: BadRequirements class
-pageflow_next_url: UnsupportedType.html
-pageflow_next_text: UnsupportedType class
+pageflow_prev_url: BadRequirement.html
+pageflow_prev_text: BadRequirement class
+pageflow_next_url: UnreachableCodeExecuted.html
+pageflow_next_text: UnreachableCodeExecuted class
 ---
 
-# BadRequirementArgs
+# EmptyRequirementsList
 
 <div class="callout info" markdown="1">
 Since v1.2016052101
@@ -15,14 +15,14 @@ Since v1.2016052101
 
 ## Description
 
-`BadRequirementArgs` is an exception. It is thrown when data passed into `RequireAllOf` or `RequireAnyOneOf` isn't an array.
+`EmptyRequirementsList` is an exception. It is thrown when the list of requirements passed into `RequireAllOf` or `RequireAnyOneOf` is an empty list.
 
 ## Public Interface
 
-`BadRequirementArgs` has the following public interface:
+`EmptyRequirementsList` has the following public interface:
 
 ```php
-// BadRequirementArgs lives in this namespace
+// EmptyRequirementsList lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
@@ -32,7 +32,7 @@ use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RequestError\UnprocessableEntityStatus;
 
-class BadRequirementArgs
+class EmptyRequirementsList
   extends ParameterisedException
   implements DefensiveException, HttpRequestErrorException
 {
@@ -40,8 +40,8 @@ class BadRequirementArgs
     use UnprocessableEntityStatusProvider;
 
     /**
-     * creates a new exception about data we could not use as input parameters
-     * for a single Requirement object
+     * create a new exception from the requirements list that has been
+     * rejected
      *
      * @param  mixed $fieldOrVar
      *         the value that you're throwing an exception about
@@ -55,7 +55,7 @@ class BadRequirementArgs
      * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
-     * @return BadRequirementArgs
+     * @return EmptyRequirementsList
      *         an fully-built exception for you to throw
      */
     public static function newFromVar(
@@ -94,38 +94,38 @@ class BadRequirementArgs
 
 ### Creating Exceptions To Throw
 
-Call `BadRequirementArgs::newFromVar()` to create a new throwable exception:
+Call `EmptyRequirementsList::newFromVar()` to create a new throwable exception:
 
 ```php
 // how to import
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 
-throw BadRequirementArgs::newFromVar([], '$data');
+throw EmptyRequirementsList::newFromVar(null, '$list');
 ```
 
 ### Catching The Exception
 
-`BadRequirementArgs` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
+`EmptyRequirementsList` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
 
 ```php
-// example 1: we catch only BadRequirementArgs exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+// example 1: we catch only EmptyRequirementsList exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 
 try {
-    throw BadRequirementArgs::newFromVar([], '$data');
+    throw EmptyRequirementsList::newFromVar([], '$list');
 }
-catch(BadRequirementArgs $e) {
+catch(EmptyRequirementsList $e) {
     // ...
 }
 ```
 
 ```php
 // example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadRequirementArgs::newFromVar([], '$data');
+    throw EmptyRequirementsList::newFromVar([], '$list');
 }
 catch(DefensiveException $e) {
     // ...
@@ -135,11 +135,11 @@ catch(DefensiveException $e) {
 ```php
 // example 3: catch all exceptions where there was a problem with the
 // parameter(s) passed into the method
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 try {
-    throw BadRequirementArgs::newFromVar([], '$data');
+    throw EmptyRequirementsList::newFromVar([], '$list');
 }
 catch(HttpRequestErrorException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -149,11 +149,11 @@ catch(HttpRequestErrorException $e) {
 
 ```php
 // example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw BadRequirementArgs::newFromVar([], '$data');
+    throw EmptyRequirementsList::newFromVar([], '$list');
 }
 catch(HttpException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -163,11 +163,11 @@ catch(HttpException $e) {
 
 ```php
 // example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use RuntimeException;
 
 try {
-    throw BadRequirementArgs::newFromVar([], '$data');
+    throw EmptyRequirementsList::newFromVar([], '$list');
 }
 catch(RuntimeException $e) {
     // ...
@@ -178,13 +178,14 @@ catch(RuntimeException $e) {
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs
+    GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList
      [x] Can instantiate
      [x] is DefensiveException
      [x] is RuntimeException
-     [x] is HttpStatusProvider
-     [x] maps to UnprocessableEntity
-     [x] Can create from bad requirement args
+     [x] is HttpRequestErrorException
+     [x] maps to HTTP 422 UnprocessableEntity
+     [x] Can create from empty requirements list list
+     [x] exception states that list must not be empty
 
 Class contracts are built from this class's unit tests.
 

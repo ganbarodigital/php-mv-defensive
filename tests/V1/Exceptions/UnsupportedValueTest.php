@@ -78,7 +78,7 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsDefensiveException()
+    public function test_is_DefensiveException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -99,7 +99,7 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsRuntimeException()
+    public function test_is_RuntimeException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -115,55 +115,5 @@ class UnsupportedValueTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertTrue($unit instanceof RuntimeException);
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::newFromVar
-     */
-    public function testAutomaticallyWorksOutWhoIsThrowingTheException()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $expectedCaller = [
-            __CLASS__,
-            __FUNCTION__,
-        ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = UnsupportedValue::newFromVar(null, 'value');
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $actualData = $unit->getMessageData();
-        $this->assertEquals($expectedCaller[0], $actualData['caller']->getClass());
-        $this->assertEquals($expectedCaller[1], $actualData['caller']->getMethod());
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::newFromVar
-     */
-    public function testAutomaticallyAddsThrowerDetailsIntoExceptionMessage()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $expectedMessage = "ReflectionMethod->invokeArgs(): 'value' contains an unsupported value";
-        $callerFilter = [ __CLASS__ ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = UnsupportedValue::newFromVar(null, 'value', null, $callerFilter);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedMessage, $unit->getMessage());
     }
 }

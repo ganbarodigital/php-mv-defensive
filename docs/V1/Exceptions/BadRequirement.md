@@ -43,14 +43,28 @@ class BadRequirement
      * create a new exception from the requirement that has been
      * rejected
      *
-     * @param  mixed $requirement
-     *         the requirement that has been rejected
-     * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
-     * @return BadRequirements
+     * @param  mixed $fieldOrVar
+     *         the value that you're throwing an exception about
+     * @param  string $fieldOrVarName
+     *         the name of the value in your code
+     * @param  array $extraData
+     *         extra data that you want to include in your exception
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final
+     *         exception message?
+     * @param  array $callStackFilter
+     *         are there any namespaces we want to filter out of
+     *         the call stack?
+     * @return BadRequirement
+     *         an fully-built exception for you to throw
      */
-    public static function newFromRequirement($requirement, $callerFilter = null);
+    public static function newFromVar(
+        $fieldOrVar,
+        $fieldOrVarName,
+        array $extraData = [],
+        $typeFlags = null,
+        array $callStackFilter = []
+    );
 
     /**
      * what was the data that we used to create the printable message?
@@ -80,13 +94,13 @@ class BadRequirement
 
 ### Creating Exceptions To Throw
 
-Call `BadRequirement::newFromRequirement()` to create a new throwable exception:
+Call `BadRequirement::newFromVar()` to create a new throwable exception:
 
 ```php
 // how to import
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 
-throw BadRequirement::newFromRequirement([]);
+throw BadRequirement::newFromVar([], '$data');
 ```
 
 ### Catching The Exception
@@ -98,7 +112,7 @@ throw BadRequirement::newFromRequirement([]);
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 
 try {
-    throw BadRequirement::newFromRequirement([]);
+    throw BadRequirement::newFromVar([], '$data');
 }
 catch(BadRequirement $e) {
     // ...
@@ -111,7 +125,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadRequirement::newFromRequirement([]);
+    throw BadRequirement::newFromVar([], '$data');
 }
 catch(DefensiveException $e) {
     // ...
@@ -125,7 +139,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 try {
-    throw BadRequirement::newFromRequirement([]);
+    throw BadRequirement::newFromVar([], '$data');
 }
 catch(HttpRequestErrorException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -139,7 +153,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw BadRequirement::newFromRequirement([]);
+    throw BadRequirement::newFromVar([], '$data');
 }
 catch(HttpException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -153,12 +167,49 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use RuntimeException;
 
 try {
-    throw BadRequirement::newFromRequirement([]);
+    throw BadRequirement::newFromVar([], '$data');
 }
 catch(RuntimeException $e) {
     // ...
 }
 ```
+
+## Class Contract
+
+Here is the contract for this class:
+
+    GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
+     [x] Can instantiate
+     [x] is DefensiveException
+     [x] is RuntimeException
+     [x] is HttpStatusProvider
+     [x] maps to UnprocessableEntity
+     [x] Can create from bad requirement
+
+Class contracts are built from this class's unit tests.
+
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+
+<div class="callout info" markdown="1">
+Future releases of this class may add to this contract. New additions may include:
+
+* clarifying existing behaviour (e.g. stricter contract around input or return types)
+* add new behaviours (e.g. extra class methods)
+</div>
+
+<div class="callout warning" markdown="1">
+When you use this class, you can only rely on the behaviours documented by this contract.
+
+If you:
+
+* find other ways to use this class,
+* or depend on behaviours that are not covered by a unit test,
+* or depend on undocumented internal states of this class,
+
+... your code may not work in the future.
+</div>
 
 ## Notes
 

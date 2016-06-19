@@ -10,7 +10,11 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### Refactor
+
+* Update everything to be compatible with the latest Exception Helpers library.
+  - Update every class
+  - Added `EmptyRequirementsList` exception
 
 ## v1.2016060601
 

@@ -62,7 +62,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 
 $diContainer = new DefensiveExceptions;
 
-throw $diContainer['BadRequirement::newFromRequirement'](false);
+throw $diContainer['BadRequirement::newFromVar'](false, '$data');
 ```
 
 ## Class Contract
@@ -72,12 +72,18 @@ Here is the contract for this class:
     GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
      [x] Can instantiate
      [x] Is factory list
-     [x] has factory for BadRequirement newFromRequirement
-     [x] has factory for BadRequirementArgs newFromRequirementArgs
-     [x] has factory for BadRequirements newFromRequirementsList
-     [x] has factory for BadRequirements newFromEmptyList
+     [x] has factory for BadRequirement newFromInputParameter
+     [x] has factory for BadRequirement newFromVar
+     [x] has factory for BadRequirementArgs newFromInputParameter
+     [x] has factory for BadRequirementArgs newFromVar
+     [x] has factory for BadRequirements newFromInputParameter
+     [x] has factory for BadRequirements newFromVar
+     [x] has factory for EmptyRequirementsList newFromInputParameter
+     [x] has factory for EmptyRequirementsList newFromVar
      [x] has factory for UnreachableCodeExecuted newAlert
+     [x] has factory for UnsupportedType newFromInputParameter
      [x] has factory for UnsupportedType newFromVar
+     [x] has factory for UnsupportedValue newFromInputParameter
      [x] has factory for UnsupportedValue newFromVar
 
 Class contracts are built from this class's unit tests.

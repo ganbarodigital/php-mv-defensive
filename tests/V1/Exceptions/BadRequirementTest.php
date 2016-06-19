@@ -81,7 +81,7 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsDefensiveException()
+    public function test_is_DefensiveException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -102,7 +102,7 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsRuntimeException()
+    public function test_is_RuntimeException()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -123,7 +123,7 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsHttpStatusProvider()
+    public function test_is_HttpStatusProvider()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -144,7 +144,7 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testMapsToUnprocessableEntity()
+    public function test_maps_to_UnprocessableEntity()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -164,29 +164,26 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::newFromRequirement
+     * @covers ::newFromVar
      */
     public function testCanCreateFromBadRequirement()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "Bad requirement passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest->testCanCreateFromBadRequirement()@189 by ReflectionMethod->invokeArgs(); must be instance of Requirement";
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@186: \'$data\' must be instance of Requirement';
         $expectedData = [
-            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest', 'testCanCreateFromBadRequirement', '->', __FILE__, 189),
-            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest->testCanCreateFromBadRequirement()@189',
-            'caller' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
-            'callerName' => 'ReflectionMethod->invokeArgs()',
-            'badRequirement' => [],
-            'badRequirementType' => 'array',
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 186),
+            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementTest->testCanCreateFromBadRequirement()@186',
+            'fieldOrVar' => [],
+            'fieldOrVarName' => '$data',
+            'dataType' => 'array',
         ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        // we have to pass in an empty filter here, because the default filter
-        // filters out 'Exceptions', which is one of our namespaces
-        $unit = BadRequirement::newFromRequirement([],[]);
+        $unit = BadRequirement::newFromVar([], '$data');
         $this->assertInstanceOf(BadRequirement::class, $unit);
 
         $actualMessage = $unit->getMessage();
@@ -197,31 +194,5 @@ class BadRequirementTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedMessage, $actualMessage);
         $this->assertEquals($expectedData, $actualData);
-    }
-
-    /**
-     * @covers ::newFromRequirement
-     */
-    public function test_newFromRequirement_will_provide_an_empty_set_of_caller_filters()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // we only look for a small amount of data here, because filenames
-        // and line numbers could easily change in the future
-        $expectedThrownBy = new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 5);
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = BadRequirement::newFromRequirement(null);
-        $this->assertInstanceOf(BadRequirement::class, $unit);
-
-        $actualData = $unit->getMessageData();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedThrownBy, $actualData['thrownBy']);
     }
 }

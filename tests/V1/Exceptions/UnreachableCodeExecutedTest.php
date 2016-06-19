@@ -201,7 +201,7 @@ class UnreachableCodeExecutedTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "unreachable code executed at " . __CLASS__ . '->' . __FUNCTION__ . '()@209';
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@209: unreachable code executed';
 
         // ----------------------------------------------------------------
         // perform the change
@@ -224,8 +224,8 @@ class UnreachableCodeExecutedTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedData = [
-            'caller' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 234),
-            'callerName' => __CLASS__ . '->' . __FUNCTION__ . '()@234',
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 234),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . '()@234',
         ];
 
         // ----------------------------------------------------------------
