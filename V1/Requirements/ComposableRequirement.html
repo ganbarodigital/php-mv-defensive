@@ -163,7 +163,7 @@ function minMaxCheck($data, $minValue, $maxValue, $fieldOrVarName) {
 $data = 15;
 
 // is $data in the range 10..20?
-ComposableRequirement::apply(minMaxCheck, [10, 20])-&gt;to($data, '\$data');</code></pre>
+ComposableRequirement::apply(minMaxCheck, [10, 20])-&gt;to($data, '$data');</code></pre>
 <p>The <code>::apply()-&gt;to()</code> pattern helps make your code more readable.</p>
 <p>The real benefit of <code>ComposableRequirement</code> comes when you want to use <code>minMaxCheck</code> in a list of requirements:</p>
 <pre><code class="language-php">use GanbaroDigital\Defensive\V1\Requirements\RequireAllOf;
@@ -179,7 +179,7 @@ $requirements = [
 // the data to check
 $data = 15;
 
-RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
+RequireAllOf::apply($requirements)-&gt;to($data, '$data');</code></pre>
 <p>You can wrap any <code>callable</code> as a <code>ComposableRequirement</code> as long as:</p>
 <ul>
 <li>the first input parameter must be the data to check</li>

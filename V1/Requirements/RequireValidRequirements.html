@@ -74,6 +74,9 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 // RequireValidRequirements is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
+// our input and return type(s)
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+
 class RequireValidRequirements implements Requirement
 {
     /**
@@ -130,7 +133,7 @@ class RequireValidRequirements implements Requirement
 <pre><code class="language-php">$requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireValidRequirements::apply()-&gt;to($requirements, '\$requirements');</code></pre>
+RequireValidRequirements::apply()-&gt;to($requirements, '$requirements');</code></pre>
 <p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>

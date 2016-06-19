@@ -88,14 +88,28 @@ class BadRequirementArgs
      * creates a new exception about data we could not use as input parameters
      * for a single Requirement object
      *
-     * @param  mixed $badArgs
-     *         the data we could not accept
-     * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
+     * @param  mixed $fieldOrVar
+     *         the value that you're throwing an exception about
+     * @param  string $fieldOrVarName
+     *         the name of the value in your code
+     * @param  array $extraData
+     *         extra data that you want to include in your exception
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final
+     *         exception message?
+     * @param  array $callStackFilter
+     *         are there any namespaces we want to filter out of
+     *         the call stack?
      * @return BadRequirementArgs
+     *         an fully-built exception for you to throw
      */
-    public static function newFromRequirementArgs($badArgs, $callerFilter = null);
+    public static function newFromVar(
+        $fieldOrVar,
+        $fieldOrVarName,
+        array $extraData = [],
+        $typeFlags = null,
+        array $callStackFilter = []
+    );
 
     /**
      * what was the data that we used to create the printable message?
@@ -121,18 +135,18 @@ class BadRequirementArgs
 </code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="creating-exceptions-to-throw">Creating Exceptions To Throw</h3>
-<p>Call <code>BadRequirementArgs::newFromRequirementArgs()</code> to create a new throwable exception:</p>
+<p>Call <code>BadRequirementArgs::newFromVar()</code> to create a new throwable exception:</p>
 <pre><code class="language-php">// how to import
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 
-throw BadRequirementArgs::newFromRequirementArgs([]);</code></pre>
+throw BadRequirementArgs::newFromVar([], '$data');</code></pre>
 <h3 id="catching-the-exception">Catching The Exception</h3>
 <p><code>BadRequirementArgs</code> extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.</p>
 <pre><code class="language-php">// example 1: we catch only BadRequirementArgs exceptions
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 
 try {
-    throw BadRequirementArgs::newFromRequirementArgs([]);
+    throw BadRequirementArgs::newFromVar([], '$data');
 }
 catch(BadRequirementArgs $e) {
     // ...
@@ -142,7 +156,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadRequirementArgs::newFromRequirementArgs([]);
+    throw BadRequirementArgs::newFromVar([], '$data');
 }
 catch(DefensiveException $e) {
     // ...
@@ -153,7 +167,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 try {
-    throw BadRequirementArgs::newFromRequirementArgs([]);
+    throw BadRequirementArgs::newFromVar([], '$data');
 }
 catch(HttpRequestErrorException $e) {
     $httpStatus = $e-&gt;getHttpStatus();
@@ -164,7 +178,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw BadRequirementArgs::newFromRequirementArgs([]);
+    throw BadRequirementArgs::newFromVar([], '$data');
 }
 catch(HttpException $e) {
     $httpStatus = $e-&gt;getHttpStatus();
@@ -175,11 +189,41 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use RuntimeException;
 
 try {
-    throw BadRequirementArgs::newFromRequirementArgs([]);
+    throw BadRequirementArgs::newFromVar([], '$data');
 }
 catch(RuntimeException $e) {
     // ...
 }</code></pre>
+<h2 id="class-contract">Class Contract</h2>
+<p>Here is the contract for this class:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs
+ [x] Can instantiate
+ [x] is DefensiveException
+ [x] is RuntimeException
+ [x] is HttpStatusProvider
+ [x] maps to UnprocessableEntity
+ [x] Can create from bad requirement args</code></pre>
+<p>Class contracts are built from this class's unit tests.</p>
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this class may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra class methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this class,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this class,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
 <h2 id="see-also">See Also</h2>

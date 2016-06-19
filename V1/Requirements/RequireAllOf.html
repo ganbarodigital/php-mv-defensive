@@ -74,6 +74,9 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 // RequireAllOf is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
+// our input and return type(s)
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+
 class RequireAllOf implements Requirement
 {
     /**
@@ -81,11 +84,11 @@ class RequireAllOf implements Requirement
      *
      * @param array $requirements
      *        a list of the requirements to apply
-     * @param array $exception
+     * @param FactoryList|null $exceptions
      *        the functions to call when we want to throw an exception
      * @return RequireAllOf
      */
-    public static function apply($requirements, $exceptions = null);
+    public static function apply($requirements, FactoryList $exceptions = null);
 
     /**
      * throws exceptions if any of our requirements are not met
@@ -94,11 +97,9 @@ class RequireAllOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+    public function __invoke($data, $fieldOrVarName = "value");
 
     /**
      * throws exceptions if any of our requirements are not met
@@ -107,11 +108,9 @@ class RequireAllOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null);
+    public function to($data, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="applying-requirements">Applying Requirements</h3>
@@ -119,7 +118,7 @@ class RequireAllOf implements Requirement
 <pre><code class="language-php">$requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
+RequireAllOf::apply($requirements)-&gt;to($data, '$data');</code></pre>
 <p>Use <code>RequireAllOf</code> to enforce robustness in your library's public API:</p>
 <pre><code class="language-php">function doSomething($arg1)
 {
@@ -128,7 +127,7 @@ RequireAllOf::apply($requirements)-&gt;to($data, '\$data');</code></pre>
         new RequireIndexable(),
         new RequireNotEmpty()
     ];
-    RequireAllOf::apply($requirements)-&gt;to($arg1, '\$arg1');
+    RequireAllOf::apply($requirements)-&gt;to($arg1, '$arg1');
 
     // if we get here, then $arg1 is good
 }</code></pre>
