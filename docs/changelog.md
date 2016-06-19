@@ -12,6 +12,14 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016061901
+
+### Refactor
+
+* Update everything to be compatible with the latest Exception Helpers library.
+  - Update every class
+  - Added `EmptyRequirementsList` exception
+
 ## v1.2016060601
 
 Released Mon 6th June 2016.

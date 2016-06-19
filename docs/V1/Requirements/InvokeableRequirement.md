@@ -34,11 +34,9 @@ trait InvokeableRequirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+    public function __invoke($data, $fieldOrVarName = "value");
 }
 ```
 

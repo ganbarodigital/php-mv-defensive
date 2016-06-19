@@ -45,7 +45,7 @@ namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 use GanbaroDigital\Defensive\V1\Contracts\UnreachableCode;
 use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
-use GanbaroDigital\ExceptionHelpers\V1\Callers\Filters\FilterCodeCaller;
+use GanbaroDigital\ExceptionHelpers\V1\ParameterBuilders\BuildThrownBy;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
 
@@ -64,26 +64,17 @@ class UnreachableCodeExecuted
      */
     public static function newAlert()
     {
-        // who called us?
-        //
-        // we want to filter out only the absolute minimum:
-        // - ourselves
-        // - a convenience class in the `Contract` namespace
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $callerFilter = [
-            self::class,
-            static::class,
-            UnreachableCode::class,
-        ];
-        $caller = FilterCodeCaller::from($trace);
+        // build the basics
+        list($message, $exceptionData) = BuildThrownBy::from(
+            "unreachable code executed",
+            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
+            [
+                self::class,
+                static::class,
+                UnreachableCode::class,
+            ]
+        );
 
-        // putting it all together
-        $msg = "unreachable code executed at %callerName\$s";
-        $exceptionData = [
-            "caller" => $caller,
-            "callerName" => $caller->getCaller(),
-        ];
-
-        return new static($msg, $exceptionData);
+        return new static($message, $exceptionData);
     }
 }

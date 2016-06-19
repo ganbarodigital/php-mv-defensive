@@ -57,43 +57,6 @@ class BadRequirement
     // we map onto HTTP 422
     use UnprocessableEntityStatusProvider;
 
-    /**
-     * create a new exception from the requirement that has been
-     * rejected
-     *
-     * @param  mixed $requirement
-     *         the requirement that has been rejected
-     * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use an empty list
-     * @return BadRequirements
-     */
-    public static function newFromRequirement($requirement, $callerFilter = null)
-    {
-        // do we need to provide a filter?
-        if (!is_array($callerFilter)) {
-            $callerFilter = [];
-        }
-
-        // who called us?
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-        $callers = FilterBacktraceForTwoCodeCallers::from($trace, $callerFilter);
-
-        // what is the bad data we've had?
-        $type = GetPrintableType::of($requirement, GetPrintableType::FLAG_CLASSNAME);
-
-        // put it all together
-        $exceptionData = [
-            "thrownBy" => $callers[0],
-            "thrownByName" => $callers[0]->getCaller(),
-            "caller" => $callers[1],
-            "callerName" => $callers[1]->getCaller(),
-            "badRequirement" => $requirement,
-            "badRequirementType" => $type,
-        ];
-        $msg = "Bad requirement passed into %thrownByName\$s by %callerName\$s; must be instance of Requirement";
-
-        // all done
-        return new static($msg, $exceptionData);
-    }
+    // our format string
+    static protected $defaultFormat = "'%fieldOrVarName\$s' must be instance of Requirement";
 }

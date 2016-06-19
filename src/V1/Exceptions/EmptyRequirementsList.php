@@ -50,7 +50,7 @@ use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 use GanbaroDigital\HttpStatus\StatusProviders\RequestError\UnprocessableEntityStatusProvider;
 use GanbaroDigital\MissingBits\TypeInspectors\GetPrintableType;
 
-class BadRequirements
+class EmptyRequirementsList
   extends ParameterisedException
   implements DefensiveException, HttpRequestErrorException
 {
@@ -58,5 +58,5 @@ class BadRequirements
     use UnprocessableEntityStatusProvider;
 
     // our default format string
-    static protected $defaultFormat = "must be non-empty array of callables";
+    static protected $defaultFormat = "array cannot be empty";
 }

@@ -128,7 +128,7 @@ use GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement;
 $data = 15;
 
 // is $data in the range 10..20?
-ComposableRequirement::apply(minMaxCheck, [10, 20])->to($data, '\$data');
+ComposableRequirement::apply(minMaxCheck, [10, 20])->to($data, '$data');
 ```
 
 The `::apply()->to()` pattern helps make your code more readable.
@@ -149,7 +149,7 @@ $requirements = [
 // the data to check
 $data = 15;
 
-RequireAllOf::apply($requirements)->to($data, '\$data');
+RequireAllOf::apply($requirements)->to($data, '$data');
 ```
 
 You can wrap any `callable` as a `ComposableRequirement` as long as:

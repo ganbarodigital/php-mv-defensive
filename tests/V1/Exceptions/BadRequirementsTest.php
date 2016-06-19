@@ -165,7 +165,7 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::newFromRequirementsList
+     * @covers ::newFromVar
      */
     public function testCanCreateFromBadRequirementsList()
     {
@@ -175,7 +175,7 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = BadRequirements::newFromRequirementsList(true);
+        $unit = BadRequirements::newFromVar(true, '$data');
 
         // ----------------------------------------------------------------
         // test the results
@@ -184,29 +184,26 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::newFromRequirementsList
+     * @covers ::newFromVar
      */
-    public function test_newFromRequirementsList_states_that_list_must_contain_callables()
+    public function test_exception_states_that_list_must_contain_callables()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = "Bad requirements passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->test_newFromRequirementsList_states_that_list_must_contain_callables()@209 by ReflectionMethod->invokeArgs(); must be an array of callables";
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . "()@206: must be non-empty array of callables";
         $expectedData = [
-            'thrownBy' => new CodeCaller('GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest', 'test_newFromRequirementsList_states_that_list_must_contain_callables', '->', __FILE__, 209),
-            'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->test_newFromRequirementsList_states_that_list_must_contain_callables()@209',
-            'caller' => new CodeCaller('ReflectionMethod', 'invokeArgs', '->', null, null),
-            'callerName' => 'ReflectionMethod->invokeArgs()',
-            'badRequirements' => true,
-            'badRequirementsType' => 'boolean',
+            'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 206),
+            'thrownByName' => __CLASS__ . '->' . __FUNCTION__ . "()@206",
+            'dataType' => "boolean<true>",
+            'fieldOrVarName' => '$data',
+            'fieldOrVar' => true,
         ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        // we have to pass in an empty filter here, because the default filter
-        // filters out 'Exceptions', which is one of our namespaces
-        $unit = BadRequirements::newFromRequirementsList(true, []);
+        $unit = BadRequirements::newFromVar(true, '$data');
         $this->assertInstanceOf(BadRequirements::class, $unit);
 
         $actualMessage = $unit->getMessage();
@@ -217,71 +214,5 @@ class BadRequirementsTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedMessage, $actualMessage);
         $this->assertEquals($expectedData, $actualData);
-    }
-
-    /**
-     * @covers ::newFromRequirementsList
-     */
-    public function test_newFromRequirementsList_will_provide_an_empty_set_of_caller_filters()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // we only look for a small amount of data here, because filenames
-        // and line numbers could easily change in the future
-        $expectedThrownBy = new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, __LINE__ + 5);
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = BadRequirements::newFromRequirementsList([]);
-        $actualData = $unit->getMessageData();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedThrownBy, $actualData['thrownBy']);
-    }
-
-    /**
-     * @covers ::newFromEmptyList
-     */
-    public function testCanCreateFromEmptyRequirementsList()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = BadRequirements::newFromEmptyList();
-        $actualData = $unit->getMessageData();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertInstanceOf(BadRequirements::class, $unit);
-    }
-
-    /**
-     * @covers ::newFromEmptyList
-     */
-    public function test_newFromEmptyList_states_that_list_cannot_be_empty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $expectedMessage = "Bad requirements passed into GanbaroDigitalTest\Defensive\V1\Exceptions\BadRequirementsTest->test_newFromEmptyList_states_that_list_cannot_be_empty()@279 by ReflectionMethod->invokeArgs(); empty array provided";
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = BadRequirements::newFromEmptyList([]);
-        $actualMessage = $unit->getMessage();
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedMessage, $actualMessage);
     }
 }

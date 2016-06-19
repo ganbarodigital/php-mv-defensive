@@ -51,12 +51,18 @@ class DefensiveExceptions extends FactoryListContainer
     {
         // the exceptions that our library throws
         $ourExceptions = [
-            'BadRequirement::newFromRequirement' => [ BadRequirement::class, 'newFromRequirement' ],
-            'BadRequirementArgs::newFromRequirementArgs' => [ BadRequirementArgs::class, 'newFromRequirementArgs' ],
-            'BadRequirements::newFromRequirementsList' => [ BadRequirements::class, 'newFromRequirementsList' ],
-            'BadRequirements::newFromEmptyList' => [ BadRequirements::class, 'newFromEmptyList' ],
+            'BadRequirement::newFromInputParameter' => [ BadRequirement::class, 'newFromInputParameter' ],
+            'BadRequirement::newFromVar' => [ BadRequirement::class, 'newFromVar' ],
+            'BadRequirementArgs::newFromInputParameter' => [ BadRequirementArgs::class, 'newFromInputParameter' ],
+            'BadRequirementArgs::newFromVar' => [ BadRequirementArgs::class, 'newFromVar' ],
+            'BadRequirements::newFromInputParameter' => [ BadRequirements::class, 'newFromInputParameter' ],
+            'BadRequirements::newFromVar' => [ BadRequirements::class, 'newFromVar' ],
+            'EmptyRequirementsList::newFromInputParameter' => [ EmptyRequirementsList::class, 'newFromInputParameter' ],
+            'EmptyRequirementsList::newFromVar' => [ EmptyRequirementsList::class, 'newFromVar' ],
             'UnreachableCodeExecuted::newAlert' => [ UnreachableCodeExecuted::class, 'newAlert' ],
+            'UnsupportedType::newFromInputParameter' => [ UnsupportedType::class, 'newFromInputParameter' ],
             'UnsupportedType::newFromVar' => [ UnsupportedType::class, 'newFromVar' ],
+            'UnsupportedValue::newFromInputParameter' => [ UnsupportedValue::class, 'newFromInputParameter' ],
             'UnsupportedValue::newFromVar' => [ UnsupportedValue::class, 'newFromVar' ],
         ];
 

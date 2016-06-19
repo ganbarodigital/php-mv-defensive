@@ -105,14 +105,14 @@ class RequireValidRequirements implements Requirement
         // we do not use Reflections RequireTraversable here because then
         // Reflections cannot depend upon this library
         if (!is_array($requirements)) {
-            throw $this->exceptions['BadRequirements::newFromRequirementsList']($requirements, $fieldOrVarName);
+            throw $this->exceptions['BadRequirements::newFromInputParameter']($requirements, $fieldOrVarName);
         }
         if (empty($requirements)) {
-            throw $this->exceptions['BadRequirements::newFromEmptyList']($requirements, $fieldOrVarName);
+            throw $this->exceptions['EmptyRequirementsList::newFromInputParameter']($requirements, $fieldOrVarName);
         }
         foreach ($requirements as $requirement) {
             if (!$requirement instanceof Requirement) {
-                throw $this->exceptions['BadRequirement::newFromRequirement']($requirement, $fieldOrVarName);
+                throw $this->exceptions['BadRequirement::newFromInputParameter']($requirement, $fieldOrVarName);
             }
         }
     }

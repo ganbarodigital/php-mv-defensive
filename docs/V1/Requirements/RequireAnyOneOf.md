@@ -30,6 +30,9 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 // RequireAnyOneOf is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
+// our input and return type(s)
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+
 class RequireAnyOneOf implements Requirement
 {
     /**
@@ -37,11 +40,11 @@ class RequireAnyOneOf implements Requirement
      *
      * @param array $requirements
      *        a list of the requirements to apply
-     * @param array $exception
+     * @param FactoryList|null $exceptions
      *        the functions to call when we want to throw an exception
      * @return RequireAnyOneOf
      */
-    public static function apply($requirements, $exceptions = null);
+    public static function apply($requirements, FactoryList $exceptions = null);
 
     /**
      * throws exception if none of our requirements are met
@@ -50,11 +53,9 @@ class RequireAnyOneOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value", $exceptions = null);
+    public function __invoke($data, $fieldOrVarName = "value");
 
     /**
      * throws exception if none of our requirements are met
@@ -63,11 +64,9 @@ class RequireAnyOneOf implements Requirement
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
-     * @param  array|null $exceptions
-     *         the functions to call when we want to throw an exception
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value", $exceptions = null);
+    public function to($data, $fieldOrVarName = "value");
 }
 ```
 
@@ -81,7 +80,7 @@ Use the `::apply()->to()` pattern:
 $requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireAnyOneOf::apply($requirements)->to($data, '\$data');
+RequireAnyOneOf::apply($requirements)->to($data, '$data');
 ```
 
 Use `RequireAnyOneOf` to enforce robustness in your library's public API:
@@ -94,7 +93,7 @@ function doSomething($arg1)
         new RequireString(),
         new RequireNull()
     ];
-    RequireAnyOneOf::apply($requirements)->to($arg1, '\$arg1');
+    RequireAnyOneOf::apply($requirements)->to($arg1, '$arg1');
 
     // if we get here, then $arg1 is good
 }

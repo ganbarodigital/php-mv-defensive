@@ -74,7 +74,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function testIsRequirement()
+    public function test_is_Requirement()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -174,7 +174,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::apply
      * @covers ::to
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirements
+     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList
      */
     public function testListOfRequirementsCannotBeEmpty()
     {

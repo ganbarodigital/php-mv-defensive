@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: BadRequirement.html
 pageflow_prev_text: BadRequirement class
-pageflow_next_url: UnreachableCodeExecuted.html
-pageflow_next_text: UnreachableCodeExecuted class
+pageflow_next_url: EmptyRequirementsList.html
+pageflow_next_text: EmptyRequirementsList class
 ---
 
 # BadRequirements
@@ -43,14 +43,28 @@ class BadRequirements
      * create a new exception from the requirements list that has been
      * rejected
      *
-     * @param  mixed $list
-     *         the requirements list that has been rejected
-     * @param  array|null $callerFilter
-     *         a list of classnames or partial namespaces to avoid
-     *         if null, we use FilterCodeCaller::$DEFAULT_PARTIALS
+     * @param  mixed $fieldOrVar
+     *         the value that you're throwing an exception about
+     * @param  string $fieldOrVarName
+     *         the name of the value in your code
+     * @param  array $extraData
+     *         extra data that you want to include in your exception
+     * @param  int|null $typeFlags
+     *         do we want any extra type information in the final
+     *         exception message?
+     * @param  array $callStackFilter
+     *         are there any namespaces we want to filter out of
+     *         the call stack?
      * @return BadRequirements
+     *         an fully-built exception for you to throw
      */
-    public static function newFromRequirementsList($list, $callerFilter = null);
+    public static function newFromVar(
+        $fieldOrVar,
+        $fieldOrVarName,
+        array $extraData = [],
+        $typeFlags = null,
+        array $callStackFilter = []
+    );
 
     /**
      * what was the data that we used to create the printable message?
@@ -80,21 +94,13 @@ class BadRequirements
 
 ### Creating Exceptions To Throw
 
-Call `BadRequirements::newFromRequirementsList()` to create a new throwable exception:
+Call `BadRequirements::newFromVar()` to create a new throwable exception:
 
 ```php
 // how to import
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 
-throw BadRequirements::newFromRequirementsList(null);
-```
-
-Call `BadRequirements::newFromEmptyList()` if the requirements list is an empty array:
-
-```php
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
-
-throw BadRequirements::newFromEmptyList();
+throw BadRequirements::newFromVar(null, '$list');
 ```
 
 ### Catching The Exception
@@ -106,7 +112,7 @@ throw BadRequirements::newFromEmptyList();
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 
 try {
-    throw BadRequirements::newFromRequirementsList(null);
+    throw BadRequirements::newFromVar(null, '$list');
 }
 catch(BadRequirements $e) {
     // ...
@@ -119,7 +125,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadRequirements::newFromRequirementsList(null);
+    throw BadRequirements::newFromVar(null, '$list');
 }
 catch(DefensiveException $e) {
     // ...
@@ -133,7 +139,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRequestErrorException;
 
 try {
-    throw BadRequirements::newFromRequirementsList(null);
+    throw BadRequirements::newFromVar(null, '$list');
 }
 catch(HttpRequestErrorException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -147,7 +153,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw BadRequirements::newFromRequirementsList(null);
+    throw BadRequirements::newFromVar(null, '$list');
 }
 catch(HttpException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -161,7 +167,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use RuntimeException;
 
 try {
-    throw BadRequirements::newFromRequirementsList(null);
+    throw BadRequirements::newFromVar(null, '$list');
 }
 catch(RuntimeException $e) {
     // ...
@@ -179,10 +185,7 @@ Here is the contract for this class:
      [x] is HttpRequestErrorException
      [x] maps to HTTP 422 UnprocessableEntity
      [x] Can create from bad requirements list
-     [x] newFromRequirementsList states that list must contain callables
-     [x] newFromRequirementsList will provide an empty set of caller filters
-     [x] Can create from empty requirements list
-     [x] newFromEmptyList states that list cannot be empty
+     [x] exception states that list must contain callables
 
 Class contracts are built from this class's unit tests.
 

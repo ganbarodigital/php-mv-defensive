@@ -47,6 +47,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
@@ -99,7 +100,7 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::offsetGet
      */
-    public function test_has_factory_for_BadRequirement_newFromRequirement()
+    public function test_has_factory_for_BadRequirement_newFromInputParameter()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -109,8 +110,8 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $factory = $unit['BadRequirement::newFromRequirement'];
-        $exception = $factory(false);
+        $factory = $unit['BadRequirement::newFromInputParameter'];
+        $exception = $factory(false, '$data');
 
         // ----------------------------------------------------------------
         // test the results
@@ -121,7 +122,7 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::offsetGet
      */
-    public function test_has_factory_for_BadRequirementArgs_newFromRequirementArgs()
+    public function test_has_factory_for_BadRequirement_newFromVar()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -131,8 +132,30 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $factory = $unit['BadRequirementArgs::newFromRequirementArgs'];
-        $exception = $factory(false);
+        $factory = $unit['BadRequirement::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadRequirement::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadRequirementArgs_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadRequirementArgs::newFromInputParameter'];
+        $exception = $factory(false, '$data');
 
         // ----------------------------------------------------------------
         // test the results
@@ -143,7 +166,7 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::offsetGet
      */
-    public function test_has_factory_for_BadRequirements_newFromRequirementsList()
+    public function test_has_factory_for_BadRequirementArgs_newFromVar()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -153,8 +176,30 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $factory = $unit['BadRequirements::newFromRequirementsList'];
-        $exception = $factory(false);
+        $factory = $unit['BadRequirementArgs::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadRequirementArgs::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadRequirements_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadRequirements::newFromInputParameter'];
+        $exception = $factory(false, '$data');
 
         // ----------------------------------------------------------------
         // test the results
@@ -165,7 +210,7 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::offsetGet
      */
-    public function test_has_factory_for_BadRequirements_newFromEmptyList()
+    public function test_has_factory_for_BadRequirements_newFromVar()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -175,13 +220,57 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $factory = $unit['BadRequirements::newFromEmptyList'];
-        $exception = $factory();
+        $factory = $unit['BadRequirements::newFromVar'];
+        $exception = $factory(false, '$data');
 
         // ----------------------------------------------------------------
         // test the results
 
         $this->assertInstanceOf(BadRequirements::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_EmptyRequirementsList_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['EmptyRequirementsList::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(EmptyRequirementsList::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_EmptyRequirementsList_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['EmptyRequirementsList::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(EmptyRequirementsList::class, $exception);
     }
 
     /**
@@ -209,6 +298,28 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::offsetGet
      */
+    public function test_has_factory_for_UnsupportedType_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['UnsupportedType::newFromInputParameter'];
+        $exception = $factory(null, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(UnsupportedType::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
     public function test_has_factory_for_UnsupportedType_newFromVar()
     {
         // ----------------------------------------------------------------
@@ -220,12 +331,34 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // perform the change
 
         $factory = $unit['UnsupportedType::newFromVar'];
-        $exception = $factory(null, '\$data');
+        $exception = $factory(null, '$data');
 
         // ----------------------------------------------------------------
         // test the results
 
         $this->assertInstanceOf(UnsupportedType::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_UnsupportedValue_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['UnsupportedValue::newFromInputParameter'];
+        $exception = $factory(null, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(UnsupportedValue::class, $exception);
     }
 
     /**
@@ -242,7 +375,7 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // perform the change
 
         $factory = $unit['UnsupportedValue::newFromVar'];
-        $exception = $factory(null, '\$data');
+        $exception = $factory(null, '$data');
 
         // ----------------------------------------------------------------
         // test the results
