@@ -100,7 +100,7 @@ class RequireValidRequirements implements Requirement
      *        what is the name of $data in the calling code?
      * @return void
      */
-    public function to($requirements, $fieldOrVarName = "requirements")
+    public function to($requirements, $fieldOrVarName = "value")
     {
         // we do not use Reflections RequireTraversable here because then
         // Reflections cannot depend upon this library

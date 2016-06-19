@@ -28,6 +28,9 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 // RequireValidRequirements is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
+// our input and return type(s)
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+
 class RequireValidRequirements implements Requirement
 {
     /**
@@ -92,7 +95,7 @@ Use the `::apply()->to()` pattern:
 $requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireValidRequirements::apply()->to($requirements, '\$requirements');
+RequireValidRequirements::apply()->to($requirements, '$requirements');
 ```
 
 If any of the requirements aren't met, `RequireValidRequirements` will throw an exception.
