@@ -18,6 +18,7 @@ These are the exceptions that this library can throw.
 Class | Description
 ------|------------
 [`BadAssurance`](BadAssurance.html) | thrown when you pass something that isn't an assurnace into one of the [Assurance](../Assurances/index.html) classes
+[`BadAssuranceArgs`](BadAssuranceArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Assurance](../Assurances/index.html) classes
 
 ### Requirements Exceptions
 
