@@ -10,7 +10,10 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### New
+
+* Added support for _assurances_: checks on return values and generated data values
+  - added `BadAssurance` exception
 
 ## v1.2016061901
 
