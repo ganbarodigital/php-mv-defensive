@@ -247,8 +247,8 @@ Here's a list of the extra data added by each factory method.
 
 Factory Method | Extra Data Added
 ---------------|-----------------
-`DataCannotBeEmpty::newFromInputParameter()` | `thrownBy`, `thrownByName`, `calledBy`, `calledByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
-`DataCannotBeEmpty::newFromVar()` | `thrownBy`, `thrownByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
+`BadAssurance::newFromInputParameter()` | `thrownBy`, `thrownByName`, `calledBy`, `calledByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
+`BadAssurance::newFromVar()` | `thrownBy`, `thrownByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
 
 ## Class Contract
 
