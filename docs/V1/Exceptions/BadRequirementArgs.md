@@ -1,10 +1,10 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadRequirements.html
-pageflow_prev_text: BadRequirements class
-pageflow_next_url: UnsupportedType.html
-pageflow_next_text: UnsupportedType class
+pageflow_prev_url: BadRequirement.html
+pageflow_prev_text: BadRequirement class
+pageflow_next_url: BadRequirements.html
+pageflow_next_text: BadRequirements class
 ---
 
 # BadRequirementArgs
