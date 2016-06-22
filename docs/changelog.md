@@ -18,6 +18,8 @@ pageflow_next_text: Contributing
   - added `BadAssurancesList` exception
   - added `EmptyAssurancesList` exception
   - updated `DefensiveExceptions` with the new exception factories
+  - added `Assurance` interface
+  - added `Inspection` interface
 
 ## v1.2016061901
 

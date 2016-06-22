@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: interfaces
-pageflow_next_url: Requirement.html
-pageflow_next_text: Requirement interface
+pageflow_next_url: Assurance.html
+pageflow_next_text: Assurance interface
 ---
 
 # Interfaces
@@ -14,5 +14,7 @@ These are the interfaces defined by this library.
 ## Interfaces List
 
 Interface | Description
-------|------------
-[`Requirement`](Requirement.html) | our standard for all requirements to implement
+----------|------------
+[`Assurance`](Assurance.html) | inspect a returned value, or a calculated / generated value
+[`Inspection`](Inspection.html) | common standard for all assurances and requirements
+[`Requirement`](Requirement.html) | inspect an input value
