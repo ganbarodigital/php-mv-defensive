@@ -16,6 +16,7 @@ pageflow_next_text: Contributing
   - added `BadAssurance` exception
   - added `BadAssuranceArgs` exception
   - added `BadAssurancesList` exception
+  - added `EmptyAssurancesList` exception
 
 ## v1.2016061901
 
