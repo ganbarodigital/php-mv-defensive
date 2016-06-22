@@ -7,7 +7,7 @@ pageflow_next_url: BadAssurancesList.html
 pageflow_next_text: BadAssurancesList class
 ---
 
-# BadAssurancesArgs
+# BadAssuranceArgs
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,14 +15,14 @@ Not yet in a tagged release
 
 ## Description
 
-`BadAssurancesArgs` is an exception. It is thrown when the list of assurances' arguments passed into `EnsureAllOf` or `EnsureAnyOneOf` isn't an array.
+`BadAssuranceArgs` is an exception. It is thrown when the list of assurances' arguments passed into `EnsureAllOf` or `EnsureAnyOneOf` isn't an array.
 
 ## Public Interface
 
-`BadAssurancesArgs` has the following public interface:
+`BadAssuranceArgs` has the following public interface:
 
 ```php
-// BadAssurancesArgs lives in this namespace
+// BadAssuranceArgs lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
@@ -32,7 +32,7 @@ use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
 
-class BadAssurancesArgs
+class BadAssuranceArgs
   extends ParameterisedException
   implements DefensiveException, HttpRuntimeErrorException
 {
