@@ -15,7 +15,7 @@ Not yet in a tagged release
 
 ## Description
 
-`BadAssurancesArgs` is an exception. It is thrown when data passed into `EnsureAllOf` or `EnsureAnyOneOf` isn't an array.
+`BadAssurancesArgs` is an exception. It is thrown when the list of assurances' arguments passed into `EnsureAllOf` or `EnsureAnyOneOf` isn't an array.
 
 ## Public Interface
 
