@@ -15,6 +15,7 @@ pageflow_next_text: Contributing
 * Added support for _assurances_: checks on return values and generated data values
   - added `BadAssurance` exception
   - added `BadAssuranceArgs` exception
+  - added `BadAssurancesList` exception
 
 ## v1.2016061901
 
