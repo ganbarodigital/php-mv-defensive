@@ -259,8 +259,8 @@ Here is the contract for this class:
      [x] is RuntimeException
      [x] is HttpRuntimeErrorException
      [x] maps to HTTP 500 UnexpectedError
-     [x] Can create from bad assurances list
-     [x] exception states that list must contain callables
+     [x] Can create from empty assurances list list
+     [x] exception states that list must not be empty
 
 Class contracts are built from this class's unit tests.
 
