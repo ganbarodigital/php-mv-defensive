@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: requirements
-pageflow_prev_url: RequireAnyOneOf.html
-pageflow_prev_text: RequireAnyOneOf class
+pageflow_prev_url: RequireValidAssurances.html
+pageflow_prev_text: RequireValidAssurances class
 ---
 
 # RequireValidRequirements

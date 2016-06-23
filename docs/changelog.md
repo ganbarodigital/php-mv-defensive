@@ -21,6 +21,7 @@ pageflow_next_text: Contributing
   - added `Assurance` interface
   - added `Inspection` interface
   - `Requirement` is now an `Inspection`
+  - added `RequireValidAssurances`
 
 ## v1.2016061901
 

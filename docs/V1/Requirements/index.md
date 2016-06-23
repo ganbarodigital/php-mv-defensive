@@ -30,6 +30,7 @@ Class | Description
 [`InvokeableRequirement`](InvokeableRequirement.html) | convenience trait to provide the `__invoke()` method of the `Requirement` interface
 [`RequireAllOf`](RequireAllOf.html) | a value must meet all the requirements in the list
 [`RequireAnyOneOf`](RequireAnyOneOf.html) | a value must meet at least one of the requirements in the list
+[`RequireValidAssurances`](RequireValidAssurances.html) | a value must be a list of assurances
 [`RequireValidRequirements`](RequireValidRequirements.html) | a value must be a list of requirements
 
 Click on the name of a class to see full details.
