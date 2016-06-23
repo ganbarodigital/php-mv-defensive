@@ -20,6 +20,7 @@ pageflow_next_text: Contributing
   - updated `DefensiveExceptions` with the new exception factories
   - added `Assurance` interface
   - added `Inspection` interface
+  - `Requirement` is now an `Inspection`
 
 ## v1.2016061901
 

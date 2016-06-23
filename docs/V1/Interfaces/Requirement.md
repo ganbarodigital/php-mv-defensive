@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: interfaces
-pageflow_prev_url: index.html
-pageflow_prev_text: Interfaces
+pageflow_prev_url: Assurance.html
+pageflow_prev_text: Assurance interface
 ---
 
 # Requirement
@@ -21,31 +21,39 @@ Since v1.2016052101
 
 ```php
 // Requirement lives in this namespace
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+namespace GanbaroDigital\Defensive\V1\Interfaces;
+
+// our base interface
+use GanbaroDigital\Defensive\V1\Interfaces\Inspection;
 
 interface Requirement
+  extends Inspection
 {
     /**
-     * throws exception if our requirement is not met
+     * throws exception if our inspection fails
      *
-     * @param  mixed $data
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $fieldOrVar
      *         the data to be examined
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
 
     /**
-     * throws exception if our requirement is not met
+     * throws exception if our inspection fails
      *
-     * @param  mixed $data
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $fieldOrVar
      *         the data to be examined
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 
