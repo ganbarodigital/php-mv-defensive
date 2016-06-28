@@ -15,8 +15,9 @@ Version 1 was written to replace `ganbarodigital/php-defensive`. It offers prett
 
 The key ideas in Version 1 are:
 
-* `Requirement::apply()->to()` pattern - apply the requirement to a value. If the requirement isn't met, throw an exception.
-* _composable requirements_ - each `Requirement` now takes one parameter (the value being checked). This allows us to build lists of requirements to apply to a value.
+* _requirements_ (checks on inputs) and _assurances_ (checks on outputs and return values)
+* `Assurance::apply()->to()` / `Requirement::apply()->to()` pattern - apply the assurance / requirement to a value. If the assurance / requirement isn't met, throw an exception.
+* _composable assurances and requirements_ - each `Assurance` / `Requirement` now takes one parameter (the value being checked). This allows us to build lists of assurances / requirements to apply to a value.
 
 ## Components
 
@@ -24,8 +25,9 @@ Version 1 ships with the following components:
 
 Namespace | Purpose
 ----------|--------
+[`GanbaroDigital\Defensive\V1\Assurances`](Assurances/index.html) | robustness checks for outputs and return values
 [`GanbaroDigital\Defensive\V1\Exceptions`](Exceptions/index.html) | exceptions thrown by this library
 [`GanbaroDigital\Defensive\V1\Interfaces`](Interfaces/index.html) | interfaces defined by this library
-[`GanbaroDigital\Defensive\V1\Requirements`](Requirements/index.html) | enforce robustness checks
+[`GanbaroDigital\Defensive\V1\Requirements`](Requirements/index.html) | robustness checks for inputs
 
 Click on the namespace to learn more about the classes in that component.

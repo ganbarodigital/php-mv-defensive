@@ -72,6 +72,14 @@ Here is the contract for this class:
     GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
      [x] Can instantiate
      [x] Is factory list
+     [x] has factory for BadAssurance newFromInputParameter
+     [x] has factory for BadAssurance newFromVar
+     [x] has factory for BadAssuranceArgs newFromInputParameter
+     [x] has factory for BadAssuranceArgs newFromVar
+     [x] has factory for BadAssurancesList newFromInputParameter
+     [x] has factory for BadAssurancesList newFromVar
+     [x] has factory for EmptyAssurancesList newFromInputParameter
+     [x] has factory for EmptyAssurancesList newFromVar
      [x] has factory for BadRequirement newFromInputParameter
      [x] has factory for BadRequirement newFromVar
      [x] has factory for BadRequirementArgs newFromInputParameter

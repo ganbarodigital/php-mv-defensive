@@ -44,8 +44,8 @@
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
 /**
- * inspect an input parameter
+ * inspect a returned value, or a calculated / generated value
  */
-interface Requirement extends Inspection
+interface Assurance extends Inspection
 {
 }

@@ -44,8 +44,29 @@
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
 /**
- * inspect an input parameter
+ * base interface for Assurance and Requirement
  */
-interface Requirement extends Inspection
+interface Inspection
 {
+    /**
+     * throws exception if our inspection fails
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function to($fieldOrVar, $fieldOrVarName = "value");
 }

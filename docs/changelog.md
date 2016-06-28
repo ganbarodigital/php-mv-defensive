@@ -12,6 +12,25 @@ pageflow_next_text: Contributing
 
 Nothing yet.
 
+## v1.2016062801
+
+### New
+
+* Added support for _assurances_: checks on return values and generated data values
+  - added `BadAssurance` exception
+  - added `BadAssuranceArgs` exception
+  - added `BadAssurancesList` exception
+  - added `EmptyAssurancesList` exception
+  - updated `DefensiveExceptions` with the new exception factories
+  - added `Assurance` interface
+  - added `Inspection` interface
+  - `Requirement` is now an `Inspection`
+  - added `RequireValidAssurances`
+  - added `ComposableAssurance`
+  - added `InvokeableAssurance`
+  - added `EnsureAllOf`
+  - added `EnsureAnyOneOf`
+
 ## v1.2016061901
 
 ### Refactor

@@ -59,6 +59,9 @@ menu:
             home:
                 text: Introduction
                 relativeUrl: V1/index.html
+            assurances:
+                text: Assurances
+                relativeUrl: V1/Assurances/index.html
             exceptions:
                 text: Exceptions
                 relativeUrl: V1/Exceptions/index.html

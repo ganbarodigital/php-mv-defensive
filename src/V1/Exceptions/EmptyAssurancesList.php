@@ -34,18 +34,26 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Interfaces
+ * @package   Defensive/V1/Exceptions
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigital\Defensive\V1\Interfaces;
+namespace GanbaroDigital\Defensive\V1\Exceptions;
 
-/**
- * inspect an input parameter
- */
-interface Requirement extends Inspection
+use GanbaroDigital\ExceptionHelpers\V1\BaseExceptions\ParameterisedException;
+use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
+use GanbaroDigital\HttpStatus\StatusProviders\RuntimeError\UnexpectedErrorStatusProvider;
+
+class EmptyAssurancesList
+  extends ParameterisedException
+  implements DefensiveException, HttpRuntimeErrorException
 {
+    // we map onto HTTP 500
+    use UnexpectedErrorStatusProvider;
+
+    // our default format string
+    static protected $defaultFormat = "array cannot be empty";
 }

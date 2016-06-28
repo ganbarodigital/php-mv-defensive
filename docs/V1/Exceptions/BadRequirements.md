@@ -1,10 +1,10 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadRequirement.html
-pageflow_prev_text: BadRequirement class
-pageflow_next_url: EmptyRequirementsList.html
-pageflow_next_text: EmptyRequirementsList class
+pageflow_prev_url: BadRequirementArgs.html
+pageflow_prev_text: BadRequirementArgs class
+pageflow_next_url: EmptyAssurancesList.html
+pageflow_next_text: EmptyAssurancesList class
 ---
 
 # BadRequirements

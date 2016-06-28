@@ -34,18 +34,28 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Interfaces
+ * @package   Defensive/V1/Assurances
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigital\Defensive\V1\Interfaces;
+namespace GanbaroDigital\Defensive\V1\Assurances;
 
-/**
- * inspect an input parameter
- */
-interface Requirement extends Inspection
+trait InvokeableAssurance
 {
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * @param  mixed $data
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function __invoke($data, $fieldOrVarName = "value")
+    {
+        return $this->to($data, $fieldOrVarName);
+    }
 }
