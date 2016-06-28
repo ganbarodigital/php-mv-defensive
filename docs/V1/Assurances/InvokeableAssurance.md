@@ -1,10 +1,8 @@
 ---
 currentSection: v1
 currentItem: requirements
-pageflow_prev_url: ComposableAssurance.html
-pageflow_prev_text: ComposableAssurance class
-pageflow_next_url: RequireAllOf.html
-pageflow_next_text: RequireAllOf class
+pageflow_prev_url: EnsureAnyOneOf.html
+pageflow_prev_text: EnsureAnyOneOf class
 ---
 
 # InvokeableAssurance

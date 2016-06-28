@@ -1,13 +1,13 @@
 ---
 currentSection: v1
 currentItem: assurances
-pageflow_prev_url: ComposableAssurance.html
-pageflow_prev_text: ComposableAssurance class
-pageflow_next_url: EnsureAnyOneOf.html
-pageflow_next_text: EnsureAnyOneOf class
+pageflow_prev_url: EnsureAllOf.html
+pageflow_prev_text: EnsureAllOf class
+pageflow_next_url: InvokeableAssurance.html
+pageflow_next_text: InvokeableAssurance trait
 ---
 
-# EnsureAllOf
+# EnsureAnyOneOf
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,25 +15,25 @@ Not yet in a tagged release
 
 ## Description
 
-`EnsureAllOf` allows you to apply a list of assurances to a piece of data. If any of the inspections fail, an exception is thrown.
+`EnsureAnyOneOf` allows you to apply a list of assurances to a piece of data. If none of the assurances are met, an exception is thrown.
 
-`EnsureAllOf` is a customisable function object.
+`EnsureAnyOneOf` is a customisable function object.
 
 ## Public Interface
 
-`EnsureAllOf` has the following public interface:
+`EnsureAnyOneOf` has the following public interface:
 
 ```php
-// EnsureAllOf lives in this namespace
+// EnsureAnyOneOf lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Assurances;
 
-// EnsureAllOf is an Assurance
+// EnsureAnyOneOf is an Assurance
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class EnsureAllOf implements Assurance
+class EnsureAnyOneOf implements Assurance
 {
     /**
      * create an Assurance that is ready to execute
@@ -42,15 +42,15 @@ class EnsureAllOf implements Assurance
      *        a list of the assurances to apply
      * @param FactoryList|null $exceptions
      *        the functions to call when we want to throw an exception
-     * @return EnsureAllOf
+     * @return EnsureAnyOneOf
      */
     public static function apply($assurances, FactoryList $exceptions = null);
 
     /**
-     * throws exceptions if any of our assurances are not met
+     * throws exception if none of our assurances are met
      *
      * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
      * @return void
@@ -58,10 +58,10 @@ class EnsureAllOf implements Assurance
     public function __invoke($data, $fieldOrVarName = "value");
 
     /**
-     * throws exceptions if any of our assurances are not met
+     * throws exception if none of our assurances are met
      *
      * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
      * @return void
@@ -80,43 +80,44 @@ Use the `::apply()->to()` pattern:
 $assurances = [
     // a list of objects that implement the 'Assurance' interface
 ];
-EnsureAllOf::apply($assurances)->to($data, '$data');
+EnsureAnyOneOf::apply($assurances)->to($data, '$data');
 ```
 
-Use `EnsureAllOf` to catch logic bugs in your code:
+Use `EnsureAnyOneOf` to catch bugs in your code:
 
 ```php
 function doSomething($arg1)
 {
-    // do some work ...
+    // do some work
+    // ...
 
     // assurance!
     $assurances = [
-        new EnsureIndexable(),
-        new EnsureNotEmpty()
+        new EnsureString(),
+        new EnsureNull()
     ];
-    EnsureAllOf::apply($assurances)->to($retval, '$retval');
+    EnsureAnyOneOf::apply($assurances)->to($retval, '$retval');
 
-    // if we get here, then $retval is good
+    // if we get here, then we can return $retval
     return $retval;
 }
 ```
 
-If any of the assurances aren't met, the assurance will throw an exception.
+If none of the assurances are met, `EnsureAnyOneOf` will throw an exception.
 
 ## Class Contract
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Assurances\EnsureAllOf
+    GanbaroDigital\Defensive\V1\Assurances\EnsureAnyOneOf
      [x] Can instantiate
      [x] is Assurance
      [x] Can use as object
      [x] Can call statically
      [x] Must provide an array of assurances
-     [x] Assurances array cannot be empty
+     [x] Array of assurances cannot be empty
      [x] Assurances array must contain valid assurances
-     [x] Must match all assurances given
+     [x] Will match any assurance given
      [x] Throws exception if nothing matches
 
 Class contracts are built from this class's unit tests.

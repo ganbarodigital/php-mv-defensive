@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: assurances
 pageflow_prev_url: index.html
 pageflow_prev_text: Overview
-pageflow_next_url: EnsureAnyOneOf.html
-pageflow_next_text: EnsureAnyOneOf class
+pageflow_next_url: EnsureAllOf.html
+pageflow_next_text: EnsureAllOf class
 ---
 # ComposableAssurance
 
