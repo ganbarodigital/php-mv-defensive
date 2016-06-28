@@ -9,8 +9,8 @@ pageflow_next_text: BadAssurancesList class
 
 # BadAssuranceArgs
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016062801
 </div>
 
 ## Description
