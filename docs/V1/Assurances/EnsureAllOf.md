@@ -108,14 +108,16 @@ If any of the assurances aren't met, the assurance will throw an exception.
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance
+    GanbaroDigital\Defensive\V1\Assurances\EnsureAllOf
      [x] Can instantiate
-     [x] Is assurance
+     [x] is Assurance
      [x] Can use as object
      [x] Can call statically
-     [x] Must provide a callable
-     [x] Must provide array of extra parameters
-     [x] Array of extra parameters can be empty
+     [x] Must provide an array of assurances
+     [x] Assurances array cannot be empty
+     [x] Assurances array must contain valid assurances
+     [x] Must match all assurances given
+     [x] Throws exception if nothing matches
 
 Class contracts are built from this class's unit tests.
 
