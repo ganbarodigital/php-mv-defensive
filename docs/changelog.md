@@ -24,6 +24,7 @@ pageflow_next_text: Contributing
   - added `RequireValidAssurances`
   - added `ComposableAssurance`
   - added `InvokeableAssurance`
+  - added `EnsureAllOf`
 
 ## v1.2016061901
 
