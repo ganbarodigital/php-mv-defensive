@@ -56,27 +56,47 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Assurance.html">Prev: Assurance interface</a></li>
-                                                      <li></li>
+                                    <li><a href="index.html">Prev: Interfaces</a></li>
+                                                      <li><a href="Inspection.html">Next: Inspection interface</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requirement">Requirement</h1>
+                <h1 id="assurance">Assurance</h1>
 <div class="callout info">
-<p>Since v1.2016052101</p>
+<p>Since v1.2016062801</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>Requirement</code> is an interface. It is the base interface that all requirements extend.</p>
+<p><code>Assurance</code> is an interface. It's the interface for <a href="Inspection.html"><code>Inspection</code></a>s performed against:</p>
+<ul>
+<li>returned values</li>
+<li>calculated / generated values</li>
+</ul>
+<p>If you want to inspect an input value, use a <a href="Requirement.html"><code>Requirement</code></a>.</p>
+<div class="callout info">
+<h4 id="whats-the-difference-between-an-assurance-and-a-requirement">What's The Difference Between An Assurance And A Requirement?</h4>
+<p>Requirements and assurances are both inspections. They perform the same checks, just at different places in your code.</p>
+<ul>
+<li>At the start of your method, use requirements to inspect your method's input parameters.</li>
+<li>Later on in your method, use assurances to inspect the return values of any methods you call.</li>
+<li>At the end of your method, use assurances to inspect the value your method is going to return.</li>
+</ul>
+<p>Internally, the only difference between a <code>Requirement</code> and an <code>Assurance</code> is how they create the exceptions that they throw.</p>
+<ul>
+<li>A <code>Requirement</code> will use an exception's <code>::newFromInputParameter()</code> static factory method.</li>
+<li>An <code>Assurance</code> will use an exception's <code>::newFromVar()</code> static factory method.</li>
+</ul>
+<p>This means that the exception (and, ultimately your app's log files) will have different error messages and supporting data depending on whether a <code>Requirement</code> wasn't met, or an <code>Assurance</code> wasn't met.</p>
+</div>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>Requirement</code> has the following public interface:</p>
-<pre><code class="language-php">// Requirement lives in this namespace
+<p><code>Assurance</code> has the following public interface:</p>
+<pre><code class="language-php">// Assurance lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
 // our base interface
 use GanbaroDigital\Defensive\V1\Interfaces\Inspection;
 
-interface Requirement
+interface Assurance
   extends Inspection
 {
     /**
@@ -107,21 +127,21 @@ interface Requirement
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="the-apply-gtto-pattern">The Apply-&gt;To Pattern</h3>
-<p>Every <code>Requirement</code> implements the <code>Requirement::apply()-&gt;to()</code> pattern:</p>
+<p>Every <code>Assurance</code> implements the <code>Assurance::apply()-&gt;to()</code> pattern:</p>
 <ul>
-<li>add <code>implements Requirement</code> to your class</li>
-<li>add <code>use InvokeableRequirement</code> to your class. Saves you having to implement <code>__invoke()</code> yourself.</li>
-<li>add a <code>public static function apply()</code> method to your class, and a corresponding <code>__construct()</code> method. <code>apply()</code> takes any extra parameters needed to customise the requirement, and returns a new instance of your class.</li>
+<li>add <code>implements Assurance</code> to your class</li>
+<li>add <code>use InvokeableAssurance</code> to your class. Saves you having to implement <code>__invoke()</code> yourself.</li>
+<li>add a <code>public static function apply()</code> method to your class, and a corresponding <code>__construct()</code> method. <code>apply()</code> takes any extra parameters needed to customise the assurance, and returns a new instance of your class.</li>
 <li>add a <code>public function to()</code> method to your class. This method inspects <code>$data</code>. If you're not happy with <code>$data</code>, throw an exception.</li>
 </ul>
-<p>For example, here's a simple min / max requirement:</p>
-<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Requirements;
-use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
+<p>For example, here's a simple min / max assurance:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Assurance\InvokeableAssurance;
 
-class RequireInRange implements Requirement
+class EnsureInRange implements Assurance
 {
     // save us having to declare __invoke() ourselves
-    use InvokeableRequirement;
+    use InvokeableAssurance;
 
     /**
      * minimum acceptable value in our range
@@ -134,7 +154,7 @@ class RequireInRange implements Requirement
     private $max;
 
     /**
-     * constructor. used to create a customised requirement
+     * constructor. used to create a customised assurance
      *
      * @param  int $min
      *         minimum value for allowed range
@@ -148,14 +168,14 @@ class RequireInRange implements Requirement
     }
 
     /**
-     * generates a Requirement
+     * generates an Assurance
      *
      * @param  int $min
      *         minimum value for allowed range
      * @param  int $max
      *         maximum value for allowed range
-     * @return Requirement
-     *         returns a requirement to use
+     * @return Assurance
+     *         returns an assurance to use
      */
     public static function apply($min, $max)
     {
@@ -182,24 +202,19 @@ class RequireInRange implements Requirement
         }
     }
 }</code></pre>
-<p>To use this example requirement, you would do:</p>
+<p>To use this example assurance, you would do:</p>
 <pre><code class="language-php">// $data must be &gt;=10, and &lt;=20
-RequireInRange::apply(10, 20)-&gt;to($data);</code></pre>
+EnsureInRange::apply(10, 20)-&gt;to($data, '$data');</code></pre>
 <h2 id="notes">Notes</h2>
 <ol>
-<li>We have <code>__invoke()</code> in the interface to make it easy to work with lists of requirements.</li>
+<li>We have <code>__invoke()</code> in the interface to make it easy to work with lists of assurances.</li>
 </ol>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016062801">v1.2016062801</h3>
-<ul>
-<li><code>Requirement</code> now extends the <code>Inspection</code> interface</li>
-</ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Assurance.html">Prev: Assurance interface</a></li>
-                                                      <li></li>
+                                    <li><a href="index.html">Prev: Interfaces</a></li>
+                                                      <li><a href="Inspection.html">Next: Inspection interface</a></li>
                                 </ul>
             </nav>
                     </main>

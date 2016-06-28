@@ -56,77 +56,147 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li></li>
-                                                      <li><a href="ComposableRequirement.html">Next: ComposableRequirement class</a></li>
+                                    <li><a href="EnsureAnyOneOf.html">Prev: EnsureAnyOneOf class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requirements">Requirements</h1>
-<h2 id="purpose">Purpose</h2>
-<p>These are utilities for:</p>
+                <h1 id="invokeableassurance">InvokeableAssurance</h1>
+<div class="callout info">
+<p>Since v1.2016062801</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>InvokeableAssurance</code> is a trait. It implements the <code>__invoke()</code> method of the <a href="../Interfaces/Assurance.html"><code>Assurance</code></a> interface for you.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>InvokeableAssurance</code> has the following public interface:</p>
+<pre><code class="language-php">// InvokeableAssurance lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Assurances;
+
+trait InvokeableAssurance
+{
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * @param  mixed $data
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function __invoke($data, $fieldOrVarName = "value");
+}</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<h3 id="for-convenience">For Convenience</h3>
+<p>Use <code>InvokeableAssurance</code> in your own classes to save on typing and code duplication.</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Assurances;
+use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+
+class EnsureInRange implements Assurance
+{
+    // save us having to declare __invoke() ourselves
+    use InvokeableAssurance;
+
+    /**
+     * minimum acceptable value in our range
+     */
+    private $min;
+
+    /**
+     * maximum acceptable value in our range
+     */
+    private $max;
+
+    /**
+     * constructor. used to create a customised assurance
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     */
+    public function __construct($min, $max)
+    {
+        $this-&gt;min = $min;
+        $this-&gt;max = $max;
+    }
+
+    /**
+     * generates an Assurance
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     * @return Assurance
+     *         returns a requirement to use
+     */
+    public static function apply($min, $max)
+    {
+        return new static($min, $max);
+    }
+
+    /**
+     * make sure that $data is within the specified range
+     * throws an exception if it is not
+     *
+     * @param  int $data
+     *         the value to check
+     * @param  string $fieldOrVarName
+     *         the name of $data in the caller's code
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = 'value')
+    {
+        if ($data &lt; $this-&gt;min) {
+            throw new RuntimeException($fieldOrVarName . ' cannot be less than ' . $this-&gt;min);
+        }
+        if ($data &gt; $this-&gt;max) {
+            throw new RuntimeException($fieldOrVarName . ' cannot be more than ' . $this-&gt;max);
+        }
+    }
+}</code></pre>
+<h2 id="trait-contract">Trait Contract</h2>
+<p>Here is the contract for this trait:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance
+ [x] Can instantiate class that uses trait
+ [x] is part of Assurance interface
+ [x] calls enclosing classes to method
+ [x] passes data to enclosing classes to method
+ [x] passes fieldOrVarName to enclosing classes to method</code></pre>
+<p>Trait contracts are built from this trait's unit tests.</p>
+<div class="callout success">
+Future releases of this trait will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this trait may add to this contract. New additions may include:</p>
 <ul>
-<li>an interface for requirements to implement</li>
-<li>applying groups of requirements to the same input data</li>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra trait methods)</li>
 </ul>
-<h2 id="available-interfaces">Available Interfaces</h2>
-<table>
-<thead>
-<tr>
-<th>Interface</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="../Interfaces/Requirement.html"><code>Requirement</code></a></td>
-<td>interface for all requirements to implement</td>
-</tr>
-</tbody>
-</table>
-<p>Click on the name of an interface to see full details.</p>
-<h2 id="available-classes">Available Classes</h2>
-<table>
-<thead>
-<tr>
-<th>Class</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="ComposableRequirement.html"><code>ComposableRequirement</code></a></td>
-<td>convert a partial requirement into one that could be composable</td>
-</tr>
-<tr>
-<td><a href="InvokeableRequirement.html"><code>InvokeableRequirement</code></a></td>
-<td>convenience trait to provide the <code>__invoke()</code> method of the <code>Requirement</code> interface</td>
-</tr>
-<tr>
-<td><a href="RequireAllOf.html"><code>RequireAllOf</code></a></td>
-<td>a value must meet all the requirements in the list</td>
-</tr>
-<tr>
-<td><a href="RequireAnyOneOf.html"><code>RequireAnyOneOf</code></a></td>
-<td>a value must meet at least one of the requirements in the list</td>
-</tr>
-<tr>
-<td><a href="RequireValidAssurances.html"><code>RequireValidAssurances</code></a></td>
-<td>a value must be a list of assurances</td>
-</tr>
-<tr>
-<td><a href="RequireValidRequirements.html"><code>RequireValidRequirements</code></a></td>
-<td>a value must be a list of requirements</td>
-</tr>
-</tbody>
-</table>
-<p>Click on the name of a class to see full details.</p>
+</div>
+<div class="callout warning">
+<p>When you use this trait, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this trait,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this trait,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="../Interfaces/Assurance.html"><code>Assurance</code> interface</a></li>
+</ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li></li>
-                                                      <li><a href="ComposableRequirement.html">Next: ComposableRequirement class</a></li>
+                                    <li><a href="EnsureAnyOneOf.html">Prev: EnsureAnyOneOf class</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>

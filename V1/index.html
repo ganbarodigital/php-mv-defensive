@@ -39,6 +39,9 @@
                                         <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
                                                                     <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                    </li>
+                                                                    <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
                                                                     <li class="">
@@ -65,8 +68,9 @@
 <h2 id="key-ideas">Key Ideas</h2>
 <p>The key ideas in Version 1 are:</p>
 <ul>
-<li><code>Requirement::apply()-&gt;to()</code> pattern - apply the requirement to a value. If the requirement isn't met, throw an exception.</li>
-<li><em>composable requirements</em> - each <code>Requirement</code> now takes one parameter (the value being checked). This allows us to build lists of requirements to apply to a value.</li>
+<li><em>requirements</em> (checks on inputs) and <em>assurances</em> (checks on outputs and return values)</li>
+<li><code>Assurance::apply()-&gt;to()</code> / <code>Requirement::apply()-&gt;to()</code> pattern - apply the assurance / requirement to a value. If the assurance / requirement isn't met, throw an exception.</li>
+<li><em>composable assurances and requirements</em> - each <code>Assurance</code> / <code>Requirement</code> now takes one parameter (the value being checked). This allows us to build lists of assurances / requirements to apply to a value.</li>
 </ul>
 <h2 id="components">Components</h2>
 <p>Version 1 ships with the following components:</p>
@@ -79,6 +83,10 @@
 </thead>
 <tbody>
 <tr>
+<td><a href="Assurances/index.html"><code>GanbaroDigital\Defensive\V1\Assurances</code></a></td>
+<td>robustness checks for outputs and return values</td>
+</tr>
+<tr>
 <td><a href="Exceptions/index.html"><code>GanbaroDigital\Defensive\V1\Exceptions</code></a></td>
 <td>exceptions thrown by this library</td>
 </tr>
@@ -88,7 +96,7 @@
 </tr>
 <tr>
 <td><a href="Requirements/index.html"><code>GanbaroDigital\Defensive\V1\Requirements</code></a></td>
-<td>enforce robustness checks</td>
+<td>robustness checks for inputs</td>
 </tr>
 </tbody>
 </table>

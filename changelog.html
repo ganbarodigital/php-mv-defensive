@@ -74,6 +74,26 @@
                 <h1 id="changelog">CHANGELOG</h1>
 <h2 id="develop-branch">develop branch</h2>
 <p>Nothing yet.</p>
+<h2 id="v12016062801">v1.2016062801</h2>
+<h3 id="new">New</h3>
+<ul>
+<li>Added support for <em>assurances</em>: checks on return values and generated data values
+<ul>
+<li>added <code>BadAssurance</code> exception</li>
+<li>added <code>BadAssuranceArgs</code> exception</li>
+<li>added <code>BadAssurancesList</code> exception</li>
+<li>added <code>EmptyAssurancesList</code> exception</li>
+<li>updated <code>DefensiveExceptions</code> with the new exception factories</li>
+<li>added <code>Assurance</code> interface</li>
+<li>added <code>Inspection</code> interface</li>
+<li><code>Requirement</code> is now an <code>Inspection</code></li>
+<li>added <code>RequireValidAssurances</code></li>
+<li>added <code>ComposableAssurance</code></li>
+<li>added <code>InvokeableAssurance</code></li>
+<li>added <code>EnsureAllOf</code></li>
+<li>added <code>EnsureAnyOneOf</code></li>
+</ul></li>
+</ul>
 <h2 id="v12016061901">v1.2016061901</h2>
 <h3 id="refactor">Refactor</h3>
 <ul>
@@ -105,7 +125,7 @@
 <li>initial release</li>
 <li>feature release</li>
 </ul>
-<h3 id="new">New</h3>
+<h3 id="new-1">New</h3>
 <ul>
 <li>Added a way to catch all exceptions thrown by this library
 <ul>

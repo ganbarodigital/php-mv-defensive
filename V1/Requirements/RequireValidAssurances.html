@@ -38,8 +38,8 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
@@ -47,8 +47,8 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -56,98 +56,98 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="RequireValidAssurances.html">Prev: RequireValidAssurances class</a></li>
-                                                      <li></li>
+                                    <li><a href="RequireAnyOneOf.html">Prev: RequireAnyOneOf class</a></li>
+                                                      <li><a href="RequireValidRequirements.html">Next: RequireValidRequirements class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requirevalidrequirements">RequireValidRequirements</h1>
-<div class="callout info">
-<p>Since v1.2016052101</p>
+                <h1 id="requirevalidassurances">RequireValidAssurances</h1>
+<div class="callout warning">
+<p>Not yet in a tagged release</p>
 </div>
 <h2 id="description">Description</h2>
-<p>Use <code>RequireValidRequirements</code> to ensure that you have a list that only contains valid requirements. If this requirement is not met, an exception is thrown.</p>
-<p><code>RequireValidRequirements</code> is a customisable function object.</p>
+<p>Use <code>RequireValidAssurances</code> to ensure that you have a list that only contains valid assurances. If this requirement is not met, an exception is thrown.</p>
+<p><code>RequireValidAssurances</code> is a customisable function object.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>RequireValidRequirements</code> has the following public interface:</p>
-<pre><code class="language-php">// RequireValidRequirements lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Requirements;
+<p><code>RequireValidAssurances</code> has the following public interface:</p>
+<pre><code class="language-php">// RequireValidAssurances lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Assurances;
 
-// RequireValidRequirements is a Requirement
+// RequireValidAssurances is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidRequirements implements Requirement
+class RequireValidAssurances implements Requirement
 {
     /**
      * create a Requirement that is ready to execute
      *
      * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
-     * @return RequireValidRequirements
+     * @return RequireValidAssurances
      */
     public function __construct(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid requirements to work with
+     * make sure that we have a list of valid assurances to work with
      *
-     * @param array $requirements
-     *        the list of requirements to check
+     * @param array $assurances
+     *        the list of assurances to check
      * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
+     *        what is the name of $assurances in the calling code?
      * @return void
      */
-    public function __invoke($requirements, $fieldOrVarName = "value");
+    public function __invoke($assurances, $fieldOrVarName = "value");
 
     /**
      * create a Requirement that is ready to execute
      *
      * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
-     * @return RequireValidRequirements
+     * @return RequireValidAssurances
      */
     public static function apply(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid requirements to work with
+     * make sure that we have a list of valid assurances to work with
      *
-     * @param array $requirements
-     *        the list of requirements to check
+     * @param array $assurances
+     *        the list of assurances to check
      * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
+     *        what is the name of $assurances in the calling code?
      * @return void
      */
-    public function to($requirements, $fieldOrVarName = "value");
+    public function to($assurances, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="requirements-enforced">Requirements Enforced</h2>
-<p><code>RequireValidRequirements</code> enforces the following:</p>
+<p><code>RequireValidAssurances</code> enforces the following:</p>
 <ol>
-<li><code>$requirements</code> must be an array</li>
-<li><code>$requirements</code> cannot be empty</li>
-<li>every value in <code>$requirements</code> must implement the <code>Requirement</code> interface</li>
+<li><code>$assurances</code> must be an array</li>
+<li><code>$assurances</code> cannot be empty</li>
+<li>every value in <code>$assurances</code> must implement the <code>Assurance</code> interface</li>
 </ol>
-<p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
+<p>If any of the assurances aren't met, <code>RequireValidAssurances</code> will throw an exception.</p>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="applying-requirements">Applying Requirements</h3>
 <p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
-<pre><code class="language-php">$requirements = [
-    // a list of objects that implement the 'Requirement' interface
+<pre><code class="language-php">$assurances = [
+    // a list of objects that implement the 'Assurance' interface
 ];
-RequireValidRequirements::apply()-&gt;to($requirements, '$requirements');</code></pre>
-<p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
+RequireValidAssurances::apply()-&gt;to($assurances, '$assurances');</code></pre>
+<p>If any of the requirements aren't met, <code>RequireValidAssurances</code> will throw an exception.</p>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
-<pre><code>GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements
+<pre><code>GanbaroDigital\Defensive\V1\Requirements\RequireValidAssurances
  [x] Can instantiate
- [x] Is requirement
+ [x] is Requirement
  [x] Can use as object
  [x] Can call statically
- [x] Must provide list of requirements
- [x] List of requirements cannot be empty
- [x] List of requirements can contain only requirements</code></pre>
+ [x] Must provide list of assurances
+ [x] List of assurances cannot be empty
+ [x] List of assurances can contain only assurances</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -173,14 +173,14 @@ Future releases of this class will not break this contract.
 <p>None at this time.</p>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+<li><a href="Assurance.html"><code>Assurance</code> interface</a></li>
 </ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="RequireValidAssurances.html">Prev: RequireValidAssurances class</a></li>
-                                                      <li></li>
+                                    <li><a href="RequireAnyOneOf.html">Prev: RequireAnyOneOf class</a></li>
+                                                      <li><a href="RequireValidRequirements.html">Next: RequireValidRequirements class</a></li>
                                 </ul>
             </nav>
                     </main>

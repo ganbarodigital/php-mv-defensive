@@ -38,6 +38,9 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                    </li>
                                                                     <li class="current">
                                         <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
@@ -63,6 +66,34 @@
 <h2 id="purpose">Purpose</h2>
 <p>These are the exceptions that this library can throw.</p>
 <h2 id="exceptions-list">Exceptions List</h2>
+<h3 id="assurance-exceptions">Assurance Exceptions</h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="BadAssurance.html"><code>BadAssurance</code></a></td>
+<td>thrown when you pass something that isn't an assurnace into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
+</tr>
+<tr>
+<td><a href="BadAssuranceArgs.html"><code>BadAssuranceArgs</code></a></td>
+<td>thrown when you pass something that isn't a list of arguments into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
+</tr>
+<tr>
+<td><a href="BadAssurancesList.html"><code>BadAssurancesList</code></a></td>
+<td>thrown when you pass something that isn't a list of assurances into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
+</tr>
+<tr>
+<td><a href="EmptyAssurancesList.html"><code>EmptyAssurancesList</code></a></td>
+<td>thrown when you pass an empty list into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="requirements-exceptions">Requirements Exceptions</h3>
 <table>
 <thead>
 <tr>
@@ -87,9 +118,20 @@
 <td><a href="EmptyRequirementsList.html"><code>EmptyRequirementsList</code></a></td>
 <td>thrown when you pass an empty requirements list into one of the <a href="../Requirements/index.html">Requirements</a> classes</td>
 </tr>
+</tbody>
+</table>
+<h3 id="other-exceptions">Other Exceptions</h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td><a href="UnreachableCodeExecuted.html"><code>UnreachableCodeExecuted</code></a></td>
-<td>thrown when <code>switch</code> or <code>if</code> / <code>else</code> logic reaches a branch that should never happen</td>
+<td>thrown when <code>switch</code> or <code>if</code> / <code>else</code> logic reaches a branch that should never be reached</td>
 </tr>
 <tr>
 <td><a href="UnsupportedType.html"><code>UnsupportedType</code></a></td>
