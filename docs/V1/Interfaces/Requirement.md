@@ -150,3 +150,9 @@ RequireInRange::apply(10, 20)->to($data);
 ## Notes
 
 1. We have `__invoke()` in the interface to make it easy to work with lists of requirements.
+
+## Changelog
+
+### v1.2016062801
+
+* `Requirement` now extends the `Inspection` interface
