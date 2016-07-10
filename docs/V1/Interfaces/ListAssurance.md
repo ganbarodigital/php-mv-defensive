@@ -114,15 +114,15 @@ For example, here's a simple min / max assurance:
 ```php
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
 use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
-use GanbaroDigital\Defensive\V1\Assurance\InvokeableAssurance;
-use GanbaroDigital\Defensive\V1\Assurance\ListableAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\ListableAssurance;
 
 class EnsureInRange implements Assurance, ListAssurance
 {
     // save us having to declare __invoke() ourselves
     use InvokeableAssurance;
 
-    // saves us having to declare toList() ourselves
+    // save us having to declare toList() ourselves
     use ListableAssurance;
 
     /**
@@ -165,7 +165,7 @@ class EnsureInRange implements Assurance, ListAssurance
     }
 
     /**
-     * make sure that $data is within the require range
+     * make sure that $data is within the specified range
      * throws an exception if it is not
      *
      * @param  int $data
