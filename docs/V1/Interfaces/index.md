@@ -17,4 +17,5 @@ Interface | Description
 ----------|------------
 [`Assurance`](Assurance.html) | inspect a returned value, or a calculated / generated value
 [`Inspection`](Inspection.html) | common standard for all assurances and requirements
+[`ListInspection`](ListInspection.html) | inspect every element of a list
 [`Requirement`](Requirement.html) | inspect an input value
