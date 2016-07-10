@@ -118,6 +118,16 @@ Here's how the pattern works:
 * a `stdClass` object
 </div>
 
+<div class="callout info" markdown="1">
+#### Why Not Use `array_walk()` Instead?
+
+At first glance, it looks like we can call `array_walk($list, Inspection::apply())` instead. Doing so saves us the extra effort of adding `ListInspection` support.
+
+`ListInspection` gives us something that `array_walk()` can't.
+
+If the inspection fails, an exception is thrown. The exception's message will contain precise details of which element of the list failed the inspection. We can't get that by using `array_walk()`.
+</div>
+
 ## Notes
 
 None at this time.
