@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: interfaces
-pageflow_prev_url: ListInspection.html
-pageflow_prev_text: ListInspection interface
+pageflow_prev_url: ListRequirement.html
+pageflow_prev_text: ListRequirement interface
 ---
 
 # Requirement
