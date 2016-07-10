@@ -16,6 +16,7 @@ pageflow_next_text: Contributing
   - added `ListInspection` interface
   - added `ListAssurance` interface
   - added `ListRequirement` interface
+  - added `ListableAssurance` trait
 
 ## v1.2016062801
 
