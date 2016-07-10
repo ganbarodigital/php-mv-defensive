@@ -14,6 +14,7 @@ pageflow_next_text: Contributing
 
 * Added support for applying assurances and requirements to all elements in a list
   - added `ListInspection` interface
+  - added `ListAssurance` interface
 
 ## v1.2016062801
 
