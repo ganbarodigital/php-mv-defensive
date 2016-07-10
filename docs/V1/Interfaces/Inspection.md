@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: interfaces
 pageflow_prev_url: Assurance.html
 pageflow_prev_text: Assurance interface
-pageflow_next_url: Requirement.html
-pageflow_next_text: Requirement interface
+pageflow_next_url: ListInspection.html
+pageflow_next_text: ListInspection interface
 ---
 
 # Inspection
@@ -19,10 +19,10 @@ Since v1.2016062801
 
 ## Public Interface
 
-`Assurance` has the following public interface:
+`Inspection` has the following public interface:
 
 ```php
-// Assurance lives in this namespace
+// Inspection lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
 interface Inspection

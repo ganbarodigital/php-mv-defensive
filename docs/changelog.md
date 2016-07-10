@@ -10,7 +10,10 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
-Nothing yet.
+### New
+
+* Added support for applying assurances and requirements to all elements in a list
+  - added `ListInspection` interface
 
 ## v1.2016062801
 
