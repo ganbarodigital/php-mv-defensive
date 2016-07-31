@@ -42,10 +42,11 @@
  */
 
 namespace GanbaroDigital\Defensive\V1\Assurances;
-use InvalidArgumentException;
-use stdClass;
-use Traversable;
+use GanbaroDigital\MissingBits\ListTraversals\TraverseList;
 
+/**
+ * add ListAssurance support to an existing Assurance class
+ */
 trait ListableAssurance
 {
     /**
@@ -69,7 +70,7 @@ trait ListableAssurance
      *
      * the inspection defined in the to() method is applied to every element
      * of the list passed in
-     * 
+     *
      * @param  mixed $list
      *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
@@ -78,54 +79,11 @@ trait ListableAssurance
      */
     public function toList($list, $fieldOrVarName = "value")
     {
+        // we'll use this to traverse our list
+        $callable = function($value, $key, $name) {
+            $this->to($value, $name);
+        };
         // do we have an array, or an object?
-        if (is_array($list)) {
-            $this->traverseArray($list, $fieldOrVarName);
-        }
-        else if ($list instanceof Traversable) {
-            $this->traverseArray($list, $fieldOrVarName);
-        }
-        else if ($list instanceof stdClass) {
-            $this->traverseObject($list, $fieldOrVarName);
-        }
-        else {
-            throw new InvalidArgumentException($fieldOrVarName . ' is not traversable');
-        }
-    }
-
-    /**
-     * apply our assurance to the elements of an array
-     *
-     * @param  mixed $list
-     *         the array (or array-like object) to iterate over
-     * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
-     * @return void
-     */
-    private function traverseArray($list, $fieldOrVarName)
-    {
-        // apply the requirement to each element of our list
-        foreach ($list as $key => $data) {
-            $name = $fieldOrVarName . '[' . $key . ']';
-            $this->to($data, $name);
-        }
-    }
-
-    /**
-     * apply our assurance to the properties of an object
-     *
-     * @param  object $list
-     *         the object to iterate over
-     * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
-     * @return void
-     */
-    private function traverseObject($list, $fieldOrVarName)
-    {
-        // apply the requirement to each element of our list
-        foreach ($list as $key => $data) {
-            $name = $fieldOrVarName . '->' . $key;
-            $this->to($data, $name);
-        }
+        TraverseList::using($list, $fieldOrVarName, $callable);
     }
 }

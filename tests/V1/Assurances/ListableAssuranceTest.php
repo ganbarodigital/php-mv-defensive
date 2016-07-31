@@ -96,7 +96,6 @@ class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::toList
-     * @covers ::traverseArray
      */
     public function test_can_inspect_an_array_of_data_via_toList()
     {
@@ -121,7 +120,6 @@ class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::inspectList
-     * @covers ::traverseArray
      */
     public function test_can_inspect_an_array_of_data_via_inspectList()
     {
@@ -146,7 +144,6 @@ class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::toList
-     * @covers ::traverseArray
      */
     public function test_can_inspect_a_Traversable_object_via_toList()
     {
@@ -173,7 +170,6 @@ class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::inspectList
-     * @covers ::traverseArray
      */
     public function test_can_inspect_a_Traversable_object_via_inspectList()
     {
@@ -200,7 +196,6 @@ class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::toList
-     * @covers ::traverseObject
      */
     public function test_can_inspect_a_stdClass_object_via_toList()
     {
@@ -227,7 +222,6 @@ class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::inspectList
-     * @covers ::traverseObject
      */
     public function test_can_inspect_a_stdClass_object_via_inspectList()
     {
