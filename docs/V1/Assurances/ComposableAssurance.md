@@ -14,7 +14,7 @@ Since v1.2016062801
 
 ## Description
 
-`ComposableAssurance` will turn any `callable` into a `Assurance`.
+`ComposableAssurance` will turn any `callable` into both an `Assurance` and a `ListAssurance`.
 
 ## Public Interface
 
@@ -24,13 +24,16 @@ Since v1.2016062801
 // ComposableAssurance lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Assurances;
 
-// ComposableAssurance is a Assurance
+// ComposableAssurance is an Assurance
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+// ComposableAssurance is a ListAssurance
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
 
 // our parameter and return types
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class ComposableAssurance implements Assurance
+class ComposableAssurance
+  implements Assurance, ListAssurance
 {
     /**
      * build a composable assurance
@@ -48,7 +51,11 @@ class ComposableAssurance implements Assurance
      * @return Assurance
      *         the assurance you can use
      */
-    public function __construct($assurance, $extra, FactoryList $exceptions = null);
+    public function __construct(
+        $assurance,
+        $extra,
+        FactoryList $exceptions = null
+    );
 
     /**
      * build a composable assurance
@@ -66,7 +73,11 @@ class ComposableAssurance implements Assurance
      * @return Assurance
      *         the assurance you can use
      */
-    public static function apply($assurance, $extra, FactoryList $exceptions = null);
+    public static function apply(
+        $assurance,
+        $extra,
+        FactoryList $exceptions = null
+    );
 
     /**
      * throws exception if our underlying assurance isn't met
@@ -89,6 +100,33 @@ class ComposableAssurance implements Assurance
      * @return void
      */
     public function __invoke($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function inspectList($list, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function toList($list, $fieldOrVarName = "value");
 }
 ```
 
@@ -111,10 +149,14 @@ Let's take a simple integer range check:
 // we can't use this as an Assurance, because it needs too many input params
 function minMaxCheck($data, $minValue, $maxValue, $fieldOrVarName) {
     if ($data < $minValue) {
-        throw new RuntimeException("$fieldOrVarName cannot be less than $minValue");
+        throw new RuntimeException(
+            "$fieldOrVarName cannot be less than $minValue"
+        );
     }
     if ($data > $maxValue) {
-        throw new RuntimeException("$fieldOrVarName cannot be greater than $maxValue");
+        throw new RuntimeException(
+            "$fieldOrVarName cannot be greater than $maxValue"
+        );
     }
 };
 ```
@@ -132,6 +174,20 @@ ComposableAssurance::apply(minMaxCheck, [10, 20])->to($data, '$data');
 ```
 
 The `::apply()->to()` pattern helps make your code more readable.
+
+We can also take the `minMaxCheck` and use `ComposableAssurance` to apply it to a list of data:
+
+```php
+use GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance;
+
+// the data we will check
+$list = [15,11,13];
+
+// are all elements in $list in the range 10..20?
+ComposableAssurance::apply(minMaxCheck, [10, 20])->toList($list, '$list');
+```
+
+The `::apply()->toList()` pattern helps make your code more readable.
 
 The real benefit of `ComposableAssurance` comes when you want to use `minMaxCheck` in a list of assurances:
 
@@ -170,6 +226,8 @@ Here is the contract for this class:
      [x] Must provide a callable
      [x] Must provide array of extra parameters
      [x] Array of extra parameters can be empty
+     [x] can apply to a data list
+     [x] throws InvalidArgumentException if non list passed to inspectList
 
 Class contracts are built from this class's unit tests.
 
@@ -199,6 +257,12 @@ If you:
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016073101
+
+* now implements `ListAssurance`
 
 ## See Also
 

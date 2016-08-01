@@ -189,6 +189,50 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // test the results
     }
 
+    /**
+     * @covers ::__construct
+     * @covers ::apply
+     * @covers ::inspectList
+     */
+    public function test_can_apply_to_a_data_list()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
+        $list = [
+            [],
+            []
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $assurance->inspectList($list);
+
+        // ----------------------------------------------------------------
+        // test the results
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::inspectList
+     * @dataProvider provideNonListsToTest
+     * @expectedException InvalidArgumentException
+     */
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_inspectList($list)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $assurance->inspectList($list);
+    }
+
     public function provideBadAssurances()
     {
         return [
@@ -220,6 +264,22 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
             [ new \stdClass ],
             [ STDIN ],
             [ "hello, world!" ]
+        ];
+    }
+
+    public function provideNonListsToTest()
+    {
+        return [
+            [ null ],
+            [ true ],
+            [ false ],
+            [ function() {} ],
+            [ 0.0 ],
+            [ 3.1415927 ],
+            [ 0 ],
+            [ 100 ],
+            [ STDIN ],
+            [ "hello, world!" ],
         ];
     }
 }
