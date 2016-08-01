@@ -29,11 +29,13 @@ namespace GanbaroDigital\Defensive\V1\Assurances;
 
 // EnsureAnyOneOf is an Assurance
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+// EnsureAnyOneOf is a ListAssurance
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class EnsureAnyOneOf implements Assurance
+class EnsureAnyOneOf implements Assurance, ListAssurance
 {
     /**
      * create an Assurance that is ready to execute
@@ -67,6 +69,33 @@ class EnsureAnyOneOf implements Assurance
      * @return void
      */
     public function to($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function inspectList($list, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function toList($list, $fieldOrVarName = "value");
 }
 ```
 
@@ -105,6 +134,39 @@ function doSomething($arg1)
 
 If none of the assurances are met, `EnsureAnyOneOf` will throw an exception.
 
+### Applying Assurances To Lists Of Data
+
+Use the `::apply()->toList()` pattern:
+
+```php
+$assurances = [
+    // a list of objects that implement the 'Assurance' interface
+];
+EnsureAnyOneOf::apply($assurances)->toList($list, '$list');
+```
+
+Use `EnsureAnyOneOf` to catch bugs in your code:
+
+```php
+function doSomething($arg1)
+{
+    // do some work
+    // ...
+
+    // assurance!
+    $assurances = [
+        new EnsureString(),
+        new EnsureNull()
+    ];
+    EnsureAnyOneOf::apply($assurances)->toList($retval, '$retval');
+
+    // if we get here, then we can return $retval
+    return $retval;
+}
+```
+
+If none of the assurances are met, `EnsureAnyOneOf` will throw an exception.
+
 ## Class Contract
 
 Here is the contract for this class:
@@ -119,6 +181,8 @@ Here is the contract for this class:
      [x] Assurances array must contain valid assurances
      [x] Will match any assurance given
      [x] Throws exception if nothing matches
+     [x] can apply to a data list
+     [x] throws InvalidArgumentException if non list passed to toList
 
 Class contracts are built from this class's unit tests.
 
@@ -148,6 +212,12 @@ If you:
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016080101
+
+* now implements `ListAssurance`
 
 ## See Also
 
