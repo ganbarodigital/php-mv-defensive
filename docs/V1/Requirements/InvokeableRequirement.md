@@ -178,6 +178,12 @@ If you:
 
 None at this time.
 
+## Changelog
+
+### v1.2016081301
+
+* Added `InvokeableRequirement::inspect()`
+
 ## See Also
 
-* [`Requirement` interface](Requirement.html)
+* [`Requirement` interface](../Interfaces/Requirement.html)

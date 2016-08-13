@@ -7,8 +7,8 @@ pageflow_prev_text: InvokeableAssurance trait
 
 # ListableAssurance
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016081301
 </div>
 
 ## Description

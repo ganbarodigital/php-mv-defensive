@@ -16,7 +16,6 @@ pageflow_next_text: Contributing
   - added `Inspection::inspect()` as an alias for `Inspection::to()`
   - added `InvokeableAssurable::inspect()`
   - added `InvokeableRequirement::inspect()`
-
 * Added support for applying assurances and requirements to all elements in a list
   - added `ListInspection` interface
   - added `ListAssurance` interface
@@ -33,11 +32,9 @@ pageflow_next_text: Contributing
   - `RequireAllOf` now accepts empty lists of requirements
   - `RequireAnyOneOf` now implements `ListRequirement` interface
   - `RequireAnyOneOf` now accepts empty lists of requirements
-
 * A couple of internal classes are now `ListRequirement`s only
   - `RequireValidAssurances` is now a `ListRequirement`
   - `RequireValidRequirements` is now a `ListRequirement`
-
 * Tweaks to improve usefulness of exceptions
   - `BadAssurance` exception message now includes the type of the bad assurance
   - `BadRequirement` exception message now includes the type of the bad requirement

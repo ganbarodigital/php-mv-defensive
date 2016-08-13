@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: interfaces
 pageflow_prev_url: Assurance.html
 pageflow_prev_text: Assurance interface
-pageflow_next_url: ListInspection.html
-pageflow_next_text: ListInspection interface
+pageflow_next_url: ListAssurance.html
+pageflow_next_text: ListAssurance interface
 ---
 
 # Inspection
@@ -156,7 +156,7 @@ None at this time.
 
 ## Changelog
 
-### v1.2016080701
+### v1.2016081301
 
 * Added `Inspection::inspect()` method
 

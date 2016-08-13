@@ -167,6 +167,14 @@ If you:
 
 None at this time.
 
+## Changelog
+
+### v1.2016081301
+
+* Implements `ListRequirement` instead of `Requirement`
+
+  We feel this is a more accurate description of what this function class does.
+  
 ## See Also
 
-* [`Requirement` interface](Requirement.html)
+* [`Requirement` interface](../Interfaces/Requirement.html)

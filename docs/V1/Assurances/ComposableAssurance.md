@@ -260,10 +260,11 @@ None at this time.
 
 ## Changelog
 
-### v1.2016073101
+### v1.2016081301
 
 * now implements `ListAssurance`
 
 ## See Also
 
 * [`Assurance` interface](../Interfaces/Assurance.html)
+* [`ListAssurance` interface](../Interfaces/ListAssurance.html)

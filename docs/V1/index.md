@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: home
-pageflow_next_url: Exceptions/index.html
-pageflow_next_text: Exceptions
+pageflow_next_url: Assurances/index.html
+pageflow_next_text: Assurances
 ---
 
 # Version 1.x
@@ -17,6 +17,7 @@ The key ideas in Version 1 are:
 
 * _requirements_ (checks on inputs) and _assurances_ (checks on outputs and return values)
 * `Assurance::apply()->to()` / `Requirement::apply()->to()` pattern - apply the assurance / requirement to a value. If the assurance / requirement isn't met, throw an exception.
+* `ListAssurance::apply()->toList()` / `ListRequirement::apply()->toList()` pattern - apply the assurance / requirement to a list of values. If the assurance / requirement isn't met, throw an exception.
 * _composable assurances and requirements_ - each `Assurance` / `Requirement` now takes one parameter (the value being checked). This allows us to build lists of assurances / requirements to apply to a value.
 
 ## Components
