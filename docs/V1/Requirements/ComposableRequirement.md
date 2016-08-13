@@ -243,6 +243,7 @@ Here is the contract for this class:
      [x] Must provide a callable
      [x] Must provide array of extra parameters
      [x] Array of extra parameters can be empty
+     [x] is ListRequirement
      [x] can apply to a data list
      [x] throws InvalidArgumentException if non list passed to inspectList
 

@@ -46,6 +46,7 @@ namespace GanbaroDigitalTest\Defensive\V1\Requirements;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 
@@ -187,6 +188,25 @@ class ComposableRequirementTest extends PHPUnit_Framework_TestCase
 
         // ----------------------------------------------------------------
         // test the results
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function test_is_ListRequirement()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [1, 10]);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(ListRequirement::class, $unit);
     }
 
     /**
