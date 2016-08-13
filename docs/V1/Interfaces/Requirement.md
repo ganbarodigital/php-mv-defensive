@@ -40,10 +40,29 @@ interface Requirement
      *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * this is an alias of to() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $data
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value");
 
     /**
      * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
      *
      * @inheritedFrom Inspection
      *
@@ -53,7 +72,7 @@ interface Requirement
      *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($fieldOrVar, $fieldOrVarName = "value");
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 

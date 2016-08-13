@@ -30,18 +30,10 @@ trait InvokeableRequirement
     /**
      * throws exceptions if any of our requirements are not met
      *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($data, $fieldOrVarName = "value");
-
-    /**
-     * throws exceptions if any of our requirements are not met
+     * this is an alias of to() for better readability when your
+     * inspection is an object
      *
-     * this is an alias of to() for readability purposes
+     * @inheritedFrom Inspection
      *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
@@ -50,6 +42,22 @@ trait InvokeableRequirement
      * @return void
      */
     public function inspect($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
+     *
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 

@@ -71,53 +71,83 @@ class ComposableRequirement implements Requirement, ListRequirement
     public static function apply($requirement, $extra, FactoryList $exceptions = null);
 
     /**
-     * throws exception if our underlying requirement isn't met
+     * throws exception if our inspection fails
      *
-     * @param  mixed $data
-     *         the data to be examined by our underlying requirement
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value");
-
-    /**
-     * throws exception if our underlying requirement isn't met
-     *
-     * @param  mixed $data
-     *         the data to be examined by our underlying requirement
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
 
     /**
      * throws exceptions if any of our requirements are not met
      *
-     * this is an alias of toList() for readability
+     * this is an alias of to() for better readability when your
+     * inspection is an object
      *
-     * @param  mixed $list
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $data
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
+     *         what is the name of $data in the calling code?
      * @return void
      */
-    public function inspectList($list, $fieldOrVarName = "value");
+    public function inspect($data, $fieldOrVarName = "value");
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
      *
      * the inspection defined in the to() method is applied to every element
      * of the list passed in
      *
-     * @param  mixed $list
-     *         the data to be examined by each requirement in turn
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
      * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function toList($list, $fieldOrVarName = "value");
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 
