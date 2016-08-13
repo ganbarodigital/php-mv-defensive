@@ -43,16 +43,25 @@
 
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class ComposableRequirement implements Requirement
+/**
+ * build a composable requirement
+ *
+ * we take a partial requirement (a requirement that needs multiple
+ * parameters), plus the extra parameters, so that it can be called
+ * from our RequireAllOf and RequireAnyOneOf classes
+ */
+class ComposableRequirement implements Requirement, ListRequirement
 {
     // saves us having to declare ::__invoke() ourselves
     use InvokeableRequirement;
+
+    // saves us having to declare ::toList() ourselves
+    use ListableRequirement;
 
     /**
      * the partial requirement that we are converting into a

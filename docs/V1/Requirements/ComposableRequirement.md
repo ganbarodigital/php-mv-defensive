@@ -14,7 +14,7 @@ Since v1.2016052101
 
 ## Description
 
-`ComposableRequirement` will turn any `callable` into a `Requirement`.
+`ComposableRequirement` will turn any `callable` into both a `Requirement` and a `ListRequirement`.
 
 ## Public Interface
 
@@ -26,11 +26,13 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 
 // ComposableRequirement is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+// ComposableRequirement is a ListRequirement
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 // our parameter and return types
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class ComposableRequirement implements Requirement
+class ComposableRequirement implements Requirement, ListRequirement
 {
     /**
      * build a composable requirement
@@ -89,6 +91,33 @@ class ComposableRequirement implements Requirement
      * @return void
      */
     public function __invoke($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function inspectList($list, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @param  mixed $list
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function toList($list, $fieldOrVarName = "value");
 }
 ```
 
@@ -133,6 +162,20 @@ ComposableRequirement::apply(minMaxCheck, [10, 20])->to($data, '$data');
 
 The `::apply()->to()` pattern helps make your code more readable.
 
+We can also take the `minMaxCheck` and use `ComposableRequirement` to apply it to a list of data:
+
+```php
+use GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement;
+
+// the data we will check
+$list = [15,11,13];
+
+// is $data in the range 10..20?
+ComposableRequirement::apply(minMaxCheck, [10, 20])->toList($list, '$list');
+```
+
+The `::apply()->toList()` pattern helps make your code more readable.
+
 The real benefit of `ComposableRequirement` comes when you want to use `minMaxCheck` in a list of requirements:
 
 ```php
@@ -170,6 +213,8 @@ Here is the contract for this class:
      [x] Must provide a callable
      [x] Must provide array of extra parameters
      [x] Array of extra parameters can be empty
+     [x] can apply to a data list
+     [x] throws InvalidArgumentException if non list passed to inspectList
 
 Class contracts are built from this class's unit tests.
 
