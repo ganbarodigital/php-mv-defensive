@@ -15,7 +15,7 @@ Since v1.2016052101
 
 ## Description
 
-`InvokeableRequirement` is a trait. It implements the `__invoke()` method of the [`Requirement`](../Interfaces/Requirement.html) interface for you.
+`InvokeableRequirement` is a trait. It implements the `__invoke()` and `inspect()` methods of the [`Requirement`](../Interfaces/Requirement.html) interface for you.
 
 ## Public Interface
 
@@ -37,6 +37,19 @@ trait InvokeableRequirement
      * @return void
      */
     public function __invoke($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $data
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value");
 }
 ```
 
@@ -52,7 +65,7 @@ use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
 
 class RequireInRange implements Requirement
 {
-    // save us having to declare __invoke() ourselves
+    // save us having to declare __invoke() and inspect() ourselves
     use InvokeableRequirement;
 
     /**
@@ -126,6 +139,7 @@ Here is the contract for this trait:
      [x] calls enclosing classes to method
      [x] passes data to enclosing classes to method
      [x] passes fieldOrVarName to enclosing classes to method
+     [x] inspect is alias of to method
 
 Trait contracts are built from this trait's unit tests.
 

@@ -158,6 +158,29 @@ class InvokeableRequirementTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedField, $unit->toFieldOrVarName);
     }
+
+    /**
+     * @covers ::inspect
+     */
+    public function test_inspect_is_alias_of_to_method()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedData = 1.0;
+        $expectedField = "alfred";
+        $unit = new InvokeableRequirementTest_Requirement;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit($expectedData, $expectedField);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedData, $unit->toData);
+    }
 }
 
 class InvokeableRequirementTest_Requirement implements Requirement
