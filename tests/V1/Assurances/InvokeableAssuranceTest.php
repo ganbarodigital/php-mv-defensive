@@ -158,6 +158,29 @@ class InvokeableAssuranceTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedField, $unit->toFieldOrVarName);
     }
+
+    /**
+     * @covers ::inspect
+     */
+    public function test_inspect_is_an_alias_for_to()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedData = 1.0;
+        $expectedField = "alfred";
+        $unit = new InvokeableAssuranceTest_Assurance;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit($expectedData, $expectedField);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($unit->toCalled);
+    }
 }
 
 class InvokeableAssuranceTest_Assurance implements Assurance

@@ -1,6 +1,6 @@
 ---
 currentSection: v1
-currentItem: requirements
+currentItem: assurances
 pageflow_prev_url: EnsureAnyOneOf.html
 pageflow_prev_text: EnsureAnyOneOf class
 pageflow_next_url: ListableAssurance.html
@@ -15,7 +15,7 @@ Since v1.2016062801
 
 ## Description
 
-`InvokeableAssurance` is a trait. It implements the `__invoke()` method of the [`Assurance`](../Interfaces/Assurance.html) interface for you.
+`InvokeableAssurance` is a trait. It implements the `__invoke()` and `inspect()` methods of the [`Assurance`](../Interfaces/Assurance.html) interface for you.
 
 ## Public Interface
 
@@ -37,6 +37,19 @@ trait InvokeableAssurance
      * @return void
      */
     public function __invoke($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $data
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value");
 }
 ```
 
@@ -52,7 +65,7 @@ use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
 
 class EnsureInRange implements Assurance
 {
-    // save us having to declare __invoke() ourselves
+    // save us having to declare __invoke() and inspect() ourselves
     use InvokeableAssurance;
 
     /**
@@ -107,10 +120,14 @@ class EnsureInRange implements Assurance
     public function to($data, $fieldOrVarName = 'value')
     {
         if ($data < $this->min) {
-            throw new RuntimeException($fieldOrVarName . ' cannot be less than ' . $this->min);
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be less than ' . $this->min
+            );
         }
         if ($data > $this->max) {
-            throw new RuntimeException($fieldOrVarName . ' cannot be more than ' . $this->max);
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be more than ' . $this->max
+            );
         }
     }
 }
@@ -126,6 +143,7 @@ Here is the contract for this trait:
      [x] calls enclosing classes to method
      [x] passes data to enclosing classes to method
      [x] passes fieldOrVarName to enclosing classes to method
+     [x] inspect is an alias for to
 
 Trait contracts are built from this trait's unit tests.
 

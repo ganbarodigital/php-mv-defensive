@@ -14,6 +14,7 @@ pageflow_next_text: Contributing
 
 * Tweaks and changes to improve readabilty of your code
   - added `Inspection::inspect()` as an alias for `Inspection::to()`
+  - added `InvokeableAssurable::inspect()`
 
 * Added support for applying assurances and requirements to all elements in a list
   - added `ListInspection` interface
