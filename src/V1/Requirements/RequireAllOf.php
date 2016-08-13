@@ -44,13 +44,17 @@
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireAllOf implements Requirement
+class RequireAllOf implements Requirement, ListRequirement
 {
     // saves us having to declare ::__invoke() ourselves
     use InvokeableRequirement;
+
+    // saves us having to declare ::toList() ourselves
+    use ListableRequirement;
 
     /**
      * the exceptions we should use

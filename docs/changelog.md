@@ -27,6 +27,7 @@ pageflow_next_text: Contributing
   - `ComposableRequirement` now implements `ListRequirement` interface
   - `EnsureAllOf` now implements `ListAssurance` interface
   - `EnsureAnyOneOf` now implements `ListAssurance` interface
+  - `RequireAllOf` now implements `ListRequirement` interface
 
 ## v1.2016062801
 
