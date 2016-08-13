@@ -43,19 +43,18 @@
 
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedValue;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireAnyOneOf implements Requirement
+class RequireAnyOneOf implements Requirement, ListRequirement
 {
     // saves us having to declare ::__invoke() ourselves
     use InvokeableRequirement;
+
+    // saves us having to declare ::toList() ourselves
+    use ListableRequirement;
 
     /**
      * the requirements to apply
