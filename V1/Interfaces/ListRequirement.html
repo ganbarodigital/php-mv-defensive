@@ -56,27 +56,66 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Assurance.html">Prev: Assurance interface</a></li>
-                                                      <li><a href="ListAssurance.html">Next: ListAssurance interface</a></li>
+                                    <li><a href="ListInspection.html">Prev: ListInspection interface</a></li>
+                                                      <li><a href="Requirement.html">Next: Requirement interface</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="inspection">Inspection</h1>
+                <h1 id="listrequirement">ListRequirement</h1>
 <div class="callout info">
-<p>Since v1.2016062801</p>
+<p>Since v1.2016081301</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>Inspection</code> is an interface. It defines the <code>::apply()-&gt;to()</code> pattern used by both <a href="../Assurances/index.html"><code>Assurance</code></a> and <a href="../Requirements/index.html"><code>Requirement</code></a> classes.</p>
+<p><code>ListRequirement</code> is an interface. It's the interface for <a href="ListInspection.html"><code>ListInspection</code></a>s performed against input values that are lists.</p>
+<p>If you want to inspect lists of returned values or lists of generated / calculated values, use a <a href="ListAssurance.html"><code>ListAssurance</code></a>.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>Inspection</code> has the following public interface:</p>
-<pre><code class="language-php">// Inspection lives in this namespace
+<p><code>ListRequirement</code> has the following public interface:</p>
+<pre><code class="language-php">// ListRequirement lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
-interface Inspection
+// our base interface
+use GanbaroDigital\Defensive\V1\Interfaces\ListInspection;
+
+interface ListRequirement
+  extends ListInspection
 {
     /**
      * throws exception if our inspection fails
+     *
+     * @inheritedFrom ListInspection
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * this is an alias of to() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListInspection
+     *
+     * @param  mixed $data
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
+     *
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
@@ -89,110 +128,137 @@ interface Inspection
     /**
      * throws exception if our inspection fails
      *
-     * this is an alias of to() for readability purposes
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
+     *         must be a traversable list
      * @param  string $fieldOrVarName
      *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function inspect($fieldOrVar, $fieldOrVarName = "value");
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
 
     /**
      * throws exception if our inspection fails
      *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListInspection
+     *
      * @param  mixed $fieldOrVar
      *         the data to be examined
+     *         must be a traversable list
      * @param  string $fieldOrVarName
      *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($fieldOrVar, $fieldOrVarName = "value");
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="a-base-interface">A Base Interface</h3>
-<p><code>Inspection</code> is a base interface. Its purpose is to define common functionality.</p>
+<h3 id="the-apply-gttolist-pattern">The Apply-&gt;ToList Pattern</h3>
+<p>Every <code>ListRequirement</code> implements the <code>ListRequirement::apply()-&gt;toList()</code> pattern:</p>
 <ul>
-<li>Create new interfaces that extend <code>Inspection</code> to provide type-hinting for different kinds of inspections.</li>
-<li>New Inspections should not add additional functionality.</li>
-<li>Do not add additional public methods to your Inspections.</li>
+<li>add <code>implements ListRequirement</code> to your existing <code>Requirement</code> class.</li>
+<li>add <code>use ListableRequirement</code> to your class. Saves you having to implement <code>toList()</code> and <code>inspectList()</code> yourself.</li>
+<li>add a <code>public static function apply()</code> method to your class, and a corresponding <code>__construct()</code> method. <code>apply()</code> takes any extra parameters needed to customise the requirement, and returns a new instance of your class.</li>
+<li>add a <code>public function to()</code> method to your class. This method inspects <code>$data</code>. If you're not happy with <code>$data</code>, throw an exception.</li>
 </ul>
-<p><a href="Assurance.html"><code>Assurance</code></a> and <a href="Requirement.html"><code>Requirement</code></a> are both interfaces that extend <code>Inspection</code>.</p>
-<h3 id="the-apply-gtto-pattern">The Apply-&gt;To Pattern</h3>
-<p>All inspections follow the <code>::apply()-&gt;to()</code> pattern:</p>
-<pre><code class="language-php">function foo($args)
+<p>For example, here's a simple min / max assurance:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
+use GanbaroDigital\Defensive\V1\Requirements\ListableRequirement;
+
+class RequireInRange implements Requirement, ListRequirement
 {
-    // robustness!
-    RequireListOfFish::apply()-&gt;to($args, '$args');
+    // save us having to declare __invoke() ourselves
+    use InvokeableRequirement;
 
-    // ... do some work
+    // saves us having to declare toList() ourselves
+    use ListableRequirement;
 
-    // all done
-    EnsureInRange::apply(100, 200)-&gt;to($retval, '$retval');
-    return $retval;
+    /**
+     * minimum acceptable value in our range
+     */
+    private $min;
+
+    /**
+     * maximum acceptable value in our range
+     */
+    private $max;
+
+    /**
+     * constructor. used to create a customised requirement
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     */
+    public function __construct($min, $max)
+    {
+        $this-&gt;min = $min;
+        $this-&gt;max = $max;
+    }
+
+    /**
+     * generates a Requirement
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     * @return Requirement
+     *         returns a requirement to use
+     */
+    public static function apply($min, $max)
+    {
+        return new static($min, $max);
+    }
+
+    /**
+     * make sure that $data is within the require range
+     * throws an exception if it is not
+     *
+     * @param  int $data
+     *         the value to check
+     * @param  string $fieldOrVarName
+     *         the name of $data in the caller's code
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = 'value')
+    {
+        if ($data &lt; $this-&gt;min) {
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be less than ' . $this-&gt;min
+            );
+        }
+        if ($data &gt; $this-&gt;max) {
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be more than ' . $this-&gt;max
+            );
+        }
+    }
 }</code></pre>
-<p>Here's how the pattern works:</p>
-<ul>
-<li><code>::apply()</code> is a static factory method. It returns a new inspection object.</li>
-<li>If <code>::apply()</code> has any parameters, these are used to customise the behaviour of the inspection object.</li>
-<li><code>::to()</code> is a method on the inspection object. It performs the inspection, and throws an exception if the data passed into it doesn't pass the inspection.</li>
-<li>Each inspection object also has an <code>::__invoke()</code> method, so that you can create lists of inspections to run through.</li>
-</ul>
-<p>The benefits of this pattern include:</p>
-<ul>
-<li>composability: the objects returned by <code>::apply()</code> are all composable. You can put them in a list, and then use them against the same data (see <a href="../Requirements/RequireAnyOneOf.html"><code>RequireAnyOneOf</code></a> for an example).</li>
-<li>relatively stateless: the pattern encourages creating new inspection objects, rather than attempting to reuse the same inspection objects over and over. With Storyplayer, we learned and proved that this approach keeps defects to a minimum.</li>
-</ul>
-<p>The downside of the pattern is that each inspection takes a minimum of three method calls:</p>
-<ol>
-<li>Your code calls <code>::apply()</code></li>
-<li>Internally, <code>::apply()</code> creates a new object and calls its <code>::__construct()</code></li>
-<li>Your code calls <code>::to()</code> on the created object</li>
-</ol>
-<div class="callout success">
-<p>It's our experience - and our thesis - that the time it takes a developer to write and ship working code is now the biggest bottleneck on projects. Some of this cost is writing the code the first time, and some of this cost is going back and debugging the code and fixing errors only discovered by your customers.</p>
-<p>Adding strict error detection to code (in the form of inspections) helps you ship code that works first time. Reducing post-release maintenance and support frees up more time to spend on writing new code.</p>
-</div>
-<p>In PHP 7.0 onwards, method calls aren't the major overhead that they used to be, which helps a lot. Plus, you can take advantage of the new behaviour of <code>assert()</code> in PHP 7.0 to switch off all inspections in your code if you need to:</p>
-<pre><code class="language-php">// only works in PHP 7.0 and up
-//
-// set assert.active=0 in php.ini to disable all assert() calls
-assert(EnsureInRange::apply(100,200)-&gt;to($retval));</code></pre>
-<h3 id="inspection-adapters">Inspection Adapters</h3>
-<p>You can use all implementations of <code>Inspection</code> as <em>inspection adapters</em>:</p>
-<pre><code class="language-php">$assurances = [
-    new EnsureString(),
-    new EnsureMinLength(100)
+<p>To use this example requirement, you would do:</p>
+<pre><code class="language-php">$list = [
+    25,
+    20
 ];
-foreach ($assurances as $assurance) {
-    // invokeable object
-    $assurance($data, '$data');
 
-    // for readability, this works too
-    $assurance-&gt;inspect($data, '$data');
-}</code></pre>
-<p>Here's how this pattern works:</p>
-<ul>
-<li><code>Inspection::__invoke()</code> and <code>Inspection::inspect()</code> both call <code>Inspection::to()</code> underneath</li>
-<li>if your class uses either the <a href="../Assurances/InvokeableAssurance.html"><code>InvokeableAssurance</code></a> or <a href="../Requirements/InvokeableRequirement.html"><code>InvokeableRequirement</code></a> trait, you get this behaviour for free</li>
-</ul>
-<h2 id="notes">Notes</h2>
-<p>None at this time.</p>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016081301">v1.2016081301</h3>
-<ul>
-<li>
-<p>Added <code>Inspection::inspect()</code> method</p>
-<p>This is implemented by both the <a href="../Assurances/InvokeableAssurance.html"><code>InvokeableAssurance</code></a> and <a href="../Requirements/InvokeableRequirement.html"><code>InvokeableRequirement</code></a> traits. Your code should be using these to provide the convenience methods specified in the <code>Inspection</code> interface.</p>
-</li>
-</ul>
+// every entry in $list must be &gt;=10, and &lt;=20
+RequireInRange::apply(10, 20)-&gt;toList($list, '$list');</code></pre>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Assurance.html">Prev: Assurance interface</a></li>
-                                                      <li><a href="ListAssurance.html">Next: ListAssurance interface</a></li>
+                                    <li><a href="ListInspection.html">Prev: ListInspection interface</a></li>
+                                                      <li><a href="Requirement.html">Next: Requirement interface</a></li>
                                 </ul>
             </nav>
                     </main>

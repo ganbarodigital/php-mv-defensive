@@ -74,13 +74,13 @@
 <pre><code class="language-php">// RequireValidRequirements lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-// RequireValidRequirements is a Requirement
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+// RequireValidRequirements is a ListRequirement
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidRequirements implements Requirement
+class RequireValidRequirements implements ListRequirement
 {
     /**
      * create a Requirement that is ready to execute
@@ -92,17 +92,6 @@ class RequireValidRequirements implements Requirement
     public function __construct(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid requirements to work with
-     *
-     * @param array $requirements
-     *        the list of requirements to check
-     * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($requirements, $fieldOrVarName = "value");
-
-    /**
      * create a Requirement that is ready to execute
      *
      * @param  FactoryList|null $exceptions
@@ -112,42 +101,78 @@ class RequireValidRequirements implements Requirement
     public static function apply(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid requirements to work with
+     * throws exception if our inspection fails
      *
-     * @param array $requirements
-     *        the list of requirements to check
-     * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($requirements, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="requirements-enforced">Requirements Enforced</h2>
 <p><code>RequireValidRequirements</code> enforces the following:</p>
 <ol>
-<li><code>$requirements</code> must be an array</li>
-<li><code>$requirements</code> cannot be empty</li>
+<li><code>$requirements</code> must be a list</li>
 <li>every value in <code>$requirements</code> must implement the <code>Requirement</code> interface</li>
 </ol>
 <p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="applying-requirements">Applying Requirements</h3>
-<p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
+<p>Use the <code>::apply()-&gt;toList()</code> pattern:</p>
 <pre><code class="language-php">$requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireValidRequirements::apply()-&gt;to($requirements, '$requirements');</code></pre>
+RequireValidRequirements::apply()-&gt;toList($requirements, '$requirements');</code></pre>
 <p>If any of the requirements aren't met, <code>RequireValidRequirements</code> will throw an exception.</p>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
 <pre><code>GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements
  [x] Can instantiate
- [x] Is requirement
+ [x] is ListRequirement
  [x] Can use as object
  [x] Can call statically
  [x] Must provide list of requirements
- [x] List of requirements cannot be empty
- [x] List of requirements can contain only requirements</code></pre>
+ [x] List of requirements can contain only requirements
+ [x] can apply to a data list
+ [x] throws InvalidArgumentException if non list passed to toList</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -171,9 +196,17 @@ Future releases of this class will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016081301">v1.2016081301</h3>
+<ul>
+<li>
+<p>Implements <code>ListRequirement</code> instead of <code>Requirement</code></p>
+<p>We feel this is a more accurate description of what this function class does.</p>
+</li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+<li><a href="../Interfaces/Requirement.html"><code>Requirement</code> interface</a></li>
 </ul>
             </article>
 
@@ -186,10 +219,41 @@ Future releases of this class will not break this contract.
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                                                                                                                                    <h2>Requirements</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ComposableRequirement.html">ComposableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/InvokeableRequirement.html">InvokeableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ListableRequirement.html">ListableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAllOf.html">RequireAllOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAnyOneOf.html">RequireAnyOneOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidAssurances.html">RequireValidAssurances</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidRequirements.html">RequireValidRequirements</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                    
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

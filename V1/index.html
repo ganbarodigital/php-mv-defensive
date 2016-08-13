@@ -57,7 +57,7 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="Exceptions/index.html">Next: Exceptions</a></li>
+                                                      <li><a href="Assurances/index.html">Next: Assurances</a></li>
                                 </ul>
             </nav>
             
@@ -70,6 +70,7 @@
 <ul>
 <li><em>requirements</em> (checks on inputs) and <em>assurances</em> (checks on outputs and return values)</li>
 <li><code>Assurance::apply()-&gt;to()</code> / <code>Requirement::apply()-&gt;to()</code> pattern - apply the assurance / requirement to a value. If the assurance / requirement isn't met, throw an exception.</li>
+<li><code>ListAssurance::apply()-&gt;toList()</code> / <code>ListRequirement::apply()-&gt;toList()</code> pattern - apply the assurance / requirement to a list of values. If the assurance / requirement isn't met, throw an exception.</li>
 <li><em>composable assurances and requirements</em> - each <code>Assurance</code> / <code>Requirement</code> now takes one parameter (the value being checked). This allows us to build lists of assurances / requirements to apply to a value.</li>
 </ul>
 <h2 id="components">Components</h2>
@@ -106,16 +107,18 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="Exceptions/index.html">Next: Exceptions</a></li>
+                                                      <li><a href="Assurances/index.html">Next: Assurances</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

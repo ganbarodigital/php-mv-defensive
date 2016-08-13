@@ -44,11 +44,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
-                                    </li>
                                                                     <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -56,54 +56,38 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="RequireAnyOneOf.html">Prev: RequireAnyOneOf class</a></li>
-                                                      <li><a href="RequireValidRequirements.html">Next: RequireValidRequirements class</a></li>
+                                    <li><a href="Inspection.html">Prev: Inspection interface</a></li>
+                                                      <li><a href="ListInspection.html">Next: ListInspection interface</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="requirevalidassurances">RequireValidAssurances</h1>
+                <h1 id="listassurance">ListAssurance</h1>
 <div class="callout info">
 <p>Since v1.2016081301</p>
 </div>
 <h2 id="description">Description</h2>
-<p>Use <code>RequireValidAssurances</code> to ensure that you have a list that only contains valid assurances. If this requirement is not met, an exception is thrown.</p>
-<p><code>RequireValidAssurances</code> is a customisable function object.</p>
+<p><code>ListAssurance</code> is an interface. It's the interface for <a href="ListInspection.html"><code>ListInspection</code></a>s performed against:</p>
+<ul>
+<li>lists of returned values</li>
+<li>lists of calculated / generated values</li>
+</ul>
+<p>If you want to inspect a list of input values, use a <a href="ListRequirement.html"><code>ListRequirement</code></a>.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>RequireValidAssurances</code> has the following public interface:</p>
-<pre><code class="language-php">// RequireValidAssurances lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Assurances;
+<p><code>ListAssurance</code> has the following public interface:</p>
+<pre><code class="language-php">// ListAssurance lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Interfaces;
 
-// RequireValidAssurances is a ListRequirement
-use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
+// our base interface
+use GanbaroDigital\Defensive\V1\Interfaces\ListInspection;
 
-// our input and return type(s)
-use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
-
-class RequireValidAssurances implements ListRequirement
+interface ListAssurance
+  extends ListInspection
 {
-    /**
-     * create a ListRequirement that is ready to execute
-     *
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
-     * @return RequireValidAssurances
-     */
-    public function __construct(FactoryList $exceptions = null);
-
-    /**
-     * create a Requirement that is ready to execute
-     *
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
-     * @return RequireValidAssurances
-     */
-    public static function apply(FactoryList $exceptions = null);
-
     /**
      * throws exception if our inspection fails
      *
-     * @inheritedFrom ListRequirement
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
@@ -119,7 +103,7 @@ class RequireValidAssurances implements ListRequirement
      * the inspection defined in the to() method is applied to every element
      * of the list passed in
      *
-     * @inheritedFrom ListRequirement
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
@@ -136,7 +120,7 @@ class RequireValidAssurances implements ListRequirement
      * this is an alias of toList() for better readability when your
      * inspection is an object
      *
-     * @inheritedFrom ListRequirement
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
@@ -147,108 +131,138 @@ class RequireValidAssurances implements ListRequirement
      */
     public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }</code></pre>
-<h2 id="requirements-enforced">Requirements Enforced</h2>
-<p><code>RequireValidAssurances</code> enforces the following:</p>
-<ol>
-<li><code>$assurances</code> must be a list</li>
-<li>every value in <code>$assurances</code> must implement the <code>Assurance</code> interface</li>
-</ol>
-<p>If any of the assurances aren't met, <code>RequireValidAssurances</code> will throw an exception.</p>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="applying-requirements">Applying Requirements</h3>
-<p>Use the <code>::apply()-&gt;toList()</code> pattern:</p>
-<pre><code class="language-php">$assurances = [
-    // a list of objects that implement the 'Assurance' interface
+<h3 id="the-apply-gttolist-pattern">The Apply-&gt;ToList Pattern</h3>
+<p>Every <code>ListAssurance</code> implements the <code>ListAssurance::apply()-&gt;toList()</code> pattern:</p>
+<ul>
+<li>add <code>implements ListAssurance</code> to your existing <code>Assurance</code> class.</li>
+<li>add <code>use ListableAssurance</code> to your class. Saves you having to implement <code>toList()</code> and <code>inspectList()</code> yourself.</li>
+<li>add a <code>public static function apply()</code> method to your class, and a corresponding <code>__construct()</code> method. <code>apply()</code> takes any extra parameters needed to customise the assurance, and returns a new instance of your class.</li>
+<li>add a <code>public function to()</code> method to your class. This method inspects <code>$data</code>. If you're not happy with <code>$data</code>, throw an exception.</li>
+</ul>
+<p>For example, here's a simple min / max assurance:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\ListableAssurance;
+
+class EnsureInRange implements Assurance, ListAssurance
+{
+    // save us having to declare __invoke() ourselves
+    use InvokeableAssurance;
+
+    // save us having to declare toList() ourselves
+    use ListableAssurance;
+
+    /**
+     * minimum acceptable value in our range
+     */
+    private $min;
+
+    /**
+     * maximum acceptable value in our range
+     */
+    private $max;
+
+    /**
+     * constructor. used to create a customised assurance
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     */
+    public function __construct($min, $max)
+    {
+        $this-&gt;min = $min;
+        $this-&gt;max = $max;
+    }
+
+    /**
+     * generates an Assurance
+     *
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     * @return Assurance
+     *         returns an assurance to use
+     */
+    public static function apply($min, $max)
+    {
+        return new static($min, $max);
+    }
+
+    /**
+     * make sure that $data is within the specified range
+     * throws an exception if it is not
+     *
+     * @param  int $data
+     *         the value to check
+     * @param  string $fieldOrVarName
+     *         the name of $data in the caller's code
+     * @return void
+     */
+    public function to($data, $fieldOrVarName = 'value')
+    {
+        if ($data &lt; $this-&gt;min) {
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be less than ' . $this-&gt;min
+            );
+        }
+        if ($data &gt; $this-&gt;max) {
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be more than ' . $this-&gt;max
+            );
+        }
+    }
+}</code></pre>
+<p>To use this example assurance, you would do:</p>
+<pre><code class="language-php">$list = [
+    25,
+    20
 ];
-RequireValidAssurances::apply()-&gt;toList($assurances, '$assurances');</code></pre>
-<p>If any of the requirements aren't met, <code>RequireValidAssurances</code> will throw an exception.</p>
-<h2 id="class-contract">Class Contract</h2>
-<p>Here is the contract for this class:</p>
-<pre><code>GanbaroDigital\Defensive\V1\Requirements\RequireValidAssurances
- [x] Can instantiate
- [x] is ListRequirement
- [x] Can use as object
- [x] Can call statically
- [x] Must provide list of assurances
- [x] List of assurances can contain only assurances
- [x] can apply to a data list
- [x] throws InvalidArgumentException if non list passed to toList</code></pre>
-<p>Class contracts are built from this class's unit tests.</p>
-<div class="callout success">
-Future releases of this class will not break this contract.
-</div>
-<div class="callout info">
-<p>Future releases of this class may add to this contract. New additions may include:</p>
-<ul>
-<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
-<li>add new behaviours (e.g. extra class methods)</li>
-</ul>
-</div>
-<div class="callout warning">
-<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
-<p>If you:</p>
-<ul>
-<li>find other ways to use this class,</li>
-<li>or depend on behaviours that are not covered by a unit test,</li>
-<li>or depend on undocumented internal states of this class,</li>
-</ul>
-<p>... your code may not work in the future.</p>
-</div>
-<h2 id="notes">Notes</h2>
-<p>None at this time.</p>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016081301">v1.2016081301</h3>
-<ul>
-<li>
-<p>Implements <code>ListRequirement</code> instead of <code>Requirement</code></p>
-<p>We feel this is a more accurate description of what this function class does.</p>
-</li>
-</ul>
-<h2 id="see-also">See Also</h2>
-<ul>
-<li><a href="Assurance.html"><code>Assurance</code> interface</a></li>
-</ul>
+
+// every entry in $list must be &gt;=10, and &lt;=20
+EnsureInRange::apply(10, 20)-&gt;toList($list, '$list');</code></pre>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="RequireAnyOneOf.html">Prev: RequireAnyOneOf class</a></li>
-                                                      <li><a href="RequireValidRequirements.html">Next: RequireValidRequirements class</a></li>
+                                    <li><a href="Inspection.html">Prev: Inspection interface</a></li>
+                                                      <li><a href="ListInspection.html">Next: ListInspection interface</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
-                                                                                                                                                                                                                                                                                                                                                                                                                    <h2>Requirements</h2>
+                                                                                                                                                                                                                                                                                                                                                                <h2>Interfaces</h2>
                                     <nav>
                                         <ul>
                                             <li>
-                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
                                             </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ComposableRequirement.html">ComposableRequirement</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/Assurance.html">Assurance</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/InvokeableRequirement.html">InvokeableRequirement</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/Inspection.html">Inspection</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ListableRequirement.html">ListableRequirement</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/ListAssurance.html">ListAssurance</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAllOf.html">RequireAllOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/ListInspection.html">ListInspection</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAnyOneOf.html">RequireAnyOneOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/ListRequirement.html">ListRequirement</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidAssurances.html">RequireValidAssurances</a>
-                                                </li>
-                                                                                            <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidRequirements.html">RequireValidRequirements</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/Requirement.html">Requirement</a>
                                                 </li>
                                                                                     </ul>
                                     </nav>
-                                                                                                                                    
+                                                                                                                                                                                        
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>

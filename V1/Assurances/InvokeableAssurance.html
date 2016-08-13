@@ -38,8 +38,8 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
-                                                                    <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
@@ -47,8 +47,8 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
                                     </li>
                                                             </ul>
                         </nav>
@@ -57,7 +57,7 @@
                         <nav class="pageflow">
               <ul>
                                     <li><a href="EnsureAnyOneOf.html">Prev: EnsureAnyOneOf class</a></li>
-                                                      <li></li>
+                                                      <li><a href="ListableAssurance.html">Next: ListableAssurance trait</a></li>
                                 </ul>
             </nav>
             
@@ -67,7 +67,7 @@
 <p>Since v1.2016062801</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>InvokeableAssurance</code> is a trait. It implements the <code>__invoke()</code> method of the <a href="../Interfaces/Assurance.html"><code>Assurance</code></a> interface for you.</p>
+<p><code>InvokeableAssurance</code> is a trait. It implements the <code>__invoke()</code> and <code>inspect()</code> methods of the <a href="../Interfaces/Assurance.html"><code>Assurance</code></a> interface for you.</p>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>InvokeableAssurance</code> has the following public interface:</p>
 <pre><code class="language-php">// InvokeableAssurance lives in this namespace
@@ -85,6 +85,19 @@ trait InvokeableAssurance
      * @return void
      */
     public function __invoke($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $data
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="for-convenience">For Convenience</h3>
@@ -94,7 +107,7 @@ use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
 
 class EnsureInRange implements Assurance
 {
-    // save us having to declare __invoke() ourselves
+    // save us having to declare __invoke() and inspect() ourselves
     use InvokeableAssurance;
 
     /**
@@ -149,10 +162,14 @@ class EnsureInRange implements Assurance
     public function to($data, $fieldOrVarName = 'value')
     {
         if ($data &lt; $this-&gt;min) {
-            throw new RuntimeException($fieldOrVarName . ' cannot be less than ' . $this-&gt;min);
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be less than ' . $this-&gt;min
+            );
         }
         if ($data &gt; $this-&gt;max) {
-            throw new RuntimeException($fieldOrVarName . ' cannot be more than ' . $this-&gt;max);
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be more than ' . $this-&gt;max
+            );
         }
     }
 }</code></pre>
@@ -163,7 +180,8 @@ class EnsureInRange implements Assurance
  [x] is part of Assurance interface
  [x] calls enclosing classes to method
  [x] passes data to enclosing classes to method
- [x] passes fieldOrVarName to enclosing classes to method</code></pre>
+ [x] passes fieldOrVarName to enclosing classes to method
+ [x] inspect is an alias for to</code></pre>
 <p>Trait contracts are built from this trait's unit tests.</p>
 <div class="callout success">
 Future releases of this trait will not break this contract.
@@ -187,6 +205,11 @@ Future releases of this trait will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016081301">v1.2016081301</h3>
+<ul>
+<li>Added <code>InvokeableAssurable::inspect()</code></li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="../Interfaces/Assurance.html"><code>Assurance</code> interface</a></li>
@@ -196,16 +219,41 @@ Future releases of this trait will not break this contract.
                         <nav class="pageflow">
               <ul>
                                     <li><a href="EnsureAnyOneOf.html">Prev: EnsureAnyOneOf class</a></li>
-                                                      <li></li>
+                                                      <li><a href="ListableAssurance.html">Next: ListableAssurance trait</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                        <h2>Assurances</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ComposableAssurance.html">ComposableAssurance</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAllOf.html">EnsureAllOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAnyOneOf.html">EnsureAnyOneOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/InvokeableAssurance.html">InvokeableAssurance</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ListableAssurance.html">ListableAssurance</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                                                                                                                                                                                
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

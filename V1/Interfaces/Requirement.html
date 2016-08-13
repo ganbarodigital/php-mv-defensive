@@ -56,7 +56,7 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Assurance.html">Prev: Assurance interface</a></li>
+                                    <li><a href="ListRequirement.html">Prev: ListRequirement interface</a></li>
                                                       <li></li>
                                 </ul>
             </nav>
@@ -90,10 +90,29 @@ interface Requirement
      *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our requirements are not met
+     *
+     * this is an alias of to() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $data
+     *         the data to be examined by each requirement in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value");
 
     /**
      * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
      *
      * @inheritedFrom Inspection
      *
@@ -103,7 +122,7 @@ interface Requirement
      *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($fieldOrVar, $fieldOrVarName = "value");
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="the-apply-gtto-pattern">The Apply-&gt;To Pattern</h3>
@@ -198,17 +217,45 @@ RequireInRange::apply(10, 20)-&gt;to($data);</code></pre>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Assurance.html">Prev: Assurance interface</a></li>
+                                    <li><a href="ListRequirement.html">Prev: ListRequirement interface</a></li>
                                                       <li></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                                                                                <h2>Interfaces</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/Assurance.html">Assurance</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/Inspection.html">Inspection</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/ListAssurance.html">ListAssurance</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/ListInspection.html">ListInspection</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/ListRequirement.html">ListRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/Requirement.html">Requirement</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                                                                        
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

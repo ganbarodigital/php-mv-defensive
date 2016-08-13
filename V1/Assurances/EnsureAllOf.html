@@ -76,11 +76,13 @@ namespace GanbaroDigital\Defensive\V1\Assurances;
 
 // EnsureAllOf is an Assurance
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+// EnsureAllOf is a ListAssurance
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class EnsureAllOf implements Assurance
+class EnsureAllOf implements Assurance, ListAssurance
 {
     /**
      * create an Assurance that is ready to execute
@@ -114,6 +116,33 @@ class EnsureAllOf implements Assurance
      * @return void
      */
     public function to($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function inspectList($list, $fieldOrVarName = "value");
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $list in the calling code?
+     * @return void
+     */
+    public function toList($list, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="applying-assurances">Applying Assurances</h3>
@@ -138,6 +167,30 @@ EnsureAllOf::apply($assurances)-&gt;to($data, '$data');</code></pre>
     return $retval;
 }</code></pre>
 <p>If any of the assurances aren't met, the assurance will throw an exception.</p>
+<h3 id="applying-assurances-to-lists-of-data">Applying Assurances To Lists Of Data</h3>
+<p>Use the <code>::apply()-&gt;toList()</code> pattern:</p>
+<pre><code class="language-php">$assurances = [
+    // a list of objects that implement the 'Assurance' interface
+];
+EnsureAllOf::apply($assurances)-&gt;toList($list, '$list');</code></pre>
+<p><code>EnsureAllOf</code> will apply the list of assurances to every item in <code>$list</code>.</p>
+<p>Use <code>EnsureAllOf</code> to catch logic bugs in your code:</p>
+<pre><code class="language-php">function doSomething($arg1, $arg2)
+{
+    // do some work ...
+    $retval = [$value1, $value2];
+
+    // assurance!
+    $assurances = [
+        new EnsureIndexable(),
+        new EnsureNotEmpty()
+    ];
+    EnsureAllOf::apply($assurances)-&gt;toList($retval, '$retval');
+
+    // if we get here, then $retval is good
+    return $retval;
+}</code></pre>
+<p>If any of the assurances aren't met, the assurance will throw an exception.</p>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
 <pre><code>GanbaroDigital\Defensive\V1\Assurances\EnsureAllOf
@@ -145,11 +198,12 @@ EnsureAllOf::apply($assurances)-&gt;to($data, '$data');</code></pre>
  [x] is Assurance
  [x] Can use as object
  [x] Can call statically
- [x] Must provide an array of assurances
- [x] Assurances array cannot be empty
- [x] Assurances array must contain valid assurances
+ [x] Must provide a list of assurances
+ [x] Assurances list must contain valid assurances
  [x] Must match all assurances given
- [x] Throws exception if nothing matches</code></pre>
+ [x] Throws exception if nothing matches
+ [x] can apply to a data list
+ [x] throws InvalidArgumentException if non list passed to toList</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -173,9 +227,15 @@ Future releases of this class will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016081301">v1.2016081301</h3>
+<ul>
+<li>now implements <code>ListAssurance</code></li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li><a href="../Interfaces/Assurance.html"><code>Assurance</code> interface</a></li>
+<li><a href="../Interfaces/ListAssurance.html"><code>ListAssurance</code> interface</a></li>
 </ul>
             </article>
 
@@ -188,10 +248,35 @@ Future releases of this class will not break this contract.
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                        <h2>Assurances</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ComposableAssurance.html">ComposableAssurance</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAllOf.html">EnsureAllOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAnyOneOf.html">EnsureAnyOneOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/InvokeableAssurance.html">InvokeableAssurance</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ListableAssurance.html">ListableAssurance</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                                                                                                                                                                                
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

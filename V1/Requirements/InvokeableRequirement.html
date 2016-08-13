@@ -57,7 +57,7 @@
                         <nav class="pageflow">
               <ul>
                                     <li><a href="ComposableRequirement.html">Prev: ComposableRequirement class</a></li>
-                                                      <li><a href="RequireAllOf.html">Next: RequireAllOf class</a></li>
+                                                      <li><a href="ListableRequirement.html">Next: ListableRequirement class</a></li>
                                 </ul>
             </nav>
             
@@ -67,7 +67,7 @@
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>InvokeableRequirement</code> is a trait. It implements the <code>__invoke()</code> method of the <a href="../Interfaces/Requirement.html"><code>Requirement</code></a> interface for you.</p>
+<p><code>InvokeableRequirement</code> is a trait. It implements the <code>__invoke()</code> and <code>inspect()</code> methods of the <a href="../Interfaces/Requirement.html"><code>Requirement</code></a> interface for you.</p>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>InvokeableRequirement</code> has the following public interface:</p>
 <pre><code class="language-php">// InvokeableRequirement lives in this namespace
@@ -78,13 +78,34 @@ trait InvokeableRequirement
     /**
      * throws exceptions if any of our requirements are not met
      *
+     * this is an alias of to() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom Inspection
+     *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public function inspect($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
+     *
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="for-convenience">For Convenience</h3>
@@ -94,7 +115,7 @@ use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
 
 class RequireInRange implements Requirement
 {
-    // save us having to declare __invoke() ourselves
+    // save us having to declare __invoke() and inspect() ourselves
     use InvokeableRequirement;
 
     /**
@@ -163,7 +184,8 @@ class RequireInRange implements Requirement
  [x] is part of Requirement interface
  [x] calls enclosing classes to method
  [x] passes data to enclosing classes to method
- [x] passes fieldOrVarName to enclosing classes to method</code></pre>
+ [x] passes fieldOrVarName to enclosing classes to method
+ [x] inspect is alias of to method</code></pre>
 <p>Trait contracts are built from this trait's unit tests.</p>
 <div class="callout success">
 Future releases of this trait will not break this contract.
@@ -187,25 +209,61 @@ Future releases of this trait will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016081301">v1.2016081301</h3>
+<ul>
+<li>Added <code>InvokeableRequirement::inspect()</code></li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+<li><a href="../Interfaces/Requirement.html"><code>Requirement</code> interface</a></li>
 </ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
                                     <li><a href="ComposableRequirement.html">Prev: ComposableRequirement class</a></li>
-                                                      <li><a href="RequireAllOf.html">Next: RequireAllOf class</a></li>
+                                                      <li><a href="ListableRequirement.html">Next: ListableRequirement class</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                                                                                                                                    <h2>Requirements</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ComposableRequirement.html">ComposableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/InvokeableRequirement.html">InvokeableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ListableRequirement.html">ListableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAllOf.html">RequireAllOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAnyOneOf.html">RequireAnyOneOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidAssurances.html">RequireValidAssurances</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidRequirements.html">RequireValidRequirements</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                    
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

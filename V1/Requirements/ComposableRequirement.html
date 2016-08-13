@@ -67,7 +67,7 @@
 <p>Since v1.2016052101</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>ComposableRequirement</code> will turn any <code>callable</code> into a <code>Requirement</code>.</p>
+<p><code>ComposableRequirement</code> will turn any <code>callable</code> into both a <code>Requirement</code> and a <code>ListRequirement</code>.</p>
 <h2 id="public-interface">Public Interface</h2>
 <p><code>ComposableRequirement</code> has the following public interface:</p>
 <pre><code class="language-php">// ComposableRequirement lives in this namespace
@@ -75,11 +75,13 @@ namespace GanbaroDigital\Defensive\V1\Requirements;
 
 // ComposableRequirement is a Requirement
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+// ComposableRequirement is a ListRequirement
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 // our parameter and return types
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class ComposableRequirement implements Requirement
+class ComposableRequirement implements Requirement, ListRequirement
 {
     /**
      * build a composable requirement
@@ -118,26 +120,83 @@ class ComposableRequirement implements Requirement
     public static function apply($requirement, $extra, FactoryList $exceptions = null);
 
     /**
-     * throws exception if our underlying requirement isn't met
+     * throws exception if our inspection fails
      *
-     * @param  mixed $data
-     *         the data to be examined by our underlying requirement
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($data, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
 
     /**
-     * throws exception if our underlying requirement isn't met
+     * throws exceptions if any of our requirements are not met
+     *
+     * this is an alias of to() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListRequirement
      *
      * @param  mixed $data
-     *         the data to be examined by our underlying requirement
+     *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public function inspect($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="creating-a-composable-requirement">Creating A Composable Requirement</h3>
@@ -168,6 +227,15 @@ $data = 15;
 // is $data in the range 10..20?
 ComposableRequirement::apply(minMaxCheck, [10, 20])-&gt;to($data, '$data');</code></pre>
 <p>The <code>::apply()-&gt;to()</code> pattern helps make your code more readable.</p>
+<p>We can also take the <code>minMaxCheck</code> and use <code>ComposableRequirement</code> to apply it to a list of data:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement;
+
+// the data we will check
+$list = [15,11,13];
+
+// is $data in the range 10..20?
+ComposableRequirement::apply(minMaxCheck, [10, 20])-&gt;toList($list, '$list');</code></pre>
+<p>The <code>::apply()-&gt;toList()</code> pattern helps make your code more readable.</p>
 <p>The real benefit of <code>ComposableRequirement</code> comes when you want to use <code>minMaxCheck</code> in a list of requirements:</p>
 <pre><code class="language-php">use GanbaroDigital\Defensive\V1\Requirements\RequireAllOf;
 use GanbaroDigital\Reflection\V1\Requirements\RequireInteger;
@@ -198,7 +266,10 @@ RequireAllOf::apply($requirements)-&gt;to($data, '$data');</code></pre>
  [x] Can call statically
  [x] Must provide a callable
  [x] Must provide array of extra parameters
- [x] Array of extra parameters can be empty</code></pre>
+ [x] Array of extra parameters can be empty
+ [x] is ListRequirement
+ [x] can apply to a data list
+ [x] throws InvalidArgumentException if non list passed to inspectList</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -222,9 +293,15 @@ Future releases of this class will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h3 id="v12016081301">v1.2016081301</h3>
+<ul>
+<li>Added support for <code>ListRequirement</code> interface</li>
+</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="Requirement.html"><code>Requirement</code> interface</a></li>
+<li><a href="../Interfaces/Requirement.html"><code>Requirement</code> interface</a></li>
+<li><a href="../Interfaces/ListRequirement.html"><code>ListRequirement</code> interface</a></li>
 </ul>
             </article>
 
@@ -237,10 +314,41 @@ Future releases of this class will not break this contract.
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                                                                                                                                    <h2>Requirements</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ComposableRequirement.html">ComposableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/InvokeableRequirement.html">InvokeableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/ListableRequirement.html">ListableRequirement</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAllOf.html">RequireAllOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireAnyOneOf.html">RequireAnyOneOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidAssurances.html">RequireValidAssurances</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/RequireValidRequirements.html">RequireValidRequirements</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                    
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.

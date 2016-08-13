@@ -73,9 +73,45 @@
             <article>
                 <h1 id="changelog">CHANGELOG</h1>
 <h2 id="develop-branch">develop branch</h2>
-<p>Nothing yet.</p>
-<h2 id="v12016062801">v1.2016062801</h2>
 <h3 id="new">New</h3>
+<ul>
+<li>Tweaks and changes to improve readabilty of your code
+<ul>
+<li>added <code>Inspection::inspect()</code> as an alias for <code>Inspection::to()</code></li>
+<li>added <code>InvokeableAssurable::inspect()</code></li>
+<li>added <code>InvokeableRequirement::inspect()</code></li>
+</ul></li>
+<li>Added support for applying assurances and requirements to all elements in a list
+<ul>
+<li>added <code>ListInspection</code> interface</li>
+<li>added <code>ListAssurance</code> interface</li>
+<li>added <code>ListRequirement</code> interface</li>
+<li>added <code>ListableAssurance</code> trait</li>
+<li>added <code>ListableAssurance</code> trait</li>
+<li><code>ComposableAssurance</code> now implements <code>ListAssurance</code> interface</li>
+<li><code>ComposableRequirement</code> now implements <code>ListRequirement</code> interface</li>
+<li><code>EnsureAllOf</code> now implements <code>ListAssurance</code> interface</li>
+<li><code>EnsureAllOf</code> now accepts empty lists of assurances</li>
+<li><code>EnsureAnyOneOf</code> now implements <code>ListAssurance</code> interface</li>
+<li><code>EnsureAnyOneOf</code> now accepts empty lists of assurances</li>
+<li><code>RequireAllOf</code> now implements <code>ListRequirement</code> interface</li>
+<li><code>RequireAllOf</code> now accepts empty lists of requirements</li>
+<li><code>RequireAnyOneOf</code> now implements <code>ListRequirement</code> interface</li>
+<li><code>RequireAnyOneOf</code> now accepts empty lists of requirements</li>
+</ul></li>
+<li>A couple of internal classes are now <code>ListRequirement</code>s only
+<ul>
+<li><code>RequireValidAssurances</code> is now a <code>ListRequirement</code></li>
+<li><code>RequireValidRequirements</code> is now a <code>ListRequirement</code></li>
+</ul></li>
+<li>Tweaks to improve usefulness of exceptions
+<ul>
+<li><code>BadAssurance</code> exception message now includes the type of the bad assurance</li>
+<li><code>BadRequirement</code> exception message now includes the type of the bad requirement</li>
+</ul></li>
+</ul>
+<h2 id="v12016062801">v1.2016062801</h2>
+<h3 id="new-1">New</h3>
 <ul>
 <li>Added support for <em>assurances</em>: checks on return values and generated data values
 <ul>
@@ -125,7 +161,7 @@
 <li>initial release</li>
 <li>feature release</li>
 </ul>
-<h3 id="new-1">New</h3>
+<h3 id="new-2">New</h3>
 <ul>
 <li>Added a way to catch all exceptions thrown by this library
 <ul>
@@ -171,10 +207,12 @@
                     </main>
 
         <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
         </aside>
+
         <footer>
             <div class="strapline">
                 <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.
