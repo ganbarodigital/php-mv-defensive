@@ -58,5 +58,5 @@ class BadRequirement
     use UnprocessableEntityStatusProvider;
 
     // our format string
-    static protected $defaultFormat = "'%fieldOrVarName\$s' must be instance of Requirement";
+    static protected $defaultFormat = "'%fieldOrVarName\$s' must be instance of Requirement; %dataType\$s received";
 }

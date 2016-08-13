@@ -42,23 +42,24 @@
  */
 
 namespace GanbaroDigitalTest\Defensive\V1\Requirements;
+
 use stdClass;
-use PHPUnit_Framework_TestCase;
+use ArrayObject;
 use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
-use GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements;
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Requirements\ListableRequirement;
 use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
-use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use PHPUnit_Framework_TestCase;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Requirements\ListableRequirement
  */
-class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
+class ListableRequirementTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers ::__construct
+     * @coversNothing
      */
-    public function testCanInstantiate()
+    public function testCanInstantiateClassThatUsesTrait()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -66,18 +67,18 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new RequireValidRequirements;
+        $unit = new ListableRequirementTest_Requirement;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(RequireValidRequirements::class, $unit);
+        $this->assertInstanceOf(Requirement::class, $unit);
     }
 
     /**
-     * @covers ::__construct
+     * @coversNothing
      */
-    public function test_is_ListRequirement()
+    public function test_is_part_of_ListRequirement_interface()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -85,7 +86,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new RequireValidRequirements;
+        $unit = new ListableRequirementTest_Requirement;
 
         // ----------------------------------------------------------------
         // test the results
@@ -94,215 +95,226 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::__construct
+     * @covers ::toList
+     */
+    public function test_can_inspect_an_array_of_data_via_toList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableRequirementTest_Requirement;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->toList([$expectedData], $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
      * @covers ::inspectList
-     * @covers ::toList
-     * @covers ::to
      */
-    public function testCanUseAsObject()
+    public function test_can_inspect_an_array_of_data_via_inspectList()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $requirements = [
-            new RequireValidRequirementsTest_RequireNumeric,
-            new RequireValidRequirementsTest_RequireString,
-            new RequireValidRequirementsTest_RequireType
-        ];
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableRequirementTest_Requirement;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new RequireValidRequirements;
-        $unit->inspectList($requirements);
+        $unit->inspectList([$expectedData], $fieldName);
 
         // ----------------------------------------------------------------
         // test the results
-        //
-        // we use a simple assertion here so that this doesn't get flagged
-        // as a 'useless' test
 
-        $this->assertTrue(true);
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
     }
 
     /**
-     * @covers ::apply
      * @covers ::toList
      */
-    public function testCanCallStatically()
+    public function test_can_inspect_a_Traversable_object_via_toList()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $requirements = [
-            new RequireValidRequirementsTest_RequireNumeric,
-            new RequireValidRequirementsTest_RequireString,
-            new RequireValidRequirementsTest_RequireType
-        ];
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableRequirementTest_Requirement;
+        $list = new ArrayObject;
+        $list[0] = $expectedData;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidRequirements::apply()->toList($requirements);
+        $unit->toList($list, $fieldName);
 
         // ----------------------------------------------------------------
         // test the results
-        //
-        // we use a simple assertion here so that this doesn't get flagged
-        // as a 'useless' test
 
-        $this->assertTrue(true);
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
     }
 
     /**
-     * @covers ::apply
+     * @covers ::inspectList
+     */
+    public function test_can_inspect_a_Traversable_object_via_inspectList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableRequirementTest_Requirement;
+        $list = new ArrayObject;
+        $list[0] = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->inspectList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
      * @covers ::toList
-     * @dataProvider provideNonArraysToTest
+     */
+    public function test_can_inspect_a_stdClass_object_via_toList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}->jones";
+        $unit = new ListableRequirementTest_Requirement;
+        $list = new stdClass;
+        $list->jones = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->toList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
+     * @covers ::inspectList
+     */
+    public function test_can_inspect_a_stdClass_object_via_inspectList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}->jones";
+        $unit = new ListableRequirementTest_Requirement;
+        $list = new stdClass;
+        $list->jones = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->inspectList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
+     * @covers ::toList
      * @expectedException InvalidArgumentException
+     * @dataProvider provideNonLists
      */
-    public function testMustProvideListOfRequirements($requirements)
+    public function test_throws_InvalidArgumentException_when_non_list_passed_to_toList($list)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireValidRequirements::apply()->toList($requirements);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-    }
-
-    /**
-     * @covers ::apply
-     * @covers ::toList
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
-     * @dataProvider provideNonListsToTest
-     */
-    public function testListOfRequirementsCanContainOnlyRequirements($requirement)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $requirements = [ $requirement ];
+        $unit = new ListableRequirementTest_Requirement;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidRequirements::apply()->toList($requirements);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-    }
-
-    /**
-     * @covers ::apply
-     * @covers ::toList
-     */
-    public function test_can_apply_to_a_data_list()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $list = [
-            new RequireValidRequirementsTest_RequireNumeric(),
-            new RequireValidRequirementsTest_RequireString(),
-        ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireValidRequirements::apply()->toList($list);
+        $unit->toList($list);
 
         // ----------------------------------------------------------------
         // test the results
     }
 
     /**
-     * @covers ::apply
-     * @covers ::toList
-     * @dataProvider provideNonListsToTest
+     * @covers ::inspectList
      * @expectedException InvalidArgumentException
+     * @dataProvider provideNonLists
      */
-    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
+    public function test_throws_InvalidArgumentException_when_non_list_passed_to_inspectList($list)
     {
         // ----------------------------------------------------------------
         // setup your test
 
+        $unit = new ListableRequirementTest_Requirement;
+
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidRequirements::apply()->toList($list);
+        $unit->inspectList($list);
+
+        // ----------------------------------------------------------------
+        // test the results
     }
 
-    public function provideNonArraysToTest()
+    public function provideNonLists()
     {
         return [
             [ null ],
-            [ true ],
             [ false ],
-            [ function() {} ],
-            [ 0.0 ],
+            [ true ],
             [ 3.1415927 ],
-            [ 0 ],
             [ 100 ],
             [ STDIN ],
-            [ "hello, world!" ],
-        ];
-    }
-
-    public function provideNonListsToTest()
-    {
-        return [
-            [ null ],
-            [ true ],
-            [ false ],
-            [ function() {} ],
-            [ 0.0 ],
-            [ 3.1415927 ],
-            [ 0 ],
-            [ 100 ],
-            [ STDIN ],
-            [ "hello, world!" ],
+            [ "hello, world!" ]
         ];
     }
 }
 
-class RequireValidRequirementsTest_RequireNumeric implements Requirement
+class ListableRequirementTest_Requirement implements Requirement, ListRequirement
 {
     use InvokeableRequirement;
+    use ListableRequirement;
 
-    public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
+    public $toCalled = false;
+    public $toData = null;
+    public $toFieldOrVarName = null;
+
+    public function to($item, $fieldOrVarName = "value")
     {
-        if (!is_numeric($item)) {
-            throw new \RuntimeException("item is not numeric");
-        }
-    }
-}
-
-class RequireValidRequirementsTest_RequireString implements Requirement
-{
-    use InvokeableRequirement;
-
-    public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        if (!is_string($item)) {
-            throw new \RuntimeException("item is not a string");
-        }
-    }
-}
-
-class RequireValidRequirementsTest_RequireType implements Requirement
-{
-    use InvokeableRequirement;
-
-    public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        if (gettype($item) !== $type){
-            throw new \RuntimeException("item is not of type '{$type}'");
-        }
+        $this->toCalled = true;
+        $this->toData = $item;
+        $this->toFieldOrVarName = $fieldOrVarName;
     }
 }

@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: requirements
 pageflow_prev_url: ComposableRequirement.html
 pageflow_prev_text: ComposableRequirement class
-pageflow_next_url: RequireAllOf.html
-pageflow_next_text: RequireAllOf class
+pageflow_next_url: ListableRequirement.html
+pageflow_next_text: ListableRequirement class
 ---
 
 # InvokeableRequirement
@@ -15,7 +15,7 @@ Since v1.2016052101
 
 ## Description
 
-`InvokeableRequirement` is a trait. It implements the `__invoke()` method of the [`Requirement`](../Interfaces/Requirement.html) interface for you.
+`InvokeableRequirement` is a trait. It implements the `__invoke()` and `inspect()` methods of the [`Requirement`](../Interfaces/Requirement.html) interface for you.
 
 ## Public Interface
 
@@ -30,13 +30,34 @@ trait InvokeableRequirement
     /**
      * throws exceptions if any of our requirements are not met
      *
+     * this is an alias of to() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom Inspection
+     *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public function inspect($data, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() when your inspection is an object
+     * in a list
+     *
+     * @inheritedFrom Inspection
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 
@@ -52,7 +73,7 @@ use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
 
 class RequireInRange implements Requirement
 {
-    // save us having to declare __invoke() ourselves
+    // save us having to declare __invoke() and inspect() ourselves
     use InvokeableRequirement;
 
     /**
@@ -126,6 +147,7 @@ Here is the contract for this trait:
      [x] calls enclosing classes to method
      [x] passes data to enclosing classes to method
      [x] passes fieldOrVarName to enclosing classes to method
+     [x] inspect is alias of to method
 
 Trait contracts are built from this trait's unit tests.
 
@@ -156,6 +178,12 @@ If you:
 
 None at this time.
 
+## Changelog
+
+### v1.2016081301
+
+* Added `InvokeableRequirement::inspect()`
+
 ## See Also
 
-* [`Requirement` interface](Requirement.html)
+* [`Requirement` interface](../Interfaces/Requirement.html)

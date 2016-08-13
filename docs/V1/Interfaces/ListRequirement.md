@@ -1,38 +1,42 @@
 ---
 currentSection: v1
 currentItem: interfaces
-pageflow_prev_url: ListRequirement.html
-pageflow_prev_text: ListRequirement interface
+pageflow_prev_url: ListInspection.html
+pageflow_prev_text: ListInspection interface
+pageflow_next_url: Requirement.html
+pageflow_next_text: Requirement interface
 ---
 
-# Requirement
+# ListRequirement
 
 <div class="callout info" markdown="1">
-Since v1.2016052101
+Since v1.2016081301
 </div>
 
 ## Description
 
-`Requirement` is an interface. It is the base interface that all requirements extend.
+`ListRequirement` is an interface. It's the interface for [`ListInspection`](ListInspection.html)s performed against input values that are lists.
+
+If you want to inspect lists of returned values or lists of generated / calculated values, use a [`ListAssurance`](ListAssurance.html).
 
 ## Public Interface
 
-`Requirement` has the following public interface:
+`ListRequirement` has the following public interface:
 
 ```php
-// Requirement lives in this namespace
+// ListRequirement lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
 // our base interface
-use GanbaroDigital\Defensive\V1\Interfaces\Inspection;
+use GanbaroDigital\Defensive\V1\Interfaces\ListInspection;
 
-interface Requirement
-  extends Inspection
+interface ListRequirement
+  extends ListInspection
 {
     /**
      * throws exception if our inspection fails
      *
-     * @inheritedFrom Inspection
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
@@ -48,7 +52,7 @@ interface Requirement
      * this is an alias of to() for better readability when your
      * inspection is an object
      *
-     * @inheritedFrom Inspection
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $data
      *         the data to be examined by each requirement in turn
@@ -64,7 +68,7 @@ interface Requirement
      * this is an alias of to() when your inspection is an object
      * in a list
      *
-     * @inheritedFrom Inspection
+     * @inheritedFrom ListInspection
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
@@ -73,30 +77,69 @@ interface Requirement
      * @return void
      */
     public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @inheritedFrom ListInspection
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListInspection
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 
 ## How To Use
 
-### The Apply->To Pattern
+### The Apply->ToList Pattern
 
-Every `Requirement` implements the `Requirement::apply()->to()` pattern:
+Every `ListRequirement` implements the `ListRequirement::apply()->toList()` pattern:
 
-* add `implements Requirement` to your class
-* add `use InvokeableRequirement` to your class. Saves you having to implement `__invoke()` yourself.
+* add `implements ListRequirement` to your existing `Requirement` class.
+* add `use ListableRequirement` to your class. Saves you having to implement `toList()` and `inspectList()` yourself.
 * add a `public static function apply()` method to your class, and a corresponding `__construct()` method. `apply()` takes any extra parameters needed to customise the requirement, and returns a new instance of your class.
 * add a `public function to()` method to your class. This method inspects `$data`. If you're not happy with `$data`, throw an exception.
 
-For example, here's a simple min / max requirement:
+For example, here's a simple min / max assurance:
 
 ```php
-use GanbaroDigital\Defensive\V1\Interfaces\Requirements;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
+use GanbaroDigital\Defensive\V1\Requirements\ListableRequirement;
 
-class RequireInRange implements Requirement
+class RequireInRange implements Requirement, ListRequirement
 {
     // save us having to declare __invoke() ourselves
     use InvokeableRequirement;
+
+    // saves us having to declare toList() ourselves
+    use ListableRequirement;
 
     /**
      * minimum acceptable value in our range
@@ -150,10 +193,14 @@ class RequireInRange implements Requirement
     public function to($data, $fieldOrVarName = 'value')
     {
         if ($data < $this->min) {
-            throw new RuntimeException($fieldOrVarName . ' cannot be less than ' . $this->min);
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be less than ' . $this->min
+            );
         }
         if ($data > $this->max) {
-            throw new RuntimeException($fieldOrVarName . ' cannot be more than ' . $this->max);
+            throw new RuntimeException(
+                $fieldOrVarName . ' cannot be more than ' . $this->max
+            );
         }
     }
 }
@@ -162,16 +209,11 @@ class RequireInRange implements Requirement
 To use this example requirement, you would do:
 
 ```php
-// $data must be >=10, and <=20
-RequireInRange::apply(10, 20)->to($data);
+$list = [
+    25,
+    20
+];
+
+// every entry in $list must be >=10, and <=20
+RequireInRange::apply(10, 20)->toList($list, '$list');
 ```
-
-## Notes
-
-1. We have `__invoke()` in the interface to make it easy to work with lists of requirements.
-
-## Changelog
-
-### v1.2016062801
-
-* `Requirement` now extends the `Inspection` interface

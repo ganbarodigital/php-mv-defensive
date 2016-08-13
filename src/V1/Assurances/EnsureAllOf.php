@@ -45,13 +45,17 @@ namespace GanbaroDigital\Defensive\V1\Assurances;
 
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
 use GanbaroDigital\Defensive\V1\Requirements\RequireValidAssurances;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class EnsureAllOf implements Assurance
+class EnsureAllOf implements Assurance, ListAssurance
 {
     // saves us having to declare ::__invoke() ourselves
     use InvokeableAssurance;
+
+    // saves us having to declare ::toList() ourselves
+    use ListableAssurance;
 
     /**
      * the exceptions we should use
@@ -77,7 +81,7 @@ class EnsureAllOf implements Assurance
         $this->exceptions = $exceptions;
 
         // robustness
-        RequireValidAssurances::apply($exceptions)->to($assurances);
+        RequireValidAssurances::apply($exceptions)->toList($assurances);
 
         // we're good (for now)
         $this->assurances = $assurances;

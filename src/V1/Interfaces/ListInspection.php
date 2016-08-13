@@ -34,44 +34,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Requirements
+ * @package   Defensive/V1/Interfaces
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigital\Defensive\V1\Requirements;
+namespace GanbaroDigital\Defensive\V1\Interfaces;
 
-trait InvokeableRequirement
+/**
+ * supports inspecting the elements of a list
+ */
+interface ListInspection
 {
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if our inspection fails
      *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value")
-    {
-        return $this->to($data, $fieldOrVarName);
-    }
+    public function to($fieldOrVar, $fieldOrVarName = "value");
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exception if our inspection fails
      *
-     * this is an alias of to() for readability purposes
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
      *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function inspect($data, $fieldOrVarName = "value")
-    {
-        return $this->to($data, $fieldOrVarName);
-    }
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }

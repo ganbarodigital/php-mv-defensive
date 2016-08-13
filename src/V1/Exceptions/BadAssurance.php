@@ -55,5 +55,5 @@ class BadAssurance
     use UnexpectedErrorStatusProvider;
 
     // our format string
-    static protected $defaultFormat = "'%fieldOrVarName\$s' must be instance of Assurance";
+    static protected $defaultFormat = "'%fieldOrVarName\$s' must be instance of Assurance; %dataType\$s received";
 }

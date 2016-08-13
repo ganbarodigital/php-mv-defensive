@@ -43,18 +43,15 @@
 
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidRequirements implements Requirement
+class RequireValidRequirements implements ListRequirement
 {
-    // saves us having to declare ::__invoke() ourselves
-    use InvokeableRequirement;
+    // saves us having to declare ::toList() ourselves
+    use ListableRequirement;
 
     /**
      * the exceptions we should throw
@@ -94,26 +91,16 @@ class RequireValidRequirements implements Requirement
     /**
      * make sure that we have a list of valid requirements to work with
      *
-     * @param array $requirements
+     * @param Requirement $requirement
      *        the list of requirements to check
      * @param string $fieldOrVarName
      *        what is the name of $data in the calling code?
      * @return void
      */
-    public function to($requirements, $fieldOrVarName = "value")
+    public function to($requirement, $fieldOrVarName = "value")
     {
-        // we do not use Reflections RequireTraversable here because then
-        // Reflections cannot depend upon this library
-        if (!is_array($requirements)) {
-            throw $this->exceptions['BadRequirements::newFromInputParameter']($requirements, $fieldOrVarName);
-        }
-        if (empty($requirements)) {
-            throw $this->exceptions['EmptyRequirementsList::newFromInputParameter']($requirements, $fieldOrVarName);
-        }
-        foreach ($requirements as $requirement) {
-            if (!$requirement instanceof Requirement) {
-                throw $this->exceptions['BadRequirement::newFromInputParameter']($requirement, $fieldOrVarName);
-            }
+        if (!$requirement instanceof Requirement) {
+            throw $this->exceptions['BadRequirement::newFromInputParameter']($requirement, $fieldOrVarName);
         }
     }
 }

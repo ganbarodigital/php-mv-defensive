@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: interfaces
 pageflow_prev_url: Assurance.html
 pageflow_prev_text: Assurance interface
-pageflow_next_url: Requirement.html
-pageflow_next_text: Requirement interface
+pageflow_next_url: ListAssurance.html
+pageflow_next_text: ListAssurance interface
 ---
 
 # Inspection
@@ -15,14 +15,14 @@ Since v1.2016062801
 
 ## Description
 
-`Inspection` is an interface. It defines the `::apply()->to()` pattern used by both `Assurance` and `Requirement` classes.
+`Inspection` is an interface. It defines the `::apply()->to()` pattern used by both [`Assurance`](../Assurances/index.html) and [`Requirement`](../Requirements/index.html) classes.
 
 ## Public Interface
 
-`Assurance` has the following public interface:
+`Inspection` has the following public interface:
 
 ```php
-// Assurance lives in this namespace
+// Inspection lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
 interface Inspection
@@ -37,6 +37,19 @@ interface Inspection
      * @return void
      */
     public function __invoke($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspect($fieldOrVar, $fieldOrVarName = "value");
 
     /**
      * throws exception if our inspection fails
@@ -57,8 +70,11 @@ interface Inspection
 
 `Inspection` is a base interface. Its purpose is to define common functionality.
 
-Create new interfaces that extend `Inspection` to provide type-hinting for different kinds of inspections. New interfaces should not add additional functionality. Do not add additional methods.
-For example, `Assurance` and `Requirement` are both interfaces that extend `Inspection`.
+* Create new interfaces that extend `Inspection` to provide type-hinting for different kinds of inspections.
+* New Inspections should not add additional functionality.
+* Do not add additional public methods to your Inspections.
+
+[`Assurance`](Assurance.html) and [`Requirement`](Requirement.html) are both interfaces that extend `Inspection`.
 
 ### The Apply->To Pattern
 
@@ -111,6 +127,37 @@ In PHP 7.0 onwards, method calls aren't the major overhead that they used to be,
 assert(EnsureInRange::apply(100,200)->to($retval));
 ```
 
+### Inspection Adapters
+
+You can use all implementations of `Inspection` as _inspection adapters_:
+
+```php
+$assurances = [
+    new EnsureString(),
+    new EnsureMinLength(100)
+];
+foreach ($assurances as $assurance) {
+    // invokeable object
+    $assurance($data, '$data');
+
+    // for readability, this works too
+    $assurance->inspect($data, '$data');
+}
+```
+
+Here's how this pattern works:
+
+* `Inspection::__invoke()` and `Inspection::inspect()` both call `Inspection::to()` underneath
+* if your class uses either the [`InvokeableAssurance`](../Assurances/InvokeableAssurance.html) or [`InvokeableRequirement`](../Requirements/InvokeableRequirement.html) trait, you get this behaviour for free
+
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016081301
+
+* Added `Inspection::inspect()` method
+
+  This is implemented by both the [`InvokeableAssurance`](../Assurances/InvokeableAssurance.html) and [`InvokeableRequirement`](../Requirements/InvokeableRequirement.html) traits. Your code should be using these to provide the convenience methods specified in the `Inspection` interface.

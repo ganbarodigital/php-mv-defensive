@@ -45,6 +45,8 @@ namespace GanbaroDigitalTest\Defensive\V1\Assurances;
 
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Assurances\EnsureAnyOneOf;
+use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\ListableAssurance;
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
 use PHPUnit_Framework_TestCase;
 use stdClass;
@@ -148,9 +150,9 @@ class EnsureAnyOneOfTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @dataProvider provideBadAssurances
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssurancesList
+     * @expectedException InvalidArgumentException
      */
-    public function testMustProvideAnArrayOfAssurances($assurances)
+    public function testMustProvideAListOfAssurances($assurances)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -163,28 +165,12 @@ class EnsureAnyOneOfTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::__construct
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyAssurancesList
-     */
-    public function testArrayOfAssurancesCannotBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        EnsureAnyOneOf::apply([])->to(null, "value");
-    }
-
-    /**
      * @covers ::apply
      * @covers ::__construct
      * @dataProvider provideInvalidAssurances
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssurance
      */
-    public function testAssurancesArrayMustContainValidAssurances($assurances)
+    public function testAssurancesListMustContainValidAssurances($assurances)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -242,6 +228,55 @@ class EnsureAnyOneOfTest extends PHPUnit_Framework_TestCase
         EnsureAnyOneOf::apply($assurances)->to($item, "\$item");
     }
 
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     */
+    public function test_can_apply_to_a_data_list()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $assurances = [
+            new EnsureAnyOneOfTest_EnsureString,
+            new EnsureAnyOneOfTest_EnsureNumeric,
+        ];
+
+        $list = [
+            "0",
+            "1.0",
+            "100"
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        // if these do not match, an exception is thrown
+        EnsureAnyOneOf::apply($assurances)->toList($list, 'value');
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @dataProvider provideNonLists
+     * @expectedException InvalidArgumentException
+     */
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $assurances = [
+            new EnsureAnyOneOfTest_EnsureString,
+            new EnsureAnyOneOfTest_EnsureNumeric,
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        EnsureAnyOneOf::apply($assurances)->toList($list);
+    }
+
     public function provideBadAssurances()
     {
         return [
@@ -250,7 +285,6 @@ class EnsureAnyOneOfTest extends PHPUnit_Framework_TestCase
             [ true ],
             [ 3.1415927 ],
             [ 100 ],
-            [ new stdClass ]
         ];
     }
 
@@ -283,14 +317,25 @@ class EnsureAnyOneOfTest extends PHPUnit_Framework_TestCase
             [ new stdClass ]
         ];
     }
+
+    public function provideNonLists()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ STDIN ],
+            [ "hello, world!" ]
+        ];
+    }
 }
 
 class EnsureAnyOneOfTest_EnsureNull implements Assurance
 {
-    public function __invoke($item, $fieldOrVarName = "value")
-    {
-        return $this->to($item, $fieldOrVarName);
-    }
+    use InvokeableAssurance;
+    use ListableAssurance;
 
     public function to($item, $fieldOrVarName = "value")
     {
@@ -302,10 +347,8 @@ class EnsureAnyOneOfTest_EnsureNull implements Assurance
 
 class EnsureAnyOneOfTest_EnsureNumeric implements Assurance
 {
-    public function __invoke($item, $fieldOrVarName = "value")
-    {
-        return $this->to($item, $fieldOrVarName);
-    }
+    use InvokeableAssurance;
+    use ListableAssurance;
 
     public function to($item, $fieldOrVarName = "value")
     {
@@ -317,10 +360,8 @@ class EnsureAnyOneOfTest_EnsureNumeric implements Assurance
 
 class EnsureAnyOneOfTest_EnsureString implements Assurance
 {
-    public function __invoke($item, $fieldOrVarName = "value")
-    {
-        return $this->to($item, $fieldOrVarName);
-    }
+    use InvokeableAssurance;
+    use ListableAssurance;
 
     public function to($item, $fieldOrVarName = "value")
     {

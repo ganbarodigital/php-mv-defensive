@@ -1,6 +1,6 @@
 ---
 currentSection: v1
-currentItem: assurances
+currentItem: requirements
 pageflow_prev_url: RequireAnyOneOf.html
 pageflow_prev_text: RequireAnyOneOf class
 pageflow_next_url: RequireValidRequirements.html
@@ -9,8 +9,8 @@ pageflow_next_text: RequireValidRequirements class
 
 # RequireValidAssurances
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016081301
 </div>
 
 ## Description
@@ -27,33 +27,22 @@ Use `RequireValidAssurances` to ensure that you have a list that only contains v
 // RequireValidAssurances lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Assurances;
 
-// RequireValidAssurances is a Requirement
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+// RequireValidAssurances is a ListRequirement
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidAssurances implements Requirement
+class RequireValidAssurances implements ListRequirement
 {
     /**
-     * create a Requirement that is ready to execute
+     * create a ListRequirement that is ready to execute
      *
      * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
      * @return RequireValidAssurances
      */
     public function __construct(FactoryList $exceptions = null);
-
-    /**
-     * make sure that we have a list of valid assurances to work with
-     *
-     * @param array $assurances
-     *        the list of assurances to check
-     * @param string $fieldOrVarName
-     *        what is the name of $assurances in the calling code?
-     * @return void
-     */
-    public function __invoke($assurances, $fieldOrVarName = "value");
 
     /**
      * create a Requirement that is ready to execute
@@ -65,15 +54,51 @@ class RequireValidAssurances implements Requirement
     public static function apply(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid assurances to work with
+     * throws exception if our inspection fails
      *
-     * @param array $assurances
-     *        the list of assurances to check
-     * @param string $fieldOrVarName
-     *        what is the name of $assurances in the calling code?
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($assurances, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 
@@ -81,9 +106,8 @@ class RequireValidAssurances implements Requirement
 
 `RequireValidAssurances` enforces the following:
 
-1. `$assurances` must be an array
-2. `$assurances` cannot be empty
-3. every value in `$assurances` must implement the `Assurance` interface
+1. `$assurances` must be a list
+1. every value in `$assurances` must implement the `Assurance` interface
 
 If any of the assurances aren't met, `RequireValidAssurances` will throw an exception.
 
@@ -91,13 +115,13 @@ If any of the assurances aren't met, `RequireValidAssurances` will throw an exce
 
 ### Applying Requirements
 
-Use the `::apply()->to()` pattern:
+Use the `::apply()->toList()` pattern:
 
 ```php
 $assurances = [
     // a list of objects that implement the 'Assurance' interface
 ];
-RequireValidAssurances::apply()->to($assurances, '$assurances');
+RequireValidAssurances::apply()->toList($assurances, '$assurances');
 ```
 
 If any of the requirements aren't met, `RequireValidAssurances` will throw an exception.
@@ -108,12 +132,13 @@ Here is the contract for this class:
 
     GanbaroDigital\Defensive\V1\Requirements\RequireValidAssurances
      [x] Can instantiate
-     [x] is Requirement
+     [x] is ListRequirement
      [x] Can use as object
      [x] Can call statically
      [x] Must provide list of assurances
-     [x] List of assurances cannot be empty
      [x] List of assurances can contain only assurances
+     [x] can apply to a data list
+     [x] throws InvalidArgumentException if non list passed to toList
 
 Class contracts are built from this class's unit tests.
 
@@ -143,6 +168,14 @@ If you:
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016081301
+
+* Implements `ListRequirement` instead of `Requirement`
+
+  We feel this is a more accurate description of what this function class does.
 
 ## See Also
 

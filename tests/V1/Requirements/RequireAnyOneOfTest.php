@@ -44,8 +44,10 @@
 namespace GanbaroDigitalTest\Defensive\V1\Requirements;
 
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
+use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
 use GanbaroDigital\Defensive\V1\Requirements\RequireAnyOneOf;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
@@ -148,9 +150,9 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @dataProvider provideBadRequirements
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirements
+     * @expectedException InvalidArgumentException
      */
-    public function testMustProvideAnArrayOfRequirements($requirements)
+    public function testMustProvideAListOfRequirements($requirements)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -163,28 +165,12 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::__construct
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList
-     */
-    public function testArrayOfRequirementsCannotBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireAnyOneOf::apply([])->to(null, "value");
-    }
-
-    /**
      * @covers ::apply
      * @covers ::__construct
      * @dataProvider provideInvalidRequirements
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
      */
-    public function testRequirementsArrayMustContainValidRequirements($requirements)
+    public function testRequirementsListMustContainValidRequirements($requirements)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -242,6 +228,74 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
         RequireAnyOneOf::apply($requirements)->to($item, "\$item");
     }
 
+    /**
+     * @covers ::__construct
+     */
+    public function test_is_ListRequirement()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit = new RequireAnyOneOf([ new RequireAnyOneOfTest_RequireNull ]);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(ListRequirement::class, $unit);
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     */
+    public function test_can_apply_to_a_data_list()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $requirements = [
+            new RequireAnyOneOfTest_RequireString,
+            new RequireAnyOneOfTest_RequireNumeric,
+        ];
+
+        $list = [
+            "0",
+            "1.0",
+            "100"
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        // if these do not match, an exception is thrown
+        RequireAnyOneOf::apply($requirements)->toList($list, 'value');
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @dataProvider provideNonLists
+     * @expectedException InvalidArgumentException
+     */
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $requirements = [
+            new RequireAnyOneOfTest_RequireString,
+            new RequireAnyOneOfTest_RequireNumeric,
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireAnyOneOf::apply($requirements)->toList($list, "value");
+    }
+
     public function provideBadRequirements()
     {
         return [
@@ -250,7 +304,6 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
             [ true ],
             [ 3.1415927 ],
             [ 100 ],
-            [ new stdClass ]
         ];
     }
 
@@ -283,14 +336,24 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
             [ new stdClass ]
         ];
     }
+
+    public function provideNonLists()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ STDIN ],
+            [ "hello, world!" ]
+        ];
+    }
 }
 
 class RequireAnyOneOfTest_RequireNull implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        return $this->to($item, $fieldOrVarName, $exceptions);
-    }
+    use InvokeableRequirement;
 
     public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
@@ -302,10 +365,7 @@ class RequireAnyOneOfTest_RequireNull implements Requirement
 
 class RequireAnyOneOfTest_RequireNumeric implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        return $this->to($item, $fieldOrVarName, $exceptions);
-    }
+    use InvokeableRequirement;
 
     public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
@@ -317,10 +377,7 @@ class RequireAnyOneOfTest_RequireNumeric implements Requirement
 
 class RequireAnyOneOfTest_RequireString implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        return $this->to($item, $fieldOrVarName, $exceptions);
-    }
+    use InvokeableRequirement;
 
     public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {

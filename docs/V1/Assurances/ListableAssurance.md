@@ -1,55 +1,56 @@
 ---
 currentSection: v1
 currentItem: assurances
-pageflow_prev_url: EnsureAnyOneOf.html
-pageflow_prev_text: EnsureAnyOneOf class
-pageflow_next_url: ListableAssurance.html
-pageflow_next_text: ListableAssurance trait
+pageflow_prev_url: InvokeableAssurance.html
+pageflow_prev_text: InvokeableAssurance trait
 ---
 
-# InvokeableAssurance
+# ListableAssurance
 
 <div class="callout info" markdown="1">
-Since v1.2016062801
+Since v1.2016081301
 </div>
 
 ## Description
 
-`InvokeableAssurance` is a trait. It implements the `__invoke()` and `inspect()` methods of the [`Assurance`](../Interfaces/Assurance.html) interface for you.
+`ListableAssurance` is a trait. It implements the `toList()` and `inspectList()` methods of the [`ListAssurance`](../Interfaces/ListAssurance.html) interface for you.
 
 ## Public Interface
 
-`InvokeableAssurance` has the following public interface:
+`ListableAssurance` has the following public interface:
 
 ```php
-// InvokeableAssurance lives in this namespace
+// ListableAssurance lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Assurances;
 
-trait InvokeableAssurance
+trait ListableAssurance
 {
     /**
      * throws exceptions if any of our assurances are not met
      *
-     * @param  mixed $data
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
      *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $list in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public function inspectList($list, $fieldOrVarName = "value");
 
     /**
      * throws exceptions if any of our assurances are not met
      *
-     * this is an alias of to() for readability purposes
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
      *
-     * @param  mixed $data
+     * @param  mixed $list
      *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $list in the calling code?
      * @return void
      */
-    public function inspect($data, $fieldOrVarName = "value");
+    public function toList($list, $fieldOrVarName = "value");
 }
 ```
 
@@ -57,16 +58,21 @@ trait InvokeableAssurance
 
 ### For Convenience
 
-Use `InvokeableAssurance` in your own classes to save on typing and code duplication.
+Use `ListableAssurance` in your own classes to save on typing and code duplication.
 
 ```php
-use GanbaroDigital\Defensive\V1\Interfaces\Assurances;
+use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
 use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\ListableAssurance;
 
-class EnsureInRange implements Assurance
+class EnsureInRange implements Assurance, ListAssurance
 {
-    // save us having to declare __invoke() and inspect() ourselves
+    // save us having to declare __invoke() ourselves
     use InvokeableAssurance;
+
+    // save us having to declare toList() ourselves
+    use ListableAssurance;
 
     /**
      * minimum acceptable value in our range
@@ -100,7 +106,7 @@ class EnsureInRange implements Assurance
      * @param  int $max
      *         maximum value for allowed range
      * @return Assurance
-     *         returns a requirement to use
+     *         returns an assurance to use
      */
     public static function apply($min, $max)
     {
@@ -133,17 +139,33 @@ class EnsureInRange implements Assurance
 }
 ```
 
+To use this example assurance, you would do:
+
+```php
+$list = [
+    25,
+    20
+];
+
+// every entry in $list must be >=10, and <=20
+EnsureInRange::apply(10, 20)->toList($list, '$list');
+```
+
 ## Trait Contract
 
 Here is the contract for this trait:
 
-    GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance
+    GanbaroDigital\Defensive\V1\Assurances\ListableAssurance
      [x] Can instantiate class that uses trait
-     [x] is part of Assurance interface
-     [x] calls enclosing classes to method
-     [x] passes data to enclosing classes to method
-     [x] passes fieldOrVarName to enclosing classes to method
-     [x] inspect is an alias for to
+     [x] is part of ListAssurance interface
+     [x] can inspect an array of data via toList
+     [x] can inspect an array of data via inspectList
+     [x] can inspect a Traversable object via toList
+     [x] can inspect a Traversable object via inspectList
+     [x] can inspect a stdClass object via toList
+     [x] can inspect a stdClass object via inspectList
+     [x] throws InvalidArgumentException when non list passed to toList
+     [x] throws InvalidArgumentException when non list passed to inspectList
 
 Trait contracts are built from this trait's unit tests.
 
@@ -173,12 +195,6 @@ If you:
 ## Notes
 
 None at this time.
-
-## Changelog
-
-### v1.2016081301
-
-* Added `InvokeableAssurable::inspect()`
 
 ## See Also
 

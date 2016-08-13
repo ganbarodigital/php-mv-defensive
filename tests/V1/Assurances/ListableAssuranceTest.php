@@ -34,31 +34,32 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Requirements
+ * @package   Defensive/V1/Assurances
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigitalTest\Defensive\V1\Requirements;
+namespace GanbaroDigitalTest\Defensive\V1\Assurances;
 
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement;
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
-use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
-use PHPUnit_Framework_TestCase;
 use stdClass;
+use ArrayObject;
+use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+use GanbaroDigital\Defensive\V1\Assurances\ListableAssurance;
+use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
+use PHPUnit_Framework_TestCase;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Requirements\ComposableRequirement
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Assurances\ListableAssurance
  */
-class ComposableRequirementTest extends PHPUnit_Framework_TestCase
+class ListableAssuranceTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers ::__construct
+     * @coversNothing
      */
-    public function testCanInstantiate()
+    public function testCanInstantiateClassThatUsesTrait()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -66,18 +67,18 @@ class ComposableRequirementTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [1, 10]);
+        $unit = new ListableAssuranceTest_Assurance;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(ComposableRequirement::class, $unit);
+        $this->assertInstanceOf(Assurance::class, $unit);
     }
 
     /**
-     * @covers ::__construct
+     * @coversNothing
      */
-    public function testIsRequirement()
+    public function test_is_part_of_ListAssurance_interface()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -85,238 +86,235 @@ class ComposableRequirementTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [1, 10]);
+        $unit = new ListableAssuranceTest_Assurance;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(Requirement::class, $unit);
+        $this->assertInstanceOf(ListAssurance::class, $unit);
     }
 
     /**
-     * @covers ::__construct
-     * @covers ::__invoke
+     * @covers ::toList
      */
-    public function testCanUseAsObject()
+    public function test_can_inspect_an_array_of_data_via_toList()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = [ 1, 2, 3 ];
-        $unit = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [1, 10]);
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableAssuranceTest_Assurance;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit($data);
+        $unit->toList([$expectedData], $fieldName);
 
         // ----------------------------------------------------------------
         // test the results
 
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
     }
 
     /**
-     * @covers ::apply
-     * @covers ::to
-     */
-    public function testCanCallStatically()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $data = [ 1, 2, 3 ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        ComposableRequirement::apply(new ComposableRequirementTest_RequireArrayOfSize, [1, 10])->to($data);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
-     * @dataProvider provideBadRequirements
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
-     */
-    public function testMustProvideACallable($badRequirement)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        new ComposableRequirement($badRequirement, []);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
-     * @dataProvider provideBadParameters
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs
-     */
-    public function testMustProvideArrayOfExtraParameters($badParameters)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, $badParameters);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
-     */
-    public function testArrayOfExtraParametersCanBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, []);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
-     */
-    public function test_is_ListRequirement()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $unit = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [1, 10]);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertInstanceOf(ListRequirement::class, $unit);
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::apply
      * @covers ::inspectList
      */
-    public function test_can_apply_to_a_data_list()
+    public function test_can_inspect_an_array_of_data_via_inspectList()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $requirement = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [0, 1]);
-        $list = [
-            [],
-            []
-        ];
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableAssuranceTest_Assurance;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $requirement->inspectList($list);
+        $unit->inspectList([$expectedData], $fieldName);
 
         // ----------------------------------------------------------------
         // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
     }
 
     /**
-     * @covers ::apply
+     * @covers ::toList
+     */
+    public function test_can_inspect_a_Traversable_object_via_toList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableAssuranceTest_Assurance;
+        $list = new ArrayObject;
+        $list[0] = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->toList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
      * @covers ::inspectList
-     * @dataProvider provideNonListsToTest
+     */
+    public function test_can_inspect_a_Traversable_object_via_inspectList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}[0]";
+        $unit = new ListableAssuranceTest_Assurance;
+        $list = new ArrayObject;
+        $list[0] = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->inspectList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
+     * @covers ::toList
+     */
+    public function test_can_inspect_a_stdClass_object_via_toList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}->jones";
+        $unit = new ListableAssuranceTest_Assurance;
+        $list = new stdClass;
+        $list->jones = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->toList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
+     * @covers ::inspectList
+     */
+    public function test_can_inspect_a_stdClass_object_via_inspectList()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $fieldName = '$alfred';
+        $expectedData = 1.0;
+        $expectedField = "{$fieldName}->jones";
+        $unit = new ListableAssuranceTest_Assurance;
+        $list = new stdClass;
+        $list->jones = $expectedData;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->inspectList($list, $fieldName);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedField, $unit->toFieldOrVarName);
+    }
+
+    /**
+     * @covers ::toList
      * @expectedException InvalidArgumentException
+     * @dataProvider provideNonLists
      */
-    public function test_throws_InvalidArgumentException_if_non_list_passed_to_inspectList($list)
+    public function test_throws_InvalidArgumentException_when_non_list_passed_to_toList($list)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $requirement = new ComposableRequirement(new ComposableRequirementTest_RequireArrayOfSize, [0, 1]);
+        $unit = new ListableAssuranceTest_Assurance;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $requirement->inspectList($list);
+        $unit->toList($list);
+
+        // ----------------------------------------------------------------
+        // test the results
     }
 
-    public function provideBadRequirements()
+    /**
+     * @covers ::inspectList
+     * @expectedException InvalidArgumentException
+     * @dataProvider provideNonLists
+     */
+    public function test_throws_InvalidArgumentException_when_non_list_passed_to_inspectList($list)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new ListableAssuranceTest_Assurance;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $unit->inspectList($list);
+
+        // ----------------------------------------------------------------
+        // test the results
+    }
+
+    public function provideNonLists()
     {
         return [
             [ null ],
-            [ [] ],
-            [ true ],
             [ false ],
-            [ 0.0 ],
+            [ true ],
             [ 3.1415927 ],
-            [ 0 ],
             [ 100 ],
-            [ new \stdClass ],
             [ STDIN ],
             [ "hello, world!" ]
-        ];
-    }
-
-    public function provideBadParameters()
-    {
-        return [
-            [ null ],
-            [ true ],
-            [ false ],
-            [ function(){} ],
-            [ 0.0 ],
-            [ 3.1415927 ],
-            [ 0 ],
-            [ 100 ],
-            [ new \stdClass ],
-            [ STDIN ],
-            [ "hello, world!" ]
-        ];
-    }
-
-    public function provideNonListsToTest()
-    {
-        return [
-            [ null ],
-            [ true ],
-            [ false ],
-            [ function() {} ],
-            [ 0.0 ],
-            [ 3.1415927 ],
-            [ 0 ],
-            [ 100 ],
-            [ STDIN ],
-            [ "hello, world!" ],
         ];
     }
 }
 
-class ComposableRequirementTest_RequireArrayOfSize
+class ListableAssuranceTest_Assurance implements Assurance, ListAssurance
 {
-    public function __invoke($item, $min, $max)
+    use InvokeableAssurance;
+    use ListableAssurance;
+
+    public $toCalled = false;
+    public $toData = null;
+    public $toFieldOrVarName = null;
+
+    public function to($item, $fieldOrVarName = "value")
     {
-        if (!is_array($item)) {
-            throw new \RuntimeException("item is not an array");
-        }
-        $len = count($item);
-        if ($len < $min) {
-            throw new \RuntimeException("item is too small");
-        }
-        if ($len > $max) {
-            throw new \RuntimeException("item is too large");
-        }
+        $this->toCalled = true;
+        $this->toData = $item;
+        $this->toFieldOrVarName = $fieldOrVarName;
     }
 }

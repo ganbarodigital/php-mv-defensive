@@ -62,6 +62,19 @@ interface Inspection
     /**
      * throws exception if our inspection fails
      *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspect($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
      * @param  mixed $fieldOrVar
      *         the data to be examined
      * @param  string $fieldOrVarName

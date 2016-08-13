@@ -58,4 +58,20 @@ trait InvokeableAssurance
     {
         return $this->to($data, $fieldOrVarName);
     }
+
+    /**
+     * throws exceptions if any of our assurances are not met
+     *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $data
+     *         the data to be examined by each assurance in turn
+     * @param  string $fieldOrVarName
+     *         what is the name of $data in the calling code?
+     * @return void
+     */
+    public function inspect($data, $fieldOrVarName = "value")
+    {
+        return $this->to($data, $fieldOrVarName);
+    }
 }

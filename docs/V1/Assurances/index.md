@@ -1,6 +1,6 @@
 ---
 currentSection: v1
-currentItem: assurance
+currentItem: assurances
 pageflow_next_url: ComposableAssurance.html
 pageflow_next_text: ComposableAssurance class
 ---
@@ -19,6 +19,7 @@ These are utilities for:
 Interface | Description
 ------|------------
 [`Assurance`](../Interfaces/Assurance.html) | interface for all assurances to implement
+[`ListAssurance`](../Interfaces/ListAssurance.html) | interface for all assurances that check lists of data to implement
 
 Click on the name of an interface to see full details.
 
@@ -27,8 +28,9 @@ Click on the name of an interface to see full details.
 Class | Description
 ------|------------
 [`ComposableAssurance`](ComposableAssurance.html) | convert a partial assurance into one that could be composable
-[`InvokeableAssurance`](InvokeableAssurance.html) | convenience trait to provide the `__invoke()` method of the `Assurance` interface
 [`EnsureAllOf`](EnsureAllOf.html) | a value must meet all the assurances in the list
 [`EnsureAnyOneOf`](EnsureAnyOneOf.html) | a value must meet at least one of the assurances in the list
+[`InvokeableAssurance`](InvokeableAssurance.html) | convenience trait to provide the `__invoke()` method of the `Assurance` interface
+[`ListableAssurance`](ListableAssurance.html) | convenience trait to provide the `toList()` and `inspectList()` methods of the `ListAssurance` interface
 
 Click on the name of a class to see full details.

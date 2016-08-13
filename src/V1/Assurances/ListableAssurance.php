@@ -34,44 +34,56 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Requirements
+ * @package   Defensive/V1/Assurances
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigital\Defensive\V1\Requirements;
+namespace GanbaroDigital\Defensive\V1\Assurances;
+use GanbaroDigital\MissingBits\ListTraversals\TraverseList;
 
-trait InvokeableRequirement
+/**
+ * add ListAssurance support to an existing Assurance class
+ */
+trait ListableAssurance
 {
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exceptions if any of our assurances are not met
      *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $list in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value")
+    public function inspectList($list, $fieldOrVarName = "value")
     {
-        return $this->to($data, $fieldOrVarName);
+        $this->toList($list, $fieldOrVarName);
     }
 
     /**
-     * throws exceptions if any of our requirements are not met
+     * throws exceptions if any of our assurances are not met
      *
-     * this is an alias of to() for readability purposes
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
      *
-     * @param  mixed $data
-     *         the data to be examined by each requirement in turn
+     * @param  mixed $list
+     *         the data to be examined by each assurance in turn
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $list in the calling code?
      * @return void
      */
-    public function inspect($data, $fieldOrVarName = "value")
+    public function toList($list, $fieldOrVarName = "value")
     {
-        return $this->to($data, $fieldOrVarName);
+        // we'll use this to traverse our list
+        $callable = function($value, $key, $name) {
+            $this->to($value, $name);
+        };
+        // do we have an array, or an object?
+        TraverseList::using($list, $fieldOrVarName, $callable);
     }
 }

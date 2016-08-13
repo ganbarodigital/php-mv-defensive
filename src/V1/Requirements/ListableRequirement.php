@@ -42,36 +42,45 @@
  */
 
 namespace GanbaroDigital\Defensive\V1\Requirements;
+use GanbaroDigital\MissingBits\ListTraversals\TraverseList;
 
-trait InvokeableRequirement
+/**
+ * add ListRequirement support to an existing Requirement class
+ */
+trait ListableRequirement
 {
     /**
      * throws exceptions if any of our requirements are not met
      *
-     * @param  mixed $data
+     * this is an alias of toList() for readability
+     *
+     * @param  mixed $list
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
      *         what is the name of $data in the calling code?
      * @return void
      */
-    public function __invoke($data, $fieldOrVarName = "value")
+    public function inspectList($list, $fieldOrVarName = "value")
     {
-        return $this->to($data, $fieldOrVarName);
+        $this->toList($list, $fieldOrVarName);
     }
 
     /**
      * throws exceptions if any of our requirements are not met
      *
-     * this is an alias of to() for readability purposes
-     *
-     * @param  mixed $data
+     * @param  mixed $list
      *         the data to be examined by each requirement in turn
      * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
+     *         what is the name of $list in the calling code?
      * @return void
      */
-    public function inspect($data, $fieldOrVarName = "value")
+    public function toList($list, $fieldOrVarName = "value")
     {
-        return $this->to($data, $fieldOrVarName);
+        // we'll use this to traverse our list
+        $callable = function($value, $key, $name) {
+            $this->to($value, $name);
+        };
+        // do we have an array, or an object?
+        TraverseList::using($list, $fieldOrVarName, $callable);
     }
 }
