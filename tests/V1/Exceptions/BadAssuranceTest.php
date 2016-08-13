@@ -171,7 +171,7 @@ class BadAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@186: \'$data\' must be instance of Assurance';
+        $expectedMessage = __CLASS__ . '->' . __FUNCTION__ . '()@186: \'$data\' must be instance of Assurance; array received';
         $expectedData = [
             'thrownBy' => new CodeCaller(__CLASS__, __FUNCTION__, '->', __FILE__, 186),
             'thrownByName' => 'GanbaroDigitalTest\Defensive\V1\Exceptions\BadAssuranceTest->testCanCreateFromBadAssurance()@186',

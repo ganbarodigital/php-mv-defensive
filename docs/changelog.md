@@ -38,6 +38,10 @@ pageflow_next_text: Contributing
   - `RequireValidAssurances` is now a `ListRequirement`
   - `RequireValidRequirements` is now a `ListRequirement`
 
+* Tweaks to improve usefulness of exceptions
+  - `BadAssurance` exception message now includes the type of the bad assurance
+  - `BadRequirement` exception message now includes the type of the bad requirement
+
 ## v1.2016062801
 
 ### New
