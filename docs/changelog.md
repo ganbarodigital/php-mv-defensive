@@ -22,6 +22,7 @@ pageflow_next_text: Contributing
   - added `ListAssurance` interface
   - added `ListRequirement` interface
   - added `ListableAssurance` trait
+  - added `ListableAssurance` trait
   - `ComposableAssurance` now implements `ListAssurance` interface
   - `EnsureAllOf` now implements `ListAssurance` interface
   - `EnsureAnyOneOf` now implements `ListAssurance` interface

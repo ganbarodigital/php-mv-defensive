@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: requirements
-pageflow_prev_url: InvokeableRequirement.html
-pageflow_prev_text: InvokeableRequirement trait
+pageflow_prev_url: ListableRequirement.html
+pageflow_prev_text: ListableRequirement trait
 pageflow_next_url: RequireAnyOneOf.html
 pageflow_next_text: RequireAnyOneOf class
 ---
