@@ -138,16 +138,17 @@ $assurances = [
 ];
 foreach ($assurances as $assurance) {
     // invokeable object
-    $assurance($data);
+    $assurance($data, '$data');
 
     // for readability, this works too
-    $assurance->inspect($data);
+    $assurance->inspect($data, '$data');
 }
 ```
 
 Here's how this pattern works:
 
-* both `Inspection::__invoke()` and `Inspection::inspect()` must be implemented to call `Inspection::to()`.
+* `Inspection::__invoke()` and `Inspection::inspect()` both call `Inspection::to()` underneath
+* if your class uses either the [`InvokeableAssurance`](../Assurances/InvokeableAssurance.html) or [`InvokeableRequirement`](../Requirements/InvokeableRequirement.html) trait, you get this behaviour for free
 
 ## Notes
 
@@ -157,4 +158,6 @@ None at this time.
 
 ### v1.2016080701
 
-* Added `inspect()` method
+* Added `Inspection::inspect()` method
+
+  This is implemented by both the [`InvokeableAssurance`](../Assurances/InvokeableAssurance.html) and [`InvokeableRequirement`](../Requirements/InvokeableRequirement.html) traits. Your code should be using these to provide the convenience methods specified in the `Inspection` interface.
