@@ -1,6 +1,6 @@
 ---
 currentSection: v1
-currentItem: assurances
+currentItem: requirements
 pageflow_prev_url: RequireAnyOneOf.html
 pageflow_prev_text: RequireAnyOneOf class
 pageflow_next_url: RequireValidRequirements.html
@@ -9,8 +9,8 @@ pageflow_next_text: RequireValidRequirements class
 
 # RequireValidAssurances
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016081301
 </div>
 
 ## Description
@@ -168,6 +168,14 @@ If you:
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016081301
+
+* Implements `ListRequirement` instead of `Requirement`
+
+  We feel this is a more accurate description of what this function class does.
 
 ## See Also
 

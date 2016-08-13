@@ -9,8 +9,8 @@ pageflow_next_text: ListInspection interface
 
 # ListAssurance
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016081301
 </div>
 
 ## Description
@@ -36,19 +36,6 @@ use GanbaroDigital\Defensive\V1\Interfaces\ListInspection;
 interface ListAssurance
   extends ListInspection
 {
-    /**
-     * throws exception if our inspection fails
-     *
-     * @inheritedFrom ListInspection
-     *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     * @param  string $fieldOrVarName
-     *         what is the name of $fieldOrVar in the calling code?
-     * @return void
-     */
-    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
-
     /**
      * throws exception if our inspection fails
      *

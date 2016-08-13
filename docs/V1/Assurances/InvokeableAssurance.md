@@ -174,6 +174,12 @@ If you:
 
 None at this time.
 
+## Changelog
+
+### v1.2016081301
+
+* Added `InvokeableAssurable::inspect()`
+
 ## See Also
 
 * [`Assurance` interface](../Interfaces/Assurance.html)

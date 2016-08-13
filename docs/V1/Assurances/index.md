@@ -1,6 +1,6 @@
 ---
 currentSection: v1
-currentItem: assurance
+currentItem: assurances
 pageflow_next_url: ComposableAssurance.html
 pageflow_next_text: ComposableAssurance class
 ---
@@ -19,6 +19,7 @@ These are utilities for:
 Interface | Description
 ------|------------
 [`Assurance`](../Interfaces/Assurance.html) | interface for all assurances to implement
+[`ListAssurance`](../Interfaces/ListAssurance.html) | interface for all assurances that check lists of data to implement
 
 Click on the name of an interface to see full details.
 

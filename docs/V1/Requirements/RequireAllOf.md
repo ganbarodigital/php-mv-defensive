@@ -224,6 +224,13 @@ If you:
 
 None at this time.
 
+## Changelog
+
+### v1.2016081301
+
+* Added support for `ListRequirement` interface
+
 ## See Also
 
-* [`Requirement` interface](Requirement.html)
+* [`Requirement` interface](../Interfaces/Requirement.html)
+* [`ListRequirement` interface](../Interfaces/ListRequirement.html)

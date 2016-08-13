@@ -9,8 +9,8 @@ pageflow_next_text: Requirement interface
 
 # ListRequirement
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016081301
 </div>
 
 ## Description
