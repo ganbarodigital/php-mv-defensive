@@ -15,7 +15,7 @@ Since v1.2016062801
 
 ## Description
 
-`Inspection` is an interface. It defines the `::apply()->to()` pattern used by both `Assurance` and `Requirement` classes.
+`Inspection` is an interface. It defines the `::apply()->to()` pattern used by both [`Assurance`](../Assurances/index.html) and [`Requirement`](../Requirements/index.html) classes.
 
 ## Public Interface
 
@@ -41,6 +41,19 @@ interface Inspection
     /**
      * throws exception if our inspection fails
      *
+     * this is an alias of to() for readability purposes
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspect($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
      * @param  mixed $fieldOrVar
      *         the data to be examined
      * @param  string $fieldOrVarName
@@ -57,8 +70,11 @@ interface Inspection
 
 `Inspection` is a base interface. Its purpose is to define common functionality.
 
-Create new interfaces that extend `Inspection` to provide type-hinting for different kinds of inspections. New interfaces should not add additional functionality. Do not add additional methods.
-For example, `Assurance` and `Requirement` are both interfaces that extend `Inspection`.
+* Create new interfaces that extend `Inspection` to provide type-hinting for different kinds of inspections.
+* New Inspections should not add additional functionality.
+* Do not add additional public methods to your Inspections.
+
+[`Assurance`](Assurance.html) and [`Requirement`](Requirement.html) are both interfaces that extend `Inspection`.
 
 ### The Apply->To Pattern
 
@@ -111,6 +127,34 @@ In PHP 7.0 onwards, method calls aren't the major overhead that they used to be,
 assert(EnsureInRange::apply(100,200)->to($retval));
 ```
 
+### Inspection Adapters
+
+You can use all implementations of `Inspection` as _inspection adapters_:
+
+```php
+$assurances = [
+    new EnsureString(),
+    new EnsureMinLength(100)
+];
+foreach ($assurances as $assurance) {
+    // invokeable object
+    $assurance($data);
+
+    // for readability, this works too
+    $assurance->inspect($data);
+}
+```
+
+Here's how this pattern works:
+
+* both `Inspection::__invoke()` and `Inspection::inspect()` must be implemented to call `Inspection::to()`.
+
 ## Notes
 
 None at this time.
+
+## Changelog
+
+### v1.2016080701
+
+* Added `inspect()` method
