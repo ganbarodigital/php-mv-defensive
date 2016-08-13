@@ -25,19 +25,8 @@ Not yet in a tagged release
 // ListInspection lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
-interface ListInspection extends Inspection
+interface ListInspection
 {
-    /**
-     * throws exception if our inspection fails
-     *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     * @param  string $fieldOrVarName
-     *         what is the name of $fieldOrVar in the calling code?
-     * @return void
-     */
-    public function __invoke($fieldOrVar, $fieldOrVarName = "value");
-
     /**
      * throws exception if our inspection fails
      *

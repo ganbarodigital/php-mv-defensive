@@ -46,8 +46,19 @@ namespace GanbaroDigital\Defensive\V1\Interfaces;
 /**
  * supports inspecting the elements of a list
  */
-interface ListInspection extends Inspection
+interface ListInspection
 {
+    /**
+     * throws exception if our inspection fails
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
     /**
      * throws exception if our inspection fails
      *
