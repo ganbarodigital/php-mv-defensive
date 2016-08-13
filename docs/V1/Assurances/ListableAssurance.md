@@ -1,6 +1,6 @@
 ---
 currentSection: v1
-currentItem: requirements
+currentItem: assurances
 pageflow_prev_url: InvokeableAssurance.html
 pageflow_prev_text: InvokeableAssurance trait
 ---
