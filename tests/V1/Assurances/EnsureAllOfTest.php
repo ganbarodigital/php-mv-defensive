@@ -150,9 +150,9 @@ class EnsureAllOfTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @dataProvider provideBadAssurances
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssurancesList
+     * @expectedException InvalidArgumentException
      */
-    public function testMustProvideAnArrayOfAssurances($requirements)
+    public function testMustProvideAListOfAssurances($requirements)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -167,26 +167,10 @@ class EnsureAllOfTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @covers ::apply
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyAssurancesList
-     */
-    public function testAssurancesArrayCannotBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        EnsureAllOf::apply([])->to('value');
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::apply
      * @dataProvider provideInvalidAssurances
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssurance
      */
-    public function testAssurancesArrayMustContainValidAssurances($requirements)
+    public function testAssurancesListMustContainValidAssurances($requirements)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -297,7 +281,6 @@ class EnsureAllOfTest extends PHPUnit_Framework_TestCase
             [ true ],
             [ 3.1415927 ],
             [ 100 ],
-            [ new stdClass ]
         ];
     }
 

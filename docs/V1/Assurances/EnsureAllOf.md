@@ -177,9 +177,8 @@ Here is the contract for this class:
      [x] is Assurance
      [x] Can use as object
      [x] Can call statically
-     [x] Must provide an array of assurances
-     [x] Assurances array cannot be empty
-     [x] Assurances array must contain valid assurances
+     [x] Must provide a list of assurances
+     [x] Assurances list must contain valid assurances
      [x] Must match all assurances given
      [x] Throws exception if nothing matches
      [x] can apply to a data list

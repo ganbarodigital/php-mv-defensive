@@ -43,19 +43,18 @@
 
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
-use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidAssurances implements Requirement
+/**
+ * make sure that we have a list of valid assurances to work with
+ */
+class RequireValidAssurances implements ListRequirement
 {
-    // saves us having to declare ::__invoke() ourselves
-    use InvokeableRequirement;
+    // saves us having to declare ::toList() ourselves
+    use ListableRequirement;
 
     /**
      * the exceptions we should throw
@@ -95,24 +94,16 @@ class RequireValidAssurances implements Requirement
     /**
      * make sure that we have a list of valid assurances to work with
      *
-     * @param array $assurances
+     * @param Assurance $assurance
      *        the list of assurances to check
      * @param string $fieldOrVarName
      *        what is the name of $assurances in the calling code?
      * @return void
      */
-    public function to($assurances, $fieldOrVarName = "value")
+    public function to($assurance, $fieldOrVarName = "value")
     {
-        if (!is_array($assurances)) {
-            throw $this->exceptions['BadAssurancesList::newFromInputParameter']($assurances, $fieldOrVarName);
-        }
-        if (empty($assurances)) {
-            throw $this->exceptions['EmptyAssurancesList::newFromInputParameter']($assurances, $fieldOrVarName);
-        }
-        foreach ($assurances as $assurance) {
-            if (!$assurance instanceof Assurance) {
-                throw $this->exceptions['BadAssurance::newFromInputParameter']($assurance, $fieldOrVarName);
-            }
+        if (!$assurance instanceof Assurance) {
+            throw $this->exceptions['BadAssurance::newFromInputParameter']($assurance, $fieldOrVarName);
         }
     }
 }

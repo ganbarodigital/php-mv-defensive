@@ -26,9 +26,17 @@ pageflow_next_text: Contributing
   - `ComposableAssurance` now implements `ListAssurance` interface
   - `ComposableRequirement` now implements `ListRequirement` interface
   - `EnsureAllOf` now implements `ListAssurance` interface
+  - `EnsureAllOf` now accepts empty lists of assurances
   - `EnsureAnyOneOf` now implements `ListAssurance` interface
+  - `EnsureAnyOneOf` now accepts empty lists of assurances
   - `RequireAllOf` now implements `ListRequirement` interface
+  - `RequireAllOf` now accepts empty lists of requirements
   - `RequireAnyOneOf` now implements `ListRequirement` interface
+  - `RequireAnyOneOf` now accepts empty lists of requirements
+
+* A couple of internal classes are now `ListRequirement`s only
+  - `RequireValidAssurances` is now a `ListRequirement`
+  - `RequireValidRequirements` is now a `ListRequirement`
 
 ## v1.2016062801
 

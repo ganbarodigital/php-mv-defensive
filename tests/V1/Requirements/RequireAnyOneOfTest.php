@@ -150,9 +150,9 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @dataProvider provideBadRequirements
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirements
+     * @expectedException InvalidArgumentException
      */
-    public function testMustProvideAnArrayOfRequirements($requirements)
+    public function testMustProvideAListOfRequirements($requirements)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -165,28 +165,12 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::__construct
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList
-     */
-    public function testArrayOfRequirementsCannotBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireAnyOneOf::apply([])->to(null, "value");
-    }
-
-    /**
      * @covers ::apply
      * @covers ::__construct
      * @dataProvider provideInvalidRequirements
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
      */
-    public function testRequirementsArrayMustContainValidRequirements($requirements)
+    public function testRequirementsListMustContainValidRequirements($requirements)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -320,7 +304,6 @@ class RequireAnyOneOfTest extends PHPUnit_Framework_TestCase
             [ true ],
             [ 3.1415927 ],
             [ 100 ],
-            [ new stdClass ]
         ];
     }
 

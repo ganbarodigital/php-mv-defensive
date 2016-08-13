@@ -25,13 +25,13 @@ Use `RequireValidRequirements` to ensure that you have a list that only contains
 // RequireValidRequirements lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Requirements;
 
-// RequireValidRequirements is a Requirement
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+// RequireValidRequirements is a ListRequirement
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidRequirements implements Requirement
+class RequireValidRequirements implements ListRequirement
 {
     /**
      * create a Requirement that is ready to execute
@@ -43,17 +43,6 @@ class RequireValidRequirements implements Requirement
     public function __construct(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid requirements to work with
-     *
-     * @param array $requirements
-     *        the list of requirements to check
-     * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($requirements, $fieldOrVarName = "value");
-
-    /**
      * create a Requirement that is ready to execute
      *
      * @param  FactoryList|null $exceptions
@@ -63,15 +52,51 @@ class RequireValidRequirements implements Requirement
     public static function apply(FactoryList $exceptions = null);
 
     /**
-     * make sure that we have a list of valid requirements to work with
+     * throws exception if our inspection fails
      *
-     * @param array $requirements
-     *        the list of requirements to check
-     * @param string $fieldOrVarName
-     *        what is the name of $data in the calling code?
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
      * @return void
      */
-    public function to($requirements, $fieldOrVarName = "value");
+    public function to($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * the inspection defined in the to() method is applied to every element
+     * of the list passed in
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function toList($fieldOrVar, $fieldOrVarName = "value");
+
+    /**
+     * throws exception if our inspection fails
+     *
+     * this is an alias of toList() for better readability when your
+     * inspection is an object
+     *
+     * @inheritedFrom ListRequirement
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     *         must be a traversable list
+     * @param  string $fieldOrVarName
+     *         what is the name of $fieldOrVar in the calling code?
+     * @return void
+     */
+    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
 }
 ```
 
@@ -79,9 +104,8 @@ class RequireValidRequirements implements Requirement
 
 `RequireValidRequirements` enforces the following:
 
-1. `$requirements` must be an array
-2. `$requirements` cannot be empty
-3. every value in `$requirements` must implement the `Requirement` interface
+1. `$requirements` must be a list
+1. every value in `$requirements` must implement the `Requirement` interface
 
 If any of the requirements aren't met, `RequireValidRequirements` will throw an exception.
 
@@ -89,13 +113,13 @@ If any of the requirements aren't met, `RequireValidRequirements` will throw an 
 
 ### Applying Requirements
 
-Use the `::apply()->to()` pattern:
+Use the `::apply()->toList()` pattern:
 
 ```php
 $requirements = [
     // a list of objects that implement the 'Requirement' interface
 ];
-RequireValidRequirements::apply()->to($requirements, '$requirements');
+RequireValidRequirements::apply()->toList($requirements, '$requirements');
 ```
 
 If any of the requirements aren't met, `RequireValidRequirements` will throw an exception.
@@ -106,12 +130,13 @@ Here is the contract for this class:
 
     GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements
      [x] Can instantiate
-     [x] Is requirement
+     [x] is ListRequirement
      [x] Can use as object
      [x] Can call statically
      [x] Must provide list of requirements
-     [x] List of requirements cannot be empty
      [x] List of requirements can contain only requirements
+     [x] can apply to a data list
+     [x] throws InvalidArgumentException if non list passed to toList
 
 Class contracts are built from this class's unit tests.
 

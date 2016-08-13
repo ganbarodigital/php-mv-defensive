@@ -87,7 +87,7 @@ class RequireAnyOneOf implements Requirement, ListRequirement
         $this->exceptions = $exceptions;
 
         // robustness
-        RequireValidRequirements::apply()->to($requirements);
+        RequireValidRequirements::apply()->toList($requirements);
 
         // we're good (for now)
         $this->requirements = $requirements;

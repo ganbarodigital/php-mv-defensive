@@ -81,7 +81,7 @@ class EnsureAllOf implements Assurance, ListAssurance
         $this->exceptions = $exceptions;
 
         // robustness
-        RequireValidAssurances::apply($exceptions)->to($assurances);
+        RequireValidAssurances::apply($exceptions)->toList($assurances);
 
         // we're good (for now)
         $this->assurances = $assurances;

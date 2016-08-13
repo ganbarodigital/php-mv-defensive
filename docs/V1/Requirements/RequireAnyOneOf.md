@@ -186,9 +186,8 @@ Here is the contract for this class:
      [x] is Requirement
      [x] Can use as object
      [x] Can call statically
-     [x] Must provide an array of requirements
-     [x] Array of requirements cannot be empty
-     [x] Requirements array must contain valid requirements
+     [x] Must provide a list of requirements
+     [x] Requirements list must contain valid requirements
      [x] Will match any requirement given
      [x] Throws exception if nothing matches
      [x] is ListRequirement

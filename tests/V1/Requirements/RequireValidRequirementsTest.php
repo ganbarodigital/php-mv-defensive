@@ -42,9 +42,12 @@
  */
 
 namespace GanbaroDigitalTest\Defensive\V1\Requirements;
+use stdClass;
 use PHPUnit_Framework_TestCase;
+use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
 use GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements;
 use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 /**
@@ -74,7 +77,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function test_is_Requirement()
+    public function test_is_ListRequirement()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -87,12 +90,13 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(Requirement::class, $unit);
+        $this->assertInstanceOf(ListRequirement::class, $unit);
     }
 
     /**
      * @covers ::__construct
-     * @covers ::__invoke
+     * @covers ::inspectList
+     * @covers ::toList
      * @covers ::to
      */
     public function testCanUseAsObject()
@@ -110,7 +114,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // perform the change
 
         $unit = new RequireValidRequirements;
-        $unit($requirements);
+        $unit->inspectList($requirements);
 
         // ----------------------------------------------------------------
         // test the results
@@ -123,7 +127,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
-     * @covers ::to
+     * @covers ::toList
      */
     public function testCanCallStatically()
     {
@@ -139,7 +143,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidRequirements::apply()->to($requirements);
+        RequireValidRequirements::apply()->toList($requirements);
 
         // ----------------------------------------------------------------
         // test the results
@@ -152,9 +156,9 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
-     * @covers ::to
+     * @covers ::toList
      * @dataProvider provideNonArraysToTest
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirements
+     * @expectedException InvalidArgumentException
      */
     public function testMustProvideListOfRequirements($requirements)
     {
@@ -164,7 +168,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidRequirements::apply()->to($requirements);
+        RequireValidRequirements::apply()->toList($requirements);
 
         // ----------------------------------------------------------------
         // test the results
@@ -173,31 +177,9 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
-     * @covers ::to
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList
-     */
-    public function testListOfRequirementsCannotBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $requirements = [];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireValidRequirements::apply()->to($requirements);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-    }
-
-    /**
-     * @covers ::apply
-     * @covers ::to
+     * @covers ::toList
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
-     * @dataProvider provideNonArraysToTest
+     * @dataProvider provideNonListsToTest
      */
     public function testListOfRequirementsCanContainOnlyRequirements($requirement)
     {
@@ -209,11 +191,51 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidRequirements::apply()->to($requirements);
+        RequireValidRequirements::apply()->toList($requirements);
 
         // ----------------------------------------------------------------
         // test the results
 
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     */
+    public function test_can_apply_to_a_data_list()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $list = [
+            new RequireValidRequirementsTest_RequireNumeric(),
+            new RequireValidRequirementsTest_RequireString(),
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireValidRequirements::apply()->toList($list);
+
+        // ----------------------------------------------------------------
+        // test the results
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @dataProvider provideNonListsToTest
+     * @expectedException InvalidArgumentException
+     */
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireValidRequirements::apply()->toList($list);
     }
 
     public function provideNonArraysToTest()
@@ -227,7 +249,22 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
             [ 3.1415927 ],
             [ 0 ],
             [ 100 ],
-            [ new \stdClass ],
+            [ STDIN ],
+            [ "hello, world!" ],
+        ];
+    }
+
+    public function provideNonListsToTest()
+    {
+        return [
+            [ null ],
+            [ true ],
+            [ false ],
+            [ function() {} ],
+            [ 0.0 ],
+            [ 3.1415927 ],
+            [ 0 ],
+            [ 100 ],
             [ STDIN ],
             [ "hello, world!" ],
         ];
@@ -236,10 +273,7 @@ class RequireValidRequirementsTest extends PHPUnit_Framework_TestCase
 
 class RequireValidRequirementsTest_RequireNumeric implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        return $this->to($item, $fieldOrVarName, $exceptions);
-    }
+    use InvokeableRequirement;
 
     public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
@@ -251,10 +285,7 @@ class RequireValidRequirementsTest_RequireNumeric implements Requirement
 
 class RequireValidRequirementsTest_RequireString implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        return $this->to($item, $fieldOrVarName, $exceptions);
-    }
+    use InvokeableRequirement;
 
     public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {
@@ -266,10 +297,7 @@ class RequireValidRequirementsTest_RequireString implements Requirement
 
 class RequireValidRequirementsTest_RequireType implements Requirement
 {
-    public function __invoke($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
-    {
-        return $this->to($item, $fieldOrVarName, $exceptions);
-    }
+    use InvokeableRequirement;
 
     public function to($item, $fieldOrVarName = "value", FactoryList $exceptions = null)
     {

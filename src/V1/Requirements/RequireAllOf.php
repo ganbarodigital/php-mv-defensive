@@ -80,7 +80,7 @@ class RequireAllOf implements Requirement, ListRequirement
         $this->exceptions = $exceptions;
 
         // robustness
-        RequireValidRequirements::apply($exceptions)->to($requirements);
+        RequireValidRequirements::apply($exceptions)->toList($requirements);
 
         // we're good (for now)
         $this->requirements = $requirements;

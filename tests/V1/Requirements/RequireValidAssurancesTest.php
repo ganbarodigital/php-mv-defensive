@@ -42,12 +42,12 @@
  */
 
 namespace GanbaroDigitalTest\Defensive\V1\Requirements;
+use stdClass;
 use PHPUnit_Framework_TestCase;
-use GanbaroDigital\Defensive\V1\Requirements\InvokeableRequirement;
+use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
 use GanbaroDigital\Defensive\V1\Requirements\RequireValidAssurances;
 use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
-use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
-use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 /**
  * @coversDefaultClass GanbaroDigital\Defensive\V1\Requirements\RequireValidAssurances
@@ -76,7 +76,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      */
-    public function test_is_Requirement()
+    public function test_is_ListRequirement()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -89,12 +89,13 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(Requirement::class, $unit);
+        $this->assertInstanceOf(ListRequirement::class, $unit);
     }
 
     /**
      * @covers ::__construct
-     * @covers ::__invoke
+     * @covers ::inspectList
+     * @covers ::toList
      * @covers ::to
      */
     public function testCanUseAsObject()
@@ -112,7 +113,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
         // perform the change
 
         $unit = new RequireValidAssurances;
-        $unit($assurances);
+        $unit->inspectList($assurances);
 
         // ----------------------------------------------------------------
         // test the results
@@ -125,6 +126,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
+     * @covers ::toList
      * @covers ::to
      */
     public function testCanCallStatically()
@@ -141,7 +143,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidAssurances::apply()->to($assurances);
+        RequireValidAssurances::apply()->toList($assurances);
 
         // ----------------------------------------------------------------
         // test the results
@@ -154,9 +156,10 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
+     * @covers ::toList
      * @covers ::to
      * @dataProvider provideNonArraysToTest
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssurancesList
+     * @expectedException InvalidArgumentException
      */
     public function testMustProvideListOfAssurances($assurances)
     {
@@ -166,7 +169,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidAssurances::apply()->to($assurances);
+        RequireValidAssurances::apply()->toList($assurances);
 
         // ----------------------------------------------------------------
         // test the results
@@ -175,28 +178,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
-     * @covers ::to
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\EmptyAssurancesList
-     */
-    public function testListOfAssurancesCannotBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $assurances = [];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireValidAssurances::apply()->to($assurances);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-    }
-
-    /**
-     * @covers ::apply
+     * @covers ::toList
      * @covers ::to
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssurance
      * @dataProvider provideNonArraysToTest
@@ -211,11 +193,53 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireValidAssurances::apply()->to($assurances);
+        RequireValidAssurances::apply()->toList($assurances);
 
         // ----------------------------------------------------------------
         // test the results
 
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @covers ::to
+     */
+    public function test_can_apply_to_a_data_list()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $list = [
+            new RequireValidAssurancesTest_EnsureNumeric(),
+            new RequireValidAssurancesTest_EnsureString(),
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireValidAssurances::apply()->toList($list);
+
+        // ----------------------------------------------------------------
+        // test the results
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @covers ::to
+     * @dataProvider provideNonListsToTest
+     * @expectedException InvalidArgumentException
+     */
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireValidAssurances::apply()->toList($list);
     }
 
     public function provideNonArraysToTest()
@@ -229,7 +253,22 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
             [ 3.1415927 ],
             [ 0 ],
             [ 100 ],
-            [ new \stdClass ],
+            [ STDIN ],
+            [ "hello, world!" ],
+        ];
+    }
+
+    public function provideNonListsToTest()
+    {
+        return [
+            [ null ],
+            [ true ],
+            [ false ],
+            [ function() {} ],
+            [ 0.0 ],
+            [ 3.1415927 ],
+            [ 0 ],
+            [ 100 ],
             [ STDIN ],
             [ "hello, world!" ],
         ];
@@ -238,7 +277,7 @@ class RequireValidAssurancesTest extends PHPUnit_Framework_TestCase
 
 class RequireValidAssurancesTest_EnsureNumeric implements Assurance
 {
-    use InvokeableRequirement;
+    use InvokeableAssurance;
 
     public function to($item, $fieldOrVarName = "value")
     {
@@ -250,7 +289,7 @@ class RequireValidAssurancesTest_EnsureNumeric implements Assurance
 
 class RequireValidAssurancesTest_EnsureString implements Assurance
 {
-    use InvokeableRequirement;
+    use InvokeableAssurance;
 
     public function to($item, $fieldOrVarName = "value")
     {
@@ -262,7 +301,7 @@ class RequireValidAssurancesTest_EnsureString implements Assurance
 
 class RequireValidAssurancesTest_EnsureType implements Assurance
 {
-    use InvokeableRequirement;
+    use InvokeableAssurance;
 
     public function to($item, $fieldOrVarName = "value")
     {
