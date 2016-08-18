@@ -38,6 +38,8 @@ pageflow_next_text: Contributing
 * Tweaks to improve usefulness of exceptions
   - `BadAssurance` exception message now includes the type of the bad assurance
   - `BadRequirement` exception message now includes the type of the bad requirement
+* Added support for Checks
+  - added `Check` interface
 
 ## v1.2016062801
 

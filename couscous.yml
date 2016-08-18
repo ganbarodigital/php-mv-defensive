@@ -108,6 +108,8 @@ menu:
                 contents:
                     Assurance:
                         relativeUrl: V1/Interfaces/Assurance.html
+                    Check:
+                        relativeUrl: V1/Interfaces/Check.html
                     Inspection:
                         relativeUrl: V1/Interfaces/Inspection.html
                     ListAssurance:

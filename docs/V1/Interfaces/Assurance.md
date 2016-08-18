@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: interfaces
 pageflow_prev_url: index.html
 pageflow_prev_text: Interfaces
-pageflow_next_url: Inspection.html
-pageflow_next_text: Inspection interface
+pageflow_next_url: Check.html
+pageflow_next_text: Check interface
 ---
 
 # Assurance
