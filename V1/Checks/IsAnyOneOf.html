@@ -59,202 +59,143 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: Overview</a></li>
-                                                      <li><a href="EnsureAllOf.html">Next: EnsureAllOf class</a></li>
+                                    <li><a href="IsAllOf.html">Prev: IsAllOf class</a></li>
+                                                      <li><a href="ListableCheck.html">Next: ListableCheck trait</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="composableassurance">ComposableAssurance</h1>
+                <h1 id="isanyoneof">IsAnyOneOf</h1>
 <div class="callout info">
-<p>Since v1.2016062801</p>
+<p>Since v1.2016082401</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>ComposableAssurance</code> will turn any <code>callable</code> into both an <code>Assurance</code> and a <code>ListAssurance</code>.</p>
+<p><code>IsAnyOneOf</code> allows you to apply a list of checks to a piece of data. If any of the checks pass, <code>IsAnyOneOf</code> returns <code>true</code>.</p>
+<p><code>IsAnyOneOf</code> is a customisable function object.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>ComposableAssurance</code> has the following public interface:</p>
-<pre><code class="language-php">// ComposableAssurance lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Assurances;
+<p><code>IsAnyOneOf</code> has the following public interface:</p>
+<pre><code class="language-php">// IsAnyOneOf lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Checks;
 
-// ComposableAssurance is an Assurance
-use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
-// ComposableAssurance is a ListAssurance
-use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
+// IsAnyOneOf is an Check
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
+// IsAnyOneOf is a ListCheck
+use GanbaroDigital\Defensive\V1\Interfaces\ListCheck;
 
-// our parameter and return types
+// our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class ComposableAssurance
-  implements Assurance, ListAssurance
+class IsAnyOneOf implements Check, ListCheck
 {
     /**
-     * build a composable assurance
+     * create a check that is ready to execute
      *
-     * we take a partial assurance (a assurance that needs multiple
-     * parameters), plus the extra parameters, so that it can be called
-     * from our EnsureAllOf and EnsureAnyOneOf classes
-     *
-     * @param  callable $assurance
-     *         the partial assurance that we are wrapping
-     * @param  array $extra
-     *         the extra param(s) to pass into the underlying assurance
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
-     * @return Assurance
-     *         the assurance you can use
+     * @param array $checks
+     *        a list of the checks to apply
+     * @param FactoryList|null $exceptions
+     *        the functions to call when we want to throw an exception
+     * @return IsAllOf
      */
-    public function __construct(
-        $assurance,
-        $extra,
-        FactoryList $exceptions = null
-    );
+    public function __construct($checks, FactoryList $exceptions = null);
 
     /**
-     * build a composable assurance
+     * create a check that is ready to execute
      *
-     * we take a partial assurance (a assurance that needs multiple
-     * parameters), plus the extra parameters, so that it can be called
-     * from our EnsureAllOf and EnsureAnyOneOf classes
-     *
-     * @param  callable $assurance
-     *         the partial assurance that we are wrapping
-     * @param  array $extra
-     *         the extra param(s) to pass into the underlying assurance
-     * @param  FactoryList|null $exceptions
-     *         the functions to call when we want to throw an exception
-     * @return Assurance
-     *         the assurance you can use
+     * @param array $checks
+     *        a list of the checks to apply
+     * @param FactoryList|null $exceptions
+     *        the functions to call when we want to throw an exception
      */
-    public static function apply(
-        $assurance,
-        $extra,
-        FactoryList $exceptions = null
-    );
+    public static function using($checks, FactoryList $exceptions = null);
 
     /**
-     * throws exception if our underlying assurance isn't met
+     * applies our list of checks to a piece of data
      *
-     * @param  mixed $data
-     *         the data to be examined by our underlying assurance
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
+     * @param  mixed $fieldOrVar
+     *         the data to be examined by each check in turn
+     * @return bool
+     *         TRUE if all checks pass
+     *         FALSE otherwise
      */
-    public function to($data, $fieldOrVarName = "value");
+    public function inspect($fieldOrVar);
 
     /**
-     * throws exception if our underlying assurance isn't met
-     *
-     * @param  mixed $data
-     *         the data to be examined by our underlying assurance
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function __invoke($data, $fieldOrVarName = "value");
-
-    /**
-     * throws exceptions if any of our assurances are not met
-     *
-     * this is an alias of toList() for readability
+     * does a list of values pass inspection?
      *
      * @param  mixed $list
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
-     * @return void
+     *         the list of data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
      */
-    public function inspectList($list, $fieldOrVarName = "value");
-
-    /**
-     * throws exceptions if any of our assurances are not met
-     *
-     * the inspection defined in the to() method is applied to every element
-     * of the list passed in
-     *
-     * @param  mixed $list
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
-     * @return void
-     */
-    public function toList($list, $fieldOrVarName = "value");
+    public function inspectList($list);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="creating-a-composable-assurance">Creating A Composable Assurance</h3>
-<p>An <code>Assurance</code> can only take two input parameters:</p>
-<ul>
-<li>the data to check</li>
-<li>the name of the variable or input field being checked (to use in error messages)</li>
-</ul>
-<p>That works well for simple 'is / is not' checks. But many checks are actually 'is in' checks - range checks, or making sure the input data exists in a dataset. That's where <code>ComposableAssurance</code> can be useful.</p>
-<p>Let's take a simple integer range check:</p>
-<pre><code class="language-php">// a simple test to make sure a value falls into an acceptable range
-//
-// we can't use this as an Assurance, because it needs too many input params
-function minMaxCheck($data, $minValue, $maxValue, $fieldOrVarName) {
-    if ($data &lt; $minValue) {
-        throw new RuntimeException(
-            "$fieldOrVarName cannot be less than $minValue"
-        );
-    }
-    if ($data &gt; $maxValue) {
-        throw new RuntimeException(
-            "$fieldOrVarName cannot be greater than $maxValue"
-        );
-    }
-};</code></pre>
-<p>We can take <code>minMaxCheck</code> and use <code>ComposableAssurance</code> to apply it to data:</p>
-<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance;
-
-// the data we will check
-$data = 15;
-
-// is $data in the range 10..20?
-ComposableAssurance::apply(minMaxCheck, [10, 20])-&gt;to($data, '$data');</code></pre>
-<p>The <code>::apply()-&gt;to()</code> pattern helps make your code more readable.</p>
-<p>We can also take the <code>minMaxCheck</code> and use <code>ComposableAssurance</code> to apply it to a list of data:</p>
-<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance;
-
-// the data we will check
-$list = [15,11,13];
-
-// are all elements in $list in the range 10..20?
-ComposableAssurance::apply(minMaxCheck, [10, 20])-&gt;toList($list, '$list');</code></pre>
-<p>The <code>::apply()-&gt;toList()</code> pattern helps make your code more readable.</p>
-<p>The real benefit of <code>ComposableAssurance</code> comes when you want to use <code>minMaxCheck</code> in a list of assurances:</p>
-<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Assurances\EnsureAllOf;
-use GanbaroDigital\TypeChecking\V1\Assurances\EnsureInteger;
-
-// putting all of the assurance into a single list like this
-// makes your code very easy to read and reason about
-$assurances = [
-    new EnsureInteger,
-    new ComposableAssurance(minMaxCheck, [10, 20]),
+<h3 id="applying-checks">Applying Checks</h3>
+<p>Use the <code>::using()-&gt;inspect()</code> pattern:</p>
+<pre><code class="language-php">$checks = [
+    // a list of objects that implement the 'Check' interface
 ];
+IsAnyOneOf::using($checks)-&gt;inspect($data);</code></pre>
+<p>Use <code>IsAnyOneOf</code> to catch bugs in your code:</p>
+<pre><code class="language-php">function doSomething($arg1)
+{
+    // do some work
+    // ...
 
-// the data to check
-$data = 15;
+    // assurance!
+    $checks = [
+        new IsString(),
+        new IsNull()
+    ];
+    if (!IsAnyOneOf::using($checks)-&gt;inspect($retval)) {
+        // the check failed
+        // ...
+    }
 
-EnsureAllOf::apply($assurances)-&gt;to($data, '$data');</code></pre>
-<p>You can wrap any <code>callable</code> as a <code>ComposableAssurance</code> as long as:</p>
-<ul>
-<li>the first input parameter must be the data to check</li>
-<li>any extra parameters come next</li>
-<li>the final parameter can be the name of the variable or field being checked</li>
-</ul>
+    // if we get here, then we can return $retval
+    return $retval;
+}</code></pre>
+<p>If none of the checks are met, <code>IsAnyOneOf</code> will return <code>false</code>.</p>
+<h3 id="applying-checks-to-lists-of-data">Applying Checks To Lists Of Data</h3>
+<p>Use the <code>::using()-&gt;inspectList()</code> pattern:</p>
+<pre><code class="language-php">$checks = [
+    // a list of objects that implement the 'Check' interface
+];
+IsAnyOneOf::using($checks)-&gt;inspectList($list);</code></pre>
+<p>Use <code>IsAnyOneOf</code> to catch bugs in your code:</p>
+<pre><code class="language-php">function doSomething($arg1)
+{
+    // do some work
+    // ...
+
+    // assurance!
+    $checks = [
+        new IsString(),
+        new IsNull()
+    ];
+    if (!IsAnyOneOf::using($checks)-&gt;inspectList($retval)) {
+        // the checks failed
+        // ...
+    }
+
+    // if we get here, then we can return $retval
+    return $retval;
+}</code></pre>
+<p>If none of the checks are met, <code>IsAnyOneOf::inspectList()</code> will return <code>false</code>.</p>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
-<pre><code>GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance
+<pre><code>GanbaroDigital\Defensive\V1\Checks\IsAnyOneOf
  [x] Can instantiate
- [x] Is assurance
+ [x] is Check
  [x] Can use as object
  [x] Can call statically
- [x] Must provide a callable
- [x] Must provide array of extra parameters
- [x] Array of extra parameters can be empty
+ [x] Must provide a list of assurances
+ [x] Checks list must contain valid assurances
+ [x] Will match any assurance given
+ [x] Throws exception if nothing matches
  [x] can apply to a data list
- [x] throws InvalidArgumentException if non list passed to inspectList</code></pre>
+ [x] throws InvalidArgumentException if non list passed to toList</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -278,29 +219,17 @@ Future releases of this class will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016082401">v1.2016082401</h3>
-<ul>
-<li>
-<p>now throws a <code>BadCallable</code> if you pass a non-callable into the constructor</p>
-<p>Previously, we threw a <code>BadAssurance</code>.</p>
-</li>
-</ul>
-<h3 id="v12016081301">v1.2016081301</h3>
-<ul>
-<li>now implements <code>ListAssurance</code></li>
-</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="../Interfaces/Assurance.html"><code>Assurance</code> interface</a></li>
-<li><a href="../Interfaces/ListAssurance.html"><code>ListAssurance</code> interface</a></li>
+<li><a href="../Interfaces/Check.html"><code>Check</code> interface</a></li>
+<li><a href="../Interfaces/ListCheck.html"><code>ListCheck</code> interface</a></li>
 </ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="index.html">Prev: Overview</a></li>
-                                                      <li><a href="EnsureAllOf.html">Next: EnsureAllOf class</a></li>
+                                    <li><a href="IsAllOf.html">Prev: IsAllOf class</a></li>
+                                                      <li><a href="ListableCheck.html">Next: ListableCheck trait</a></li>
                                 </ul>
             </nav>
                     </main>

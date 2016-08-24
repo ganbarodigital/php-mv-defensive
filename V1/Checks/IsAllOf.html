@@ -38,11 +38,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
-                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
@@ -59,154 +59,141 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="EnsureAllOf.html">Prev: EnsureAllOf class</a></li>
-                                                      <li><a href="InvokeableAssurance.html">Next: InvokeableAssurance trait</a></li>
+                                    <li><a href="ComposableCheck.html">Prev: ComposableCheck class</a></li>
+                                                      <li><a href="IsAnyOneOf.html">Next: IsAnyOneOf class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="ensureanyoneof">EnsureAnyOneOf</h1>
+                <h1 id="isallof">IsAllOf</h1>
 <div class="callout info">
-<p>Since v1.2016062801</p>
+<p>Since v1.2016082401</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>EnsureAnyOneOf</code> allows you to apply a list of assurances to a piece of data. If none of the assurances are met, an exception is thrown.</p>
-<p><code>EnsureAnyOneOf</code> is a customisable function object.</p>
+<p><code>IsAllOf</code> allows you to apply a list of checks to a piece of data. If any of the inspections fail, <code>IsAllOf</code> returns <code>false</code>.</p>
+<p><code>IsAllOf</code> is a customisable function object.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>EnsureAnyOneOf</code> has the following public interface:</p>
-<pre><code class="language-php">// EnsureAnyOneOf lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Assurances;
+<p><code>IsAllOf</code> has the following public interface:</p>
+<pre><code class="language-php">// IsAllOf lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Checks;
 
-// EnsureAnyOneOf is an Assurance
-use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
-// EnsureAnyOneOf is a ListAssurance
-use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
+// IsAllOf is a Check
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
+// IsAllOf is a ListCheck
+use GanbaroDigital\Defensive\V1\Interfaces\ListCheck;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class EnsureAnyOneOf implements Assurance, ListAssurance
+class IsAllOf implements Check, ListCheck
 {
     /**
-     * create an Assurance that is ready to execute
+     * create a check that is ready to execute
      *
-     * @param array $assurances
-     *        a list of the assurances to apply
+     * @param array $checks
+     *        a list of the checks to apply
      * @param FactoryList|null $exceptions
      *        the functions to call when we want to throw an exception
-     * @return EnsureAnyOneOf
+     * @return IsAllOf
      */
-    public static function apply($assurances, FactoryList $exceptions = null);
+    public function __construct($checks, FactoryList $exceptions = null);
 
     /**
-     * throws exception if none of our assurances are met
+     * create a check that is ready to execute
      *
-     * @param  mixed $data
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
+     * @param array $checks
+     *        a list of the checks to apply
+     * @param FactoryList|null $exceptions
+     *        the functions to call when we want to throw an exception
      */
-    public function __invoke($data, $fieldOrVarName = "value");
+    public static function using($checks, FactoryList $exceptions = null);
 
     /**
-     * throws exception if none of our assurances are met
+     * applies our list of checks to a piece of data
      *
-     * @param  mixed $data
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
+     * @param  mixed $fieldOrVar
+     *         the data to be examined by each check in turn
+     * @return bool
+     *         TRUE if all checks pass
+     *         FALSE otherwise
      */
-    public function to($data, $fieldOrVarName = "value");
+    public function inspect($fieldOrVar);
 
     /**
-     * throws exceptions if any of our assurances are not met
-     *
-     * this is an alias of toList() for readability
+     * does a list of values pass inspection?
      *
      * @param  mixed $list
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
-     * @return void
+     *         the list of data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
      */
-    public function inspectList($list, $fieldOrVarName = "value");
-
-    /**
-     * throws exceptions if any of our assurances are not met
-     *
-     * the inspection defined in the to() method is applied to every element
-     * of the list passed in
-     *
-     * @param  mixed $list
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $list in the calling code?
-     * @return void
-     */
-    public function toList($list, $fieldOrVarName = "value");
+    public function inspectList($list);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
-<h3 id="applying-assurances">Applying Assurances</h3>
-<p>Use the <code>::apply()-&gt;to()</code> pattern:</p>
-<pre><code class="language-php">$assurances = [
-    // a list of objects that implement the 'Assurance' interface
+<h3 id="applying-checks">Applying Checks</h3>
+<p>Use the <code>::using()-&gt;inspect()</code> pattern:</p>
+<pre><code class="language-php">$checks = [
+    // a list of objects that implement the 'Check' interface
 ];
-EnsureAnyOneOf::apply($assurances)-&gt;to($data, '$data');</code></pre>
-<p>Use <code>EnsureAnyOneOf</code> to catch bugs in your code:</p>
+IsAllOf::using($checks)-&gt;inspect($data);</code></pre>
+<p>Use <code>IsAllOf</code> to catch logic bugs in your code:</p>
 <pre><code class="language-php">function doSomething($arg1)
 {
-    // do some work
-    // ...
+    // do some work ...
 
-    // assurance!
-    $assurances = [
-        new EnsureString(),
-        new EnsureNull()
+    // Check!
+    $checks = [
+        new IsIndexable(),
+        new IsNotEmpty()
     ];
-    EnsureAnyOneOf::apply($assurances)-&gt;to($retval, '$retval');
+    if (!IsAllOf::using($checks)-&gt;inspect($retval)) {
+        // the checks failed ...
+    }
 
-    // if we get here, then we can return $retval
+    // if we get here, then $retval is good
     return $retval;
 }</code></pre>
-<p>If none of the assurances are met, <code>EnsureAnyOneOf</code> will throw an exception.</p>
-<h3 id="applying-assurances-to-lists-of-data">Applying Assurances To Lists Of Data</h3>
-<p>Use the <code>::apply()-&gt;toList()</code> pattern:</p>
-<pre><code class="language-php">$assurances = [
-    // a list of objects that implement the 'Assurance' interface
+<p>If any of the Checks aren't met, <code>IsAllOf::inspect()</code> will return <code>false</code>.</p>
+<h3 id="applying-checks-to-lists-of-data">Applying Checks To Lists Of Data</h3>
+<p>Use the <code>::using()-&gt;inspectList()</code> pattern:</p>
+<pre><code class="language-php">$checks = [
+    // a list of objects that implement the 'Check' interface
 ];
-EnsureAnyOneOf::apply($assurances)-&gt;toList($list, '$list');</code></pre>
-<p>Use <code>EnsureAnyOneOf</code> to catch bugs in your code:</p>
-<pre><code class="language-php">function doSomething($arg1)
+IsAllOf::using($checks)-&gt;inspect($list);</code></pre>
+<p><code>IsAllOf</code> will apply the list of Checks to every item in <code>$list</code>.</p>
+<p>Use <code>IsAllOf</code> to catch logic bugs in your code:</p>
+<pre><code class="language-php">function doSomething($arg1, $arg2)
 {
-    // do some work
-    // ...
+    // do some work ...
+    $retval = [$value1, $value2];
 
-    // assurance!
-    $assurances = [
-        new EnsureString(),
-        new EnsureNull()
+    // Check!
+    $checks = [
+        new IsIndexable(),
+        new IsNotEmpty()
     ];
-    EnsureAnyOneOf::apply($assurances)-&gt;toList($retval, '$retval');
+    if (!IsAllOf::using($checks)-&gt;inspectList($retval)) {
+        // the check failed
+        // ...
+    }
 
-    // if we get here, then we can return $retval
+    // if we get here, then $retval is good
     return $retval;
 }</code></pre>
-<p>If none of the assurances are met, <code>EnsureAnyOneOf</code> will throw an exception.</p>
+<p>If any of the Checks aren't met, <code>IsAllOf::inspectList()</code> will return <code>false</code>.</p>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
-<pre><code>GanbaroDigital\Defensive\V1\Assurances\EnsureAnyOneOf
+<pre><code>GanbaroDigital\Defensive\V1\Checks\IsAllOf
  [x] Can instantiate
- [x] is Assurance
+ [x] is Check
  [x] Can use as object
  [x] Can call statically
- [x] Must provide a list of assurances
- [x] Assurances list must contain valid assurances
- [x] Will match any assurance given
- [x] Throws exception if nothing matches
+ [x] Must provide a list of checks
+ [x] Checks list must contain valid checks
+ [x] Returns false if nothing matches
  [x] can apply to a data list
- [x] throws InvalidArgumentException if non list passed to toList</code></pre>
+ [x] throws InvalidArgumentException if non list passed to inspectList</code></pre>
 <p>Class contracts are built from this class's unit tests.</p>
 <div class="callout success">
 Future releases of this class will not break this contract.
@@ -230,51 +217,43 @@ Future releases of this class will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016081301">v1.2016081301</h3>
-<ul>
-<li>now implements <code>ListAssurance</code></li>
-</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="../Interfaces/Assurance.html"><code>Assurance</code> interface</a></li>
-<li><a href="../Interfaces/ListAssurance.html"><code>ListAssurance</code> interface</a></li>
+<li><a href="../Interfaces/Check.html"><code>Check</code> interface</a></li>
+<li><a href="../Interfaces/ListCheck.html"><code>ListCheck</code> interface</a></li>
 </ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="EnsureAllOf.html">Prev: EnsureAllOf class</a></li>
-                                                      <li><a href="InvokeableAssurance.html">Next: InvokeableAssurance trait</a></li>
+                                    <li><a href="ComposableCheck.html">Prev: ComposableCheck class</a></li>
+                                                      <li><a href="IsAnyOneOf.html">Next: IsAnyOneOf class</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
-                                                                                                                                                                                                                                                        <h2>Assurances</h2>
+                                                                                                                                                                                                                                                                                                            <h2>Checks</h2>
                                     <nav>
                                         <ul>
                                             <li>
-                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
                                             </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ComposableAssurance.html">ComposableAssurance</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ComposableCheck.html">ComposableCheck</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAllOf.html">EnsureAllOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAllOf.html">IsAllOf</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAnyOneOf.html">EnsureAnyOneOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAnyOneOf.html">IsAnyOneOf</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/InvokeableAssurance.html">InvokeableAssurance</a>
-                                                </li>
-                                                                                            <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ListableAssurance.html">ListableAssurance</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ListableCheck.html">ListableCheck</a>
                                                 </li>
                                                                                     </ul>
                                     </nav>
-                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>

@@ -38,11 +38,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
-                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
@@ -59,59 +59,47 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="EnsureAnyOneOf.html">Prev: EnsureAnyOneOf class</a></li>
-                                                      <li><a href="ListableAssurance.html">Next: ListableAssurance trait</a></li>
+                                    <li><a href="IsAnyOneOf.html">Prev: IsAnyOneOf trait</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="invokeableassurance">InvokeableAssurance</h1>
+                <h1 id="listablecheck">ListableCheck</h1>
 <div class="callout info">
-<p>Since v1.2016062801</p>
+<p>Since v1.2016082401</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>InvokeableAssurance</code> is a trait. It implements the <code>__invoke()</code> and <code>inspect()</code> methods of the <a href="../Interfaces/Assurance.html"><code>Assurance</code></a> interface for you.</p>
+<p><code>ListableCheck</code> is a trait. It implements the <code>inspectList()</code> method of the <a href="../Interfaces/ListCheck.html"><code>ListCheck</code></a> interface for you.</p>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>InvokeableAssurance</code> has the following public interface:</p>
-<pre><code class="language-php">// InvokeableAssurance lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Assurances;
+<p><code>ListableCheck</code> has the following public interface:</p>
+<pre><code class="language-php">// ListableCheck lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Checks;
 
-trait InvokeableAssurance
+trait ListableCheck
 {
     /**
-     * throws exceptions if any of our assurances are not met
+     * does a list of values pass inspection?
      *
-     * @param  mixed $data
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
+     * @param  mixed $list
+     *         the list of data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
      */
-    public function __invoke($data, $fieldOrVarName = "value");
-
-    /**
-     * throws exceptions if any of our assurances are not met
-     *
-     * this is an alias of to() for readability purposes
-     *
-     * @param  mixed $data
-     *         the data to be examined by each assurance in turn
-     * @param  string $fieldOrVarName
-     *         what is the name of $data in the calling code?
-     * @return void
-     */
-    public function inspect($data, $fieldOrVarName = "value");
+    public function inspectList($list);
 }</code></pre>
 <h2 id="how-to-use">How To Use</h2>
 <h3 id="for-convenience">For Convenience</h3>
-<p>Use <code>InvokeableAssurance</code> in your own classes to save on typing and code duplication.</p>
-<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Assurances;
-use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
+<p>Use <code>ListableCheck</code> in your own classes to save on typing and code duplication.</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Check;
+use GanbaroDigital\Defensive\V1\Interfaces\ListCheck;
+use GanbaroDigital\Defensive\V1\Checks\ListableCheck;
 
-class EnsureInRange implements Assurance
+class IsInRange implements Check, ListCheck
 {
-    // save us having to declare __invoke() and inspect() ourselves
-    use InvokeableAssurance;
+    // save us having to declare inspectList() ourselves
+    use ListableCheck;
 
     /**
      * minimum acceptable value in our range
@@ -124,7 +112,7 @@ class EnsureInRange implements Assurance
     private $max;
 
     /**
-     * constructor. used to create a customised assurance
+     * constructor. used to create a customised check
      *
      * @param  int $min
      *         minimum value for allowed range
@@ -138,53 +126,61 @@ class EnsureInRange implements Assurance
     }
 
     /**
-     * generates an Assurance
+     * generates a Check
      *
      * @param  int $min
      *         minimum value for allowed range
      * @param  int $max
      *         maximum value for allowed range
-     * @return Assurance
-     *         returns a requirement to use
+     * @return Check
+     *         returns a check to use
      */
-    public static function apply($min, $max)
+    public static function using($min, $max)
     {
         return new static($min, $max);
     }
 
     /**
-     * make sure that $data is within the specified range
-     * throws an exception if it is not
+     * does a value pass inspection?
      *
-     * @param  int $data
-     *         the value to check
-     * @param  string $fieldOrVarName
-     *         the name of $data in the caller's code
-     * @return void
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
      */
-    public function to($data, $fieldOrVarName = 'value')
+    public function inspect($fieldOrVar);
     {
-        if ($data &lt; $this-&gt;min) {
-            throw new RuntimeException(
-                $fieldOrVarName . ' cannot be less than ' . $this-&gt;min
-            );
+        if ($fieldOrVar &lt; $this-&gt;min) {
+            return false;
         }
-        if ($data &gt; $this-&gt;max) {
-            throw new RuntimeException(
-                $fieldOrVarName . ' cannot be more than ' . $this-&gt;max
-            );
+        if ($fieldOrVar &gt; $this-&gt;max) {
         }
     }
 }</code></pre>
+<p>To use this example check, you would do:</p>
+<pre><code class="language-php">$list = [
+    25,
+    20
+];
+
+// every entry in $list must be &gt;=10, and &lt;=20
+if (!IsInRange::using(10, 20)-&gt;toList($list)) {
+    // at least one item in the list failed the check
+}</code></pre>
 <h2 id="trait-contract">Trait Contract</h2>
 <p>Here is the contract for this trait:</p>
-<pre><code>GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance
+<pre><code>GanbaroDigital\Defensive\V1\Checks\ListableCheck
  [x] Can instantiate class that uses trait
- [x] is part of Assurance interface
- [x] calls enclosing classes to method
- [x] passes data to enclosing classes to method
- [x] passes fieldOrVarName to enclosing classes to method
- [x] inspect is an alias for to</code></pre>
+ [x] is part of ListAssurance interface
+ [x] can inspect an array of data via toList
+ [x] can inspect an array of data via inspectList
+ [x] can inspect a Traversable object via toList
+ [x] can inspect a Traversable object via inspectList
+ [x] can inspect a stdClass object via toList
+ [x] can inspect a stdClass object via inspectList
+ [x] throws InvalidArgumentException when non list passed to toList
+ [x] throws InvalidArgumentException when non list passed to inspectList</code></pre>
 <p>Trait contracts are built from this trait's unit tests.</p>
 <div class="callout success">
 Future releases of this trait will not break this contract.
@@ -208,50 +204,42 @@ Future releases of this trait will not break this contract.
 </div>
 <h2 id="notes">Notes</h2>
 <p>None at this time.</p>
-<h2 id="changelog">Changelog</h2>
-<h3 id="v12016081301">v1.2016081301</h3>
-<ul>
-<li>Added <code>InvokeableAssurable::inspect()</code></li>
-</ul>
 <h2 id="see-also">See Also</h2>
 <ul>
-<li><a href="../Interfaces/Assurance.html"><code>Assurance</code> interface</a></li>
+<li><a href="../Interfaces/ListCheck.html"><code>ListCheck</code> interface</a></li>
 </ul>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="EnsureAnyOneOf.html">Prev: EnsureAnyOneOf class</a></li>
-                                                      <li><a href="ListableAssurance.html">Next: ListableAssurance trait</a></li>
+                                    <li><a href="IsAnyOneOf.html">Prev: IsAnyOneOf trait</a></li>
+                                                      <li></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
-                                                                                                                                                                                                                                                        <h2>Assurances</h2>
+                                                                                                                                                                                                                                                                                                            <h2>Checks</h2>
                                     <nav>
                                         <ul>
                                             <li>
-                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
                                             </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ComposableAssurance.html">ComposableAssurance</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ComposableCheck.html">ComposableCheck</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAllOf.html">EnsureAllOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAllOf.html">IsAllOf</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAnyOneOf.html">EnsureAnyOneOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAnyOneOf.html">IsAnyOneOf</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/InvokeableAssurance.html">InvokeableAssurance</a>
-                                                </li>
-                                                                                            <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ListableAssurance.html">ListableAssurance</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ListableCheck.html">ListableCheck</a>
                                                 </li>
                                                                                     </ul>
                                     </nav>
-                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>

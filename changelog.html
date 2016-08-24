@@ -73,7 +73,35 @@
             <article>
                 <h1 id="changelog">CHANGELOG</h1>
 <h2 id="develop-branch">develop branch</h2>
+<h2 id="v12016082401">v1.2016082401</h2>
 <h3 id="new">New</h3>
+<ul>
+<li>Added support for Checks
+<ul>
+<li>added <code>Check</code> interface</li>
+<li>added <code>ListCheck</code> interface</li>
+<li>added <code>BadCheck</code> exception</li>
+<li>added <code>BadCheckArgs</code> exception</li>
+<li>added <code>BadChecksList</code> exception</li>
+<li>added <code>EmptyChecksList</code> exception</li>
+<li>added <code>ComposableCheck</code></li>
+<li>added <code>IsAllOf</code></li>
+<li>added <code>IsAnyOneOf</code></li>
+<li>added <code>ListableCheck</code></li>
+<li>added <code>RequireValidChecks</code></li>
+</ul></li>
+</ul>
+<h3 id="fixes">Fixes</h3>
+<ul>
+<li>Stop reusing <code>BadXXX</code> exceptions when we're reporting problems with a <code>callable</code>
+<ul>
+<li>added <code>BadCallable</code> exception</li>
+<li><code>ComposableAssurance</code> now throws <code>BadCallable</code> instead of <code>BadAssurance</code></li>
+<li><code>ComposableRequirement</code> now throws <code>BadCallable</code> instead of <code>BadRequirement</code></li>
+</ul></li>
+</ul>
+<h2 id="v12016081301">v1.2016081301</h2>
+<h3 id="new-1">New</h3>
 <ul>
 <li>Tweaks and changes to improve readabilty of your code
 <ul>
@@ -111,7 +139,7 @@
 </ul></li>
 </ul>
 <h2 id="v12016062801">v1.2016062801</h2>
-<h3 id="new-1">New</h3>
+<h3 id="new-2">New</h3>
 <ul>
 <li>Added support for <em>assurances</em>: checks on return values and generated data values
 <ul>
@@ -141,7 +169,7 @@
 </ul>
 <h2 id="v12016060601">v1.2016060601</h2>
 <p>Released Mon 6th June 2016.</p>
-<h3 id="fixes">Fixes</h3>
+<h3 id="fixes-1">Fixes</h3>
 <ul>
 <li>Support overriding default exceptions factory list
 <ul>
@@ -151,7 +179,7 @@
 </ul>
 <h2 id="v12016060501">v1.2016060501</h2>
 <p>Released Sun 5th June 2016.</p>
-<h3 id="fixes-1">Fixes</h3>
+<h3 id="fixes-2">Fixes</h3>
 <ul>
 <li>Updated to support removal of <code>FilterCodeCaller::$DEFAULT_PARTIALS</code> from <code>ganbarodigital/php-mv-exception-helpers</code></li>
 </ul>
@@ -161,7 +189,7 @@
 <li>initial release</li>
 <li>feature release</li>
 </ul>
-<h3 id="new-2">New</h3>
+<h3 id="new-3">New</h3>
 <ul>
 <li>Added a way to catch all exceptions thrown by this library
 <ul>

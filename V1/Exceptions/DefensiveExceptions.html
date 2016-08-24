@@ -41,6 +41,9 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
                                     </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                    </li>
                                                                     <li class="current">
                                         <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
@@ -104,7 +107,7 @@ $diContainer = new DefensiveExceptions;
 throw $diContainer['BadRequirement::newFromVar'](false, '$data');</code></pre>
 <h2 id="class-contract">Class Contract</h2>
 <p>Here is the contract for this class:</p>
-<pre><code>GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
+<pre><code>GanbaroDigitalTest\Defensive\V1\Exceptions\DefensiveExceptions
  [x] Can instantiate
  [x] Is factory list
  [x] has factory for BadAssurance newFromInputParameter
@@ -115,7 +118,17 @@ throw $diContainer['BadRequirement::newFromVar'](false, '$data');</code></pre>
  [x] has factory for BadAssurancesList newFromVar
  [x] has factory for EmptyAssurancesList newFromInputParameter
  [x] has factory for EmptyAssurancesList newFromVar
+ [x] has factory for BadCallable newFromInputParameter
+ [x] has factory for BadCallable newFromVar
+ [x] has factory for BadCheckArgs newFromInputParameter
+ [x] has factory for BadCheck newFromVar
+ [x] has factory for BadCheck newFromInputParameter
+ [x] has factory for BadCheckArgs newFromVar
  [x] has factory for BadRequirement newFromInputParameter
+ [x] has factory for BadChecksList newFromInputParameter
+ [x] has factory for BadChecksList newFromVar
+ [x] has factory for EmptyChecksList newFromInputParameter
+ [x] has factory for EmptyChecksList newFromVar
  [x] has factory for BadRequirement newFromVar
  [x] has factory for BadRequirementArgs newFromInputParameter
  [x] has factory for BadRequirementArgs newFromVar
@@ -162,7 +175,7 @@ Future releases of this class will not break this contract.
                     </main>
 
         <aside class="sidebar">
-                                                                                                                                                                                                                                                                                                            <h2>Exceptions</h2>
+                                                                                                                                                                                                                                                                                                                                                                <h2>Exceptions</h2>
                                     <nav>
                                         <ul>
                                             <li>
@@ -178,6 +191,18 @@ Future releases of this class will not break this contract.
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadAssurancesList.html">BadAssurancesList</a>
                                                 </li>
                                                                                             <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadCallable.html">BadCallable</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadCheck.html">BadCheck</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadCheckArgs.html">BadCheckArgs</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadChecksList.html">BadChecksList</a>
+                                                </li>
+                                                                                            <li>
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadRequirement.html">BadRequirement</a>
                                                 </li>
                                                                                             <li>
@@ -188,6 +213,9 @@ Future releases of this class will not break this contract.
                                                 </li>
                                                                                             <li>
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/EmptyAssurancesList.html">EmptyAssurancesList</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/EmptyChecksList.html">EmptyChecksList</a>
                                                 </li>
                                                                                             <li>
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/EmptyRequirementsList.html">EmptyRequirementsList</a>

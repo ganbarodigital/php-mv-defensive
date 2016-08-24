@@ -41,6 +41,9 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
                                     </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                    </li>
                                                                     <li class="current">
                                         <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
                                     </li>
@@ -57,7 +60,7 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="BadRequirement.html">Next: BadRequirement class</a></li>
+                                                      <li><a href="BadAssurance.html">Next: BadAssurance class</a></li>
                                 </ul>
             </nav>
             
@@ -77,7 +80,7 @@
 <tbody>
 <tr>
 <td><a href="BadAssurance.html"><code>BadAssurance</code></a></td>
-<td>thrown when you pass something that isn't an assurnace into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
+<td>thrown when you pass something that isn't an assurance into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
 </tr>
 <tr>
 <td><a href="BadAssuranceArgs.html"><code>BadAssuranceArgs</code></a></td>
@@ -90,6 +93,33 @@
 <tr>
 <td><a href="EmptyAssurancesList.html"><code>EmptyAssurancesList</code></a></td>
 <td>thrown when you pass an empty list into one of the <a href="../Assurances/index.html">Assurance</a> classes</td>
+</tr>
+</tbody>
+</table>
+<h3 id="check-exceptions">Check Exceptions</h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="BadCheck.html"><code>BadCheck</code></a></td>
+<td>thrown when you pass something that isn't a check into one of the <a href="../Check/index.html">Checks</a> classes</td>
+</tr>
+<tr>
+<td><a href="BadCheckArgs.html"><code>BadCheckArgs</code></a></td>
+<td>thrown when you pass something that isn't a list of arguments into one of the <a href="../Checks/index.html">Checks</a> classes</td>
+</tr>
+<tr>
+<td><a href="BadChecksList.html"><code>BadChecksList</code></a></td>
+<td>thrown when you pass something that isn't a list of checks into one of the <a href="../Checks/index.html">Checks</a> classes</td>
+</tr>
+<tr>
+<td><a href="EmptyChecksList.html"><code>EmptyChecksList</code></a></td>
+<td>thrown when you pass an empty list into one of the <a href="../Checks/index.html">Checks</a> classes</td>
 </tr>
 </tbody>
 </table>
@@ -130,6 +160,10 @@
 </thead>
 <tbody>
 <tr>
+<td><a href="BadCallable.html"><code>BadCallable</code></a></td>
+<td>thrown when you pass a non-callable into something that is expecting a valid PHP <code>callable</code></td>
+</tr>
+<tr>
 <td><a href="UnreachableCodeExecuted.html"><code>UnreachableCodeExecuted</code></a></td>
 <td>thrown when <code>switch</code> or <code>if</code> / <code>else</code> logic reaches a branch that should never be reached</td>
 </tr>
@@ -151,13 +185,13 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="BadRequirement.html">Next: BadRequirement class</a></li>
+                                                      <li><a href="BadAssurance.html">Next: BadAssurance class</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
-                                                                                                                                                                                                                                                                                                            <h2>Exceptions</h2>
+                                                                                                                                                                                                                                                                                                                                                                <h2>Exceptions</h2>
                                     <nav>
                                         <ul>
                                             <li>
@@ -173,6 +207,18 @@
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadAssurancesList.html">BadAssurancesList</a>
                                                 </li>
                                                                                             <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadCallable.html">BadCallable</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadCheck.html">BadCheck</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadCheckArgs.html">BadCheckArgs</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadChecksList.html">BadChecksList</a>
+                                                </li>
+                                                                                            <li>
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/BadRequirement.html">BadRequirement</a>
                                                 </li>
                                                                                             <li>
@@ -183,6 +229,9 @@
                                                 </li>
                                                                                             <li>
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/EmptyAssurancesList.html">EmptyAssurancesList</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/EmptyChecksList.html">EmptyChecksList</a>
                                                 </li>
                                                                                             <li>
                                                     <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/EmptyRequirementsList.html">EmptyRequirementsList</a>

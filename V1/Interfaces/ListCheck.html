@@ -59,103 +59,116 @@
                                             <main role="main">
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Inspection.html">Prev: Inspection interface</a></li>
-                                                      <li><a href="ListCheck.html">Next: ListCheck interface</a></li>
+                                    <li><a href="ListAssurance.html">Prev: ListAssurance interface</a></li>
+                                                      <li><a href="ListInspection.html">Next: ListInspection interface</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="listassurance">ListAssurance</h1>
+                <h1 id="listcheck">ListCheck</h1>
 <div class="callout info">
-<p>Since v1.2016081301</p>
+<p>Since v1.2016082401</p>
 </div>
 <h2 id="description">Description</h2>
-<p><code>ListAssurance</code> is an interface. It's the interface for <a href="ListInspection.html"><code>ListInspection</code></a>s performed against:</p>
-<ul>
-<li>lists of returned values</li>
-<li>lists of calculated / generated values</li>
-</ul>
-<p>If you want to inspect a list of input values, use a <a href="ListRequirement.html"><code>ListRequirement</code></a>.</p>
+<p><code>ListCheck</code> is an interface. It's the interface for <code>true</code> / <code>false</code> inspections of a list of data.</p>
+<div class="callout info">
+<h4 id="whats-the-difference-between-a-check-and-assurances--requirements">What's The Difference Between A Check, And Assurances / Requirements?</h4>
+<p>Checks are <em>questions</em>, Assurances and Requirements are <em>quality inspections</em>.</p>
+<p>Checks are <code>IsXXX()</code>-type calls. Their job is to look at your data, and say if your data &quot;is&quot; something or not. For example, <code>IsStringy()</code> will tell you if your data can be used as a string or not. It isn't necessarily an error if a check returns <code>false</code>. That's why checks never throw exceptions.</p>
+<p>Assurances and Requirements are looking at your data to make sure everything is okay. For example, <code>RequireStringy()</code> makes sure that your data can be used as a string. A failed Assurance or Requirement is treated as an error, complete with exceptions thrown and dreams dashed.</p>
+<p>It's good practice for your Assurances and Requirements to be built on top of your Checks wherever possible.</p>
+</div>
 <h2 id="public-interface">Public Interface</h2>
-<p><code>ListAssurance</code> has the following public interface:</p>
-<pre><code class="language-php">// ListAssurance lives in this namespace
+<p><code>ListCheck</code> has the following public interface:</p>
+<pre><code class="language-php">// ListCheck lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Interfaces;
 
-// our base interface
-use GanbaroDigital\Defensive\V1\Interfaces\ListInspection;
-
-interface ListAssurance
-  extends ListInspection
+interface ListCheck
 {
     /**
-     * throws exception if our inspection fails
-     *
-     * @inheritedFrom ListInspection
+     * does a value pass inspection?
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined
-     * @param  string $fieldOrVarName
-     *         what is the name of $fieldOrVar in the calling code?
-     * @return void
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
      */
-    public function to($fieldOrVar, $fieldOrVarName = "value");
+    public function inspect($fieldOrVar);
 
     /**
-     * throws exception if our inspection fails
+     * does a list of values pass inspection?
      *
-     * the inspection defined in the to() method is applied to every element
-     * of the list passed in
-     *
-     * @inheritedFrom ListInspection
-     *
-     * @param  mixed $fieldOrVar
+     * @param  mixed $list
      *         the data to be examined
-     *         must be a traversable list
-     * @param  string $fieldOrVarName
-     *         what is the name of $fieldOrVar in the calling code?
-     * @return void
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
      */
-    public function toList($fieldOrVar, $fieldOrVarName = "value");
-
-    /**
-     * throws exception if our inspection fails
-     *
-     * this is an alias of toList() for better readability when your
-     * inspection is an object
-     *
-     * @inheritedFrom ListInspection
-     *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     *         must be a traversable list
-     * @param  string $fieldOrVarName
-     *         what is the name of $fieldOrVar in the calling code?
-     * @return void
-     */
-    public function inspectList($fieldOrVar, $fieldOrVarName = "value");
+    public function inspectList($list);
 }</code></pre>
-<h2 id="how-to-use">How To Use</h2>
-<h3 id="the-apply-gttolist-pattern">The Apply-&gt;ToList Pattern</h3>
-<p>Every <code>ListAssurance</code> implements the <code>ListAssurance::apply()-&gt;toList()</code> pattern:</p>
-<ul>
-<li>add <code>implements ListAssurance</code> to your existing <code>Assurance</code> class.</li>
-<li>add <code>use ListableAssurance</code> to your class. Saves you having to implement <code>toList()</code> and <code>inspectList()</code> yourself.</li>
-<li>add a <code>public static function apply()</code> method to your class, and a corresponding <code>__construct()</code> method. <code>apply()</code> takes any extra parameters needed to customise the assurance, and returns a new instance of your class.</li>
-<li>add a <code>public function to()</code> method to your class. This method inspects <code>$data</code>. If you're not happy with <code>$data</code>, throw an exception.</li>
-</ul>
-<p>For example, here's a simple min / max assurance:</p>
-<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
-use GanbaroDigital\Defensive\V1\Interfaces\ListAssurance;
-use GanbaroDigital\Defensive\V1\Assurances\InvokeableAssurance;
-use GanbaroDigital\Defensive\V1\Assurances\ListableAssurance;
-
-class EnsureInRange implements Assurance, ListAssurance
+<p><code>ListCheck</code> also has the following informal interface:</p>
+<pre><code class="language-php">interface ListCheck
 {
-    // save us having to declare __invoke() ourselves
-    use InvokeableAssurance;
+    /**
+     * does a value pass inspection?
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
+     */
+    public static function check($fieldOrVar, &lt;additional params&gt;);
 
-    // save us having to declare toList() ourselves
-    use ListableAssurance;
+    /**
+     * does a list of values pass inspection?
+     *
+     * @param  mixed $list
+     *         the data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
+     */
+    public static function checkList($list, &lt;additional params&gt;);
+}</code></pre>
+<p><em>Informal interfaces</em> contain methods that you must implement. However, due to PHP limitations, we can't add these methods to the <code>interface</code> at this time.</p>
+<h2 id="how-to-use">How To Use</h2>
+<p>Every <code>ListCheck</code> can be used in two ways:</p>
+<ul>
+<li>a static call to <code>::checkList()</code> for convenience,</li>
+<li>as an object, calling the <code>-&gt;inspectList()</code> method</li>
+</ul>
+<h3 id="scaffolding">Scaffolding</h3>
+<p>Most <code>ListCheck</code> classes also implement the <code>Check</code> interface too. See <a href="Check.html">the <code>Check</code> interface</a> to get started.</p>
+<p>Every <code>ListCheck</code> needs a bit of boilerplate code:</p>
+<ul>
+<li>add <code>use GanbaroDigital\Defensive\V1\Interfaces\ListCheck</code> to your PHP file</li>
+<li>add <code>implements ListCheck</code> to your class</li>
+</ul>
+<h3 id="the-check-pattern">The Check Pattern</h3>
+<p>Every <code>ListCheck</code> implements the <code>ListCheck::checkList()</code> pattern:</p>
+<ul>
+<li>add a <code>public static function checkList()</code> method to your class. This method inspects each element in <code>$list</code>. If you're happy with <code>$list</code>, return <code>true</code>. If you're not happy with <code>$list</code>, return <code>false</code>.</li>
+<li>if your check needs additional input parameters, pass these in as additional parameters to the <code>checkList()</code> method.</li>
+</ul>
+<h3 id="making-it-usable-as-an-object">Making It Usable As An Object</h3>
+<p>Every <code>ListCheck</code> can be used as an object:</p>
+<ul>
+<li>add a <code>public function __construct()</code> if your check needs additional input parameters</li>
+<li>add a <code>public function inspectList()</code> which calls your <code>::inspect()</code> method</li>
+</ul>
+<p>We've provided a <a href="../Checks/ListableTrait.html"><code>ListableCheck</code> trait</a> that will add <code>inspectList()</code> to your class.</p>
+<h3 id="putting-it-all-together">Putting It All Together</h3>
+<p>Here's a simple min / max check. It supports all the different ways that a <code>ListCheck</code> can be used.</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Checks\ListableCheck;
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
+use GanbaroDigital\Defensive\V1\Interfaces\ListCheck;
+
+class IsInRange implements Check, ListCheck
+{
+    // saves us having to implement inspectList() ourselves
+    use ListableCheck;
 
     /**
      * minimum acceptable value in our range
@@ -168,7 +181,7 @@ class EnsureInRange implements Assurance, ListAssurance
     private $max;
 
     /**
-     * constructor. used to create a customised assurance
+     * constructor. used to create a customised check
      *
      * @param  int $min
      *         minimum value for allowed range
@@ -182,58 +195,77 @@ class EnsureInRange implements Assurance, ListAssurance
     }
 
     /**
-     * generates an Assurance
+     * is $data within the require range?
      *
+     * @param  int $data
+     *         the value to check
+     * @return bool
+     *         TRUE if the data is in range
+     *         FALSE otherwise
+     */
+    public function inspect($data)
+    {
+        return static::check($data, $this-&gt;min, $this-&gt;max);
+    }
+
+    /**
+     * is $data within the required range?
+     *
+     * @param  int $data
+     *         the value to check
      * @param  int $min
      *         minimum value for allowed range
      * @param  int $max
      *         maximum value for allowed range
-     * @return Assurance
-     *         returns an assurance to use
+     * @return bool
+     *         TRUE if the data is in range
+     *         FALSE otherwise
      */
-    public static function apply($min, $max)
+    public static function check($data, $min, $max)
     {
-        return new static($min, $max);
+        if ($data &lt; $this-&gt;min) {
+            return false;
+        }
+        if ($data &gt; $this-&gt;max) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * make sure that $data is within the specified range
-     * throws an exception if it is not
+     * are the values in $list within the required range?
      *
-     * @param  int $data
-     *         the value to check
-     * @param  string $fieldOrVarName
-     *         the name of $data in the caller's code
-     * @return void
+     * @param  mixed $list
+     *         the list of values to check
+     * @param  int $min
+     *         minimum value for allowed range
+     * @param  int $max
+     *         maximum value for allowed range
+     * @return bool
+     *         TRUE if the data is in range
+     *         FALSE otherwise
      */
-    public function to($data, $fieldOrVarName = 'value')
+    public static function checkList($list, $min, $max)
     {
-        if ($data &lt; $this-&gt;min) {
-            throw new RuntimeException(
-                $fieldOrVarName . ' cannot be less than ' . $this-&gt;min
-            );
-        }
-        if ($data &gt; $this-&gt;max) {
-            throw new RuntimeException(
-                $fieldOrVarName . ' cannot be more than ' . $this-&gt;max
-            );
-        }
+        $check = new static($min, $max);
+        return $check-&gt;inspectList($list);
     }
 }</code></pre>
-<p>To use this example assurance, you would do:</p>
-<pre><code class="language-php">$list = [
-    25,
-    20
-];
+<p>To use this example check, you can do:</p>
+<pre><code class="language-php">// a static call is often the most convenient
+var_dump(IsInRange::checkList($list, 10,20));
 
-// every entry in $list must be &gt;=10, and &lt;=20
-EnsureInRange::apply(10, 20)-&gt;toList($list, '$list');</code></pre>
+// as an object
+$callable = new IsInRange(10, 20);
+var_dump($rangeCheck-&gt;inspect($data));
+var_dump($rangeCheck-&gt;inspectList($list));</code></pre>
             </article>
 
                         <nav class="pageflow">
               <ul>
-                                    <li><a href="Inspection.html">Prev: Inspection interface</a></li>
-                                                      <li><a href="ListCheck.html">Next: ListCheck interface</a></li>
+                                    <li><a href="ListAssurance.html">Prev: ListAssurance interface</a></li>
+                                                      <li><a href="ListInspection.html">Next: ListInspection interface</a></li>
                                 </ul>
             </nav>
                     </main>

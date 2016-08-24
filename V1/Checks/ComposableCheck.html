@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!--[if lt IE 9]>
+            <script src="assets/html5shiv.js"></script>
+            <script src="assets/html5printshiv.js"></script>
+        <![endif]-->
+        <meta charset="utf-8"/>
+        <title>Defensive Library for PHP from Ganbaro Digital</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://ganbarodigital.github.io/php-mv-defensive/assets/docs.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.css">
+        <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/prism.js"></script>
+    </head>
+    <body data-ishi-anchors="1">
+        <header role="banner">
+            <div>
+                <p style="font-size: 34px; padding-top: 10px">Defensive Library for PHP</p>
+                <p style="font-size: 18px; border-bottom: 1px solid; padding-bottom: 10px">Easy-to-use collection of helpers to improve the robustness of your code</p>
+            </div>
+            <!--<a href="http://ganbarodigital.github.io/php-mv-defensive/index.html">
+                <img src="http://ganbarodigital.github.io/php-mv-defensive/assets/ganbarodigital.svg" width="60" height="60" style="vertical-align: middle; float: left; margin-right: 15px">
+            </a>-->
+            <nav class="navbar topbar">
+                <ul>
+                                            <li class="">
+                            <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/index.html">Overview</a>
+                        </li>
+                                            <li class="current">
+                            <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Version 1.x</a>
+                        </li>
+                                    </ul>
+            </nav>
+        </header>
+                                                                            <header role="subnav">
+                        <nav class="navbar">
+                            <ul>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Interfaces/index.html">Interfaces</a>
+                                    </li>
+                                                                    <li class="">
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Requirements/index.html">Requirements</a>
+                                    </li>
+                                                            </ul>
+                        </nav>
+                    </header>
+                                            <main role="main">
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Overview</a></li>
+                                                      <li><a href="IsAllOf.html">Next: IsAllOf class</a></li>
+                                </ul>
+            </nav>
+            
+            <article>
+                <h1 id="composablecheck">ComposableCheck</h1>
+<div class="callout info">
+<p>Since v1.2016082401</p>
+</div>
+<h2 id="description">Description</h2>
+<p><code>ComposableCheck</code> will turn any <code>callable</code> into both a <code>Check</code> and a <code>ListCheck</code>.</p>
+<h2 id="public-interface">Public Interface</h2>
+<p><code>ComposableCheck</code> has the following public interface:</p>
+<pre><code class="language-php">// ComposableCheck lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Checks;
+
+// ComposableCheck is a Check
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
+// ComposableCheck is a ListCheck
+use GanbaroDigital\Defensive\V1\Interfaces\ListCheck;
+
+// our parameter and return types
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
+
+class ComposableCheck
+  implements Check, ListCheck
+{
+    /**
+     * build a composable check
+     *
+     * we take a partial check (a check that needs multiple parameters),
+     * plus the extra parameters, so that it can be called from our
+     * IsAllOf and IsAnyOneOf classes
+     *
+     * @param  callable $check
+     *         the partial check that we are wrapping
+     * @param  array $extra
+     *         the extra param(s) to pass into the underlying check
+     * @param  FactoryList|null $exceptions
+     *         the functions to call when we want to throw an exception
+     * @return Check
+     *         the check you can use
+     */
+    public function __construct(
+        $check,
+        $extra,
+        FactoryList $exceptions = null
+    );
+
+    /**
+     * does a value pass inspection?
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
+     */
+    public function inspect($fieldOrVar);
+
+    /**
+     * does a list of values pass inspection?
+     *
+     * @param  mixed $list
+     *         the list of data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
+     */
+    public function inspectList($list);
+}</code></pre>
+<h2 id="how-to-use">How To Use</h2>
+<h3 id="creating-a-composable-check">Creating A Composable Check</h3>
+<p>Let's take a simple integer range check:</p>
+<pre><code class="language-php">// a simple test to make sure a value falls into an acceptable range
+function minMaxCheck($data, $minValue, $maxValue, $fieldOrVarName) {
+    if ($data &lt; $minValue) {
+        return false;
+    }
+    if ($data &gt; $maxValue) {
+        return false;
+    }
+
+    return true;
+};</code></pre>
+<p>We can take <code>minMaxCheck</code> and use <code>ComposableCheck</code> to apply it to data:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Checks\ComposableCheck;
+
+// the data we will check
+$data = 15;
+
+// is $data in the range 10..20?
+$check = new ComposableCheck(minMaxCheck, [10, 20]);
+$check-&gt;inspect($data);</code></pre>
+<p>We can also take the <code>minMaxCheck</code> and use <code>ComposableCheck</code> to apply it to a list of data:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Checks\ComposableCheck;
+
+// the data we will check
+$list = [15,11,13];
+
+// are all elements in $list in the range 10..20?
+$check = new ComposableCheck(minMaxCheck, [10, 20]);
+$check-&gt;inspectList($list);</code></pre>
+<p><code>$check</code> can now be used anywhere that is expecting a <code>Check</code> or  a <code>ListCheck</code> object.</p>
+<p>The real benefit of <code>ComposableCheck</code> comes when you want to use <code>minMaxCheck</code> in a list of Checks:</p>
+<pre><code class="language-php">use GanbaroDigital\Defensive\V1\Checks\ComposableCheck;
+use GanbaroDigital\Defensive\V1\Checks\IsAllOf;
+use GanbaroDigital\TypeChecking\V1\Checks\IsInteger;
+
+// putting all of the Check into a single list like this
+// makes your code very easy to read and reason about
+$checks = [
+    new IsInteger,
+    new ComposableCheck(minMaxCheck, [10, 20]),
+];
+
+// the data to check
+$data = 15;
+
+$check = new IsAllOf($checks);
+$check-&gt;inspect($data);</code></pre>
+<p>You can wrap any <code>callable</code> as a <code>ComposableCheck</code> as long as:</p>
+<ul>
+<li>the first input parameter must be the data to check</li>
+<li>any extra parameters come next</li>
+</ul>
+<h2 id="class-contract">Class Contract</h2>
+<p>Here is the contract for this class:</p>
+<pre><code>GanbaroDigital\Defensive\V1\Checks\ComposableCheck
+ [x] Can instantiate
+ [x] Is check
+ [x] Can use as object
+ [x] Must provide a callable
+ [x] Must provide array of extra parameters
+ [x] Array of extra parameters can be empty
+ [x] can apply to a data list
+ [x] throws InvalidArgumentException if non list passed to inspectList</code></pre>
+<p>Class contracts are built from this class's unit tests.</p>
+<div class="callout success">
+Future releases of this class will not break this contract.
+</div>
+<div class="callout info">
+<p>Future releases of this class may add to this contract. New additions may include:</p>
+<ul>
+<li>clarifying existing behaviour (e.g. stricter contract around input or return types)</li>
+<li>add new behaviours (e.g. extra class methods)</li>
+</ul>
+</div>
+<div class="callout warning">
+<p>When you use this class, you can only rely on the behaviours documented by this contract.</p>
+<p>If you:</p>
+<ul>
+<li>find other ways to use this class,</li>
+<li>or depend on behaviours that are not covered by a unit test,</li>
+<li>or depend on undocumented internal states of this class,</li>
+</ul>
+<p>... your code may not work in the future.</p>
+</div>
+<h2 id="notes">Notes</h2>
+<p>None at this time.</p>
+<h2 id="changelog">Changelog</h2>
+<h2 id="see-also">See Also</h2>
+<ul>
+<li><a href="../Interfaces/Check.html"><code>Check</code> interface</a></li>
+<li><a href="../Interfaces/ListCheck.html"><code>ListCheck</code> interface</a></li>
+</ul>
+            </article>
+
+                        <nav class="pageflow">
+              <ul>
+                                    <li><a href="index.html">Prev: Overview</a></li>
+                                                      <li><a href="IsAllOf.html">Next: IsAllOf class</a></li>
+                                </ul>
+            </nav>
+                    </main>
+
+        <aside class="sidebar">
+                                                                                                                                                                                                                                                                                                            <h2>Checks</h2>
+                                    <nav>
+                                        <ul>
+                                            <li>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                            </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ComposableCheck.html">ComposableCheck</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAllOf.html">IsAllOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAnyOneOf.html">IsAnyOneOf</a>
+                                                </li>
+                                                                                            <li>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ListableCheck.html">ListableCheck</a>
+                                                </li>
+                                                                                    </ul>
+                                    </nav>
+                                                                                                                                                                                                                                                                                                
+            <h2>This Page</h2>
+            <nav class="toc" data-type="ishi-toc" data-max-depth="3">
+            </nav>
+        </aside>
+
+        <footer>
+            <div class="strapline">
+                <p>Copyright &copy; 2015 <a href="http://ganbarodigital.com">Ganbaro Digital Ltd</a>. Released under the <a href="http://ganbarodigital.github.io/php-mv-defensive/license.html">New BSD</a> license.
+                                            Find Defensive Library for PHP on <a href="https://github.com/ganbarodigital/php-mv-defensive">GitHub</a>.
+                                        Built with <a href="http://couscous.io/">Couscous</a>.
+                </p>
+            </div>
+        </footer>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/laroux.js"></script>
+    <script src="http://ganbarodigital.github.io/php-mv-defensive/assets/ishi.js"></script>
+    </body>
+</html>

@@ -38,11 +38,11 @@
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/index.html">Introduction</a>
                                     </li>
-                                                                    <li class="current">
-                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
-                                    </li>
                                                                     <li class="">
-                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
+                                        <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                    </li>
+                                                                    <li class="current">
+                                        <a class="current" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
                                     </li>
                                                                     <li class="">
                                         <a class="" href="http://ganbarodigital.github.io/php-mv-defensive/V1/Exceptions/index.html">Exceptions</a>
@@ -60,18 +60,14 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="ComposableAssurance.html">Next: ComposableAssurance class</a></li>
+                                                      <li><a href="ComposableCheck.html">Next: ComposableCheck class</a></li>
                                 </ul>
             </nav>
             
             <article>
-                <h1 id="assurances">Assurances</h1>
+                <h1 id="checks">Checks</h1>
 <h2 id="purpose">Purpose</h2>
-<p>These are utilities for:</p>
-<ul>
-<li>an interface for assurances to implement</li>
-<li>applying groups of assurances to the same data</li>
-</ul>
+<p>These are utilities for performing <code>true</code> / <code>false</code> inspections of data.</p>
 <h2 id="available-interfaces">Available Interfaces</h2>
 <table>
 <thead>
@@ -82,12 +78,12 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="../Interfaces/Assurance.html"><code>Assurance</code></a></td>
-<td>interface for all assurances to implement</td>
+<td><a href="../Interfaces/Check.html"><code>Check</code></a></td>
+<td>interface for all checks to implement</td>
 </tr>
 <tr>
-<td><a href="../Interfaces/ListAssurance.html"><code>ListAssurance</code></a></td>
-<td>interface for all assurances that check lists of data to implement</td>
+<td><a href="../Interfaces/ListCheck.html"><code>ListCheck</code></a></td>
+<td>interface for all inspections that check lists of data to implement</td>
 </tr>
 </tbody>
 </table>
@@ -102,24 +98,20 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="ComposableAssurance.html"><code>ComposableAssurance</code></a></td>
-<td>convert a partial assurance into one that could be composable</td>
+<td><a href="ComposableCheck.html"><code>ComposableCheck</code></a></td>
+<td>convert any callable into a <code>Check</code> that is composable</td>
 </tr>
 <tr>
-<td><a href="EnsureAllOf.html"><code>EnsureAllOf</code></a></td>
-<td>a value must meet all the assurances in the list</td>
+<td><a href="IsAllOf.html"><code>IsAllOf</code></a></td>
+<td>a value must pass all of the checks in the list</td>
 </tr>
 <tr>
-<td><a href="EnsureAnyOneOf.html"><code>EnsureAnyOneOf</code></a></td>
-<td>a value must meet at least one of the assurances in the list</td>
+<td><a href="IsAnyOneOf.html"><code>IsAnyOneOf</code></a></td>
+<td>a value must pass at least one of the checks in the list</td>
 </tr>
 <tr>
-<td><a href="InvokeableAssurance.html"><code>InvokeableAssurance</code></a></td>
-<td>convenience trait to provide the <code>__invoke()</code> method of the <code>Assurance</code> interface</td>
-</tr>
-<tr>
-<td><a href="ListableAssurance.html"><code>ListableAssurance</code></a></td>
-<td>convenience trait to provide the <code>toList()</code> and <code>inspectList()</code> methods of the <code>ListAssurance</code> interface</td>
+<td><a href="ListableCheck.html"><code>ListableCheck</code></a></td>
+<td>convenience trait to provide the <code>toList()</code> and <code>inspectList()</code> methods of the <code>ListCheck</code> interface</td>
 </tr>
 </tbody>
 </table>
@@ -129,36 +121,33 @@
                         <nav class="pageflow">
               <ul>
                                     <li></li>
-                                                      <li><a href="ComposableAssurance.html">Next: ComposableAssurance class</a></li>
+                                                      <li><a href="ComposableCheck.html">Next: ComposableCheck class</a></li>
                                 </ul>
             </nav>
                     </main>
 
         <aside class="sidebar">
-                                                                                                                                                                                                                                                        <h2>Assurances</h2>
+                                                                                                                                                                                                                                                                                                            <h2>Checks</h2>
                                     <nav>
                                         <ul>
                                             <li>
-                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/index.html">Assurances</a>
+                                                <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/index.html">Checks</a>
                                             </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ComposableAssurance.html">ComposableAssurance</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ComposableCheck.html">ComposableCheck</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAllOf.html">EnsureAllOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAllOf.html">IsAllOf</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/EnsureAnyOneOf.html">EnsureAnyOneOf</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/IsAnyOneOf.html">IsAnyOneOf</a>
                                                 </li>
                                                                                             <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/InvokeableAssurance.html">InvokeableAssurance</a>
-                                                </li>
-                                                                                            <li>
-                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Assurances/ListableAssurance.html">ListableAssurance</a>
+                                                    <a href="http://ganbarodigital.github.io/php-mv-defensive/V1/Checks/ListableCheck.html">ListableCheck</a>
                                                 </li>
                                                                                     </ul>
                                     </nav>
-                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                
             <h2>This Page</h2>
             <nav class="toc" data-type="ishi-toc" data-max-depth="3">
             </nav>
