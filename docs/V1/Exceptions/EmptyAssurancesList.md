@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: BadRequirements.html
 pageflow_prev_text: BadRequirements class
-pageflow_next_url: EmptyRequirementsList.html
-pageflow_next_text: EmptyRequirementsList class
+pageflow_next_url: EmptyChecksList.html
+pageflow_next_text: EmptyChecksList class
 ---
 
 # EmptyAssurancesList

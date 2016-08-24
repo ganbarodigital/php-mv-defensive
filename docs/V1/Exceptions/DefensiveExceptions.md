@@ -69,7 +69,7 @@ throw $diContainer['BadRequirement::newFromVar'](false, '$data');
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions
+    GanbaroDigitalTest\Defensive\V1\Exceptions\DefensiveExceptions
      [x] Can instantiate
      [x] Is factory list
      [x] has factory for BadAssurance newFromInputParameter
@@ -83,8 +83,14 @@ Here is the contract for this class:
      [x] has factory for BadCallable newFromInputParameter
      [x] has factory for BadCallable newFromVar
      [x] has factory for BadCheckArgs newFromInputParameter
+     [x] has factory for BadCheck newFromVar
+     [x] has factory for BadCheck newFromInputParameter
      [x] has factory for BadCheckArgs newFromVar
      [x] has factory for BadRequirement newFromInputParameter
+     [x] has factory for BadChecksList newFromInputParameter
+     [x] has factory for BadChecksList newFromVar
+     [x] has factory for EmptyChecksList newFromInputParameter
+     [x] has factory for EmptyChecksList newFromVar
      [x] has factory for BadRequirement newFromVar
      [x] has factory for BadRequirementArgs newFromInputParameter
      [x] has factory for BadRequirementArgs newFromVar
@@ -97,7 +103,7 @@ Here is the contract for this class:
      [x] has factory for UnsupportedType newFromVar
      [x] has factory for UnsupportedValue newFromInputParameter
      [x] has factory for UnsupportedValue newFromVar
-
+ 
 Class contracts are built from this class's unit tests.
 
 <div class="callout success">

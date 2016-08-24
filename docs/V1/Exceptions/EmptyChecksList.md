@@ -1,13 +1,13 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadCheck.html
-pageflow_prev_text: BadCheck class
-pageflow_next_url: BadChecksList.html
-pageflow_next_text: BadChecksList class
+pageflow_prev_url: EmptyAssurancesList.html
+pageflow_prev_text: EmptyAssurancesList class
+pageflow_next_url: EmptyRequirementsList.html
+pageflow_next_text: EmptyRequirementsList class
 ---
 
-# BadCheckArgs
+# EmptyChecksList
 
 <div class="callout warning" markdown="1">
 Not yet in a tagged release
@@ -15,14 +15,14 @@ Not yet in a tagged release
 
 ## Description
 
-`BadCheckArgs` is an exception. It is thrown when the list of arguments passed into `IsAllOf` or `IsAnyOneOf` isn't an array.
+`EmptyChecksList` is an exception. It is thrown when the list of assurances passed into `IsAllOf` or `IsAnyOneOf` is an empty array.
 
 ## Public Interface
 
-`BadCheckArgs` has the following public interface:
+`EmptyChecksList` has the following public interface:
 
 ```php
-// BadCheckArgs lives in this namespace
+// EmptyChecksList lives in this namespace
 namespace GanbaroDigital\Defensive\V1\Exceptions;
 
 // our base class and interface(s)
@@ -32,7 +32,7 @@ use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 // return types from our method(s)
 use GanbaroDigital\HttpStatus\StatusValues\RuntimeError\UnexpectedErrorStatus;
 
-class BadCheckArgs
+class EmptyChecksList
   extends ParameterisedException
   implements DefensiveException, HttpRuntimeErrorException
 {
@@ -54,7 +54,7 @@ class BadCheckArgs
      * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
-     * @return BadCheckArgs
+     * @return EmptyChecksList
      *         an fully-built exception for you to throw
      */
     public static function newFromInputParameter(
@@ -81,7 +81,7 @@ class BadCheckArgs
      * @param  array $callStackFilter
      *         are there any namespaces we want to filter out of
      *         the call stack?
-     * @return BadCheckArgs
+     * @return EmptyChecksList
      *         an fully-built exception for you to throw
      */
     public static function newFromVar(
@@ -113,7 +113,6 @@ class BadCheckArgs
      */
     public function getHttpStatus();
 }
-
 ```
 
 ## How To Use
@@ -124,51 +123,51 @@ Call one of the factory methods to create a new throwable exception:
 
 ```php
 // how to import
-use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 
-throw BadCheckArgs::newFromVar($args, '$args');
+throw EmptyChecksList::newFromVar($list, '$list');
 ```
 
-`BadCheckArgs` provides different factory methods for different situations:
+`EmptyChecksList` provides different factory methods for different situations:
 
 Factory Method | When To Use
 ---------------|------------
-`BadCheckArgs::newFromInputParameter()` | when `$fieldOrVar` was passed to your function or method as a parameter
-`BadCheckArgs::newFromVar()` | when `$fieldOrVar` is the return value from calling a function or method, or is a value created by your function or method
+`EmptyChecksList::newFromInputParameter()` | when `$fieldOrVar` was passed to your function or method as a parameter
+`EmptyChecksList::newFromVar()` | when `$fieldOrVar` is the return value from calling a function or method, or is a value created by your function or method
 
-Instead of creating new instances of `BadCheckArgs` directly, you should use the [`DefensiveExceptions`](DefensiveExceptions.html) dependency-injection container instead. This helps other libraries with their encapsulation support.
+Instead of creating new instances of `EmptyChecksList` directly, you should use the [`DefensiveExceptions`](DefensiveExceptions.html) dependency-injection container instead. This helps other libraries with their encapsulation support.
 
 ```php
 // how to import
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 
 $diContainer = new DefensiveExceptions;
-throw $diContainer['BadCheckArgs::newFromInputParameter']($args, '$args');
+throw $diContainer['EmptyChecksList::newFromVar']($list, '$list');
 ```
 
 ### Catching The Exception
 
-`BadCheckArgs` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
+`EmptyChecksList` extends or implements a rich set of classes and interfaces. You can use any of these to catch thrown exceptions.
 
 ```php
-// example 1: we catch only BadCheckArgs exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+// example 1: we catch only EmptyChecksList exceptions
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 
 try {
-    throw BadCheckArgs::newFromVar($args, '$args');
+    throw EmptyChecksList::newFromVar($list, '$list');
 }
-catch(BadCheckArgs $e) {
+catch(EmptyChecksList $e) {
     // ...
 }
 ```
 
 ```php
 // example 2: catch all exceptions thrown by the Defensive Library
-use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveException;
 
 try {
-    throw BadCheckArgs::newFromVar($args, '$args');
+    throw EmptyChecksList::newFromVar($list, '$list');
 }
 catch(DefensiveException $e) {
     // ...
@@ -177,11 +176,11 @@ catch(DefensiveException $e) {
 
 ```php
 // example 3: catch all exceptions where there was an unexpected problem
-use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 use GanbaroDigital\HttpStatus\Interfaces\HttpRuntimeErrorException;
 
 try {
-    throw BadCheckArgs::newFromVar($args, '$args');
+    throw EmptyChecksList::newFromVar($list, '$list');
 }
 catch(HttpRuntimeErrorException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -191,11 +190,11 @@ catch(HttpRuntimeErrorException $e) {
 
 ```php
 // example 4: catch all exceptions that map onto a HTTP status
-use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 use GanbaroDigital\HttpStatus\Interfaces\HttpException;
 
 try {
-    throw BadCheckArgs::newFromVar($args, '$args');
+    throw EmptyChecksList::newFromVar($list, '$list');
 }
 catch(HttpException $e) {
     $httpStatus = $e->getHttpStatus();
@@ -205,11 +204,11 @@ catch(HttpException $e) {
 
 ```php
 // example 5: catch all runtime exceptions
-use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 use RuntimeException;
 
 try {
-    throw BadCheckArgs::newFromVar($args, '$args');
+    throw EmptyChecksList::newFromVar($list, '$list');
 }
 catch(RuntimeException $e) {
     // ...
@@ -218,13 +217,13 @@ catch(RuntimeException $e) {
 
 ### Exception Data
 
-`BadCheckArgs` is a [`ParameterisedException`](http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/ParameterisedException.html). It contains extra data for you to write to your logs or inspect in your debugger of choice.
+`EmptyChecksList` is a [`ParameterisedException`](http://ganbarodigital.github.io/php-mv-exception-helpers/V1/BaseExceptions/ParameterisedException.html). It contains extra data for you to write to your logs or inspect in your debugger of choice.
 
 ```php
 try {
-    throw BadCheckArgs::newFromInputParameter($args, '$args');
+    throw EmptyChecksList::newFromInputParameter($list, '$list');
 }
-catch (BadCheckArgs $e) {
+catch (EmptyChecksList $e) {
     // extract the extra data
     // getMessageData() returns a PHP array
     $exData = $e->getMessageData();
@@ -247,20 +246,21 @@ Here's a list of the extra data added by each factory method.
 
 Factory Method | Extra Data Added
 ---------------|-----------------
-`BadCheckArgs::newFromInputParameter()` | `thrownBy`, `thrownByName`, `calledBy`, `calledByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
-`BadCheckArgs::newFromVar()` | `thrownBy`, `thrownByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
+`EmptyChecksList::newFromInputParameter()` | `thrownBy`, `thrownByName`, `calledBy`, `calledByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
+`EmptyChecksList::newFromVar()` | `thrownBy`, `thrownByName`, `fieldOrVarName`, `fieldOrVar`, `dataType`
 
 ## Class Contract
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs
+    GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList
      [x] Can instantiate
      [x] is DefensiveException
      [x] is RuntimeException
-     [x] is HttpStatusProvider
+     [x] is HttpRuntimeErrorException
      [x] maps to HTTP 500 UnexpectedError
-     [x] Can create from bad assurance args
+     [x] Can create from empty assurances list list
+     [x] exception states that list must not be empty
 
 Class contracts are built from this class's unit tests.
 

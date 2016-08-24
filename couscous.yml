@@ -94,8 +94,12 @@ menu:
                         relativeUrl: V1/Exceptions/BadAssurancesList.html
                     BadCallable:
                         relativeUrl: V1/Exceptions/BadCallable.html
+                    BadCheck:
+                        relativeUrl: V1/Exceptions/BadCheck.html
                     BadCheckArgs:
                         relativeUrl: V1/Exceptions/BadCheckArgs.html
+                    BadChecksList:
+                        relativeUrl: V1/Exceptions/BadChecksList.html
                     BadRequirement:
                         relativeUrl: V1/Exceptions/BadRequirement.html
                     BadRequirementArgs:
@@ -104,6 +108,8 @@ menu:
                         relativeUrl: V1/Exceptions/BadRequirements.html
                     EmptyAssurancesList:
                         relativeUrl: V1/Exceptions/EmptyAssurancesList.html
+                    EmptyChecksList:
+                        relativeUrl: V1/Exceptions/EmptyChecksList.html
                     EmptyRequirementsList:
                         relativeUrl: V1/Exceptions/EmptyRequirementsList.html
                     UnreachableCodeExecuted:

@@ -26,7 +26,10 @@ Class | Description
 
 Class | Description
 ------|------------
-[`BadCheckArgs`](BadCheckArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Check](../Checks/index.html) classes
+[`BadCheck`](BadCheck.html) | thrown when you pass something that isn't a check into one of the [Checks](../Check/index.html) classes
+[`BadCheckArgs`](BadCheckArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Checks](../Checks/index.html) classes
+[`BadChecksList`](BadChecksList.html) | thrown when you pass something that isn't a list of checks into one of the [Checks](../Checks/index.html) classes
+[`EmptyChecksList`](EmptyChecksList.html) | thrown when you pass an empty list into one of the [Checks](../Checks/index.html) classes
 
 ### Requirements Exceptions
 
