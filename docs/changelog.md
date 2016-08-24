@@ -12,6 +12,21 @@ pageflow_next_text: Contributing
 
 ### New
 
+* Added support for Checks
+  - added `Check` interface
+  - added `ListCheck` interface
+
+### Fixes
+
+* Stop reusing `BadXXX` exceptions when we're reporting problems with a `callable`
+  - added `BadCallable` exception
+  - `ComposableAssurance` now throws `BadCallable` instead of `BadAssurance`
+  - `ComposableRequirement` now throws `BadCallable` instead of `BadRequirement`
+
+## v1.2016081301
+
+### New
+
 * Tweaks and changes to improve readabilty of your code
   - added `Inspection::inspect()` as an alias for `Inspection::to()`
   - added `InvokeableAssurable::inspect()`
@@ -38,14 +53,6 @@ pageflow_next_text: Contributing
 * Tweaks to improve usefulness of exceptions
   - `BadAssurance` exception message now includes the type of the bad assurance
   - `BadRequirement` exception message now includes the type of the bad requirement
-* Added support for Checks
-  - added `Check` interface
-  - added `ListCheck` interface
-
-### Fixes
-
-* Stop reusing `BadXXX` exceptions when we're reporting problems with a `callable`
-  - added `BadCallable` exception
 
 ## v1.2016062801
 
