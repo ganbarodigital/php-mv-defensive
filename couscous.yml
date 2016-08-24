@@ -86,6 +86,8 @@ menu:
                         relativeUrl: V1/Exceptions/BadAssurancesList.html
                     BadCallable:
                         relativeUrl: V1/Exceptions/BadCallable.html
+                    BadCheckArgs:
+                        relativeUrl: V1/Exceptions/BadCheckArgs.html
                     BadRequirement:
                         relativeUrl: V1/Exceptions/BadRequirement.html
                     BadRequirementArgs:

@@ -15,6 +15,7 @@ pageflow_next_text: Contributing
 * Added support for Checks
   - added `Check` interface
   - added `ListCheck` interface
+  - added `BadCheckArgs` exception
 
 ### Fixes
 

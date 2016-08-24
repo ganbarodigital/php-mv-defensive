@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_next_url: BadRequirement.html
-pageflow_next_text: BadRequirement class
+pageflow_next_url: BadAssurance.html
+pageflow_next_text: BadAssurance class
 ---
 
 # Exceptions
@@ -21,6 +21,12 @@ Class | Description
 [`BadAssuranceArgs`](BadAssuranceArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Assurance](../Assurances/index.html) classes
 [`BadAssurancesList`](BadAssurancesList.html) | thrown when you pass something that isn't a list of assurances into one of the [Assurance](../Assurances/index.html) classes
 [`EmptyAssurancesList`](EmptyAssurancesList.html) | thrown when you pass an empty list into one of the [Assurance](../Assurances/index.html) classes
+
+### Check Exceptions
+
+Class | Description
+------|------------
+[`BadCheckArgs`](BadCheckArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Check](../Checks/index.html) classes
 
 ### Requirements Exceptions
 
