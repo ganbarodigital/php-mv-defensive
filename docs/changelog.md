@@ -20,6 +20,7 @@ pageflow_next_text: Contributing
   - added `BadChecksList` exception
   - added `EmptyChecksList` exception
   - added `ComposableCheck`
+  - added `RequireValidChecks`
 
 ### Fixes
 

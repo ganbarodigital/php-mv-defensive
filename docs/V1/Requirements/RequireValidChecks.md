@@ -1,44 +1,46 @@
 ---
 currentSection: v1
 currentItem: requirements
-pageflow_prev_url: RequireValidChecks.html
-pageflow_prev_text: RequireValidChecks class
+pageflow_prev_url: RequireAnyOneOf.html
+pageflow_prev_text: RequireAnyOneOf class
+pageflow_next_url: RequireValidRequirements.html
+pageflow_next_text: RequireValidRequirements class
 ---
 
-# RequireValidRequirements
+# RequireValidChecks
 
-<div class="callout info" markdown="1">
-Since v1.2016052101
+<div class="callout warning" markdown="1">
+Not yet in a tagged release
 </div>
 
 ## Description
 
-Use `RequireValidRequirements` to ensure that you have a list that only contains valid requirements. If this requirement is not met, an exception is thrown.
+Use `RequireValidChecks` to ensure that you have a list that only contains valid checks. If this requirement is not met, an exception is thrown.
 
-`RequireValidRequirements` is a customisable function object.
+`RequireValidChecks` is a customisable function object.
 
 ## Public Interface
 
-`RequireValidRequirements` has the following public interface:
+`RequireValidChecks` has the following public interface:
 
 ```php
-// RequireValidRequirements lives in this namespace
-namespace GanbaroDigital\Defensive\V1\Requirements;
+// RequireValidChecks lives in this namespace
+namespace GanbaroDigital\Defensive\V1\Checks;
 
-// RequireValidRequirements is a ListRequirement
+// RequireValidChecks is a ListRequirement
 use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 // our input and return type(s)
 use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
-class RequireValidRequirements implements ListRequirement
+class RequireValidChecks implements ListRequirement
 {
     /**
-     * create a Requirement that is ready to execute
+     * create a ListRequirement that is ready to execute
      *
      * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
-     * @return RequireValidRequirements
+     * @return RequireValidChecks
      */
     public function __construct(FactoryList $exceptions = null);
 
@@ -47,7 +49,7 @@ class RequireValidRequirements implements ListRequirement
      *
      * @param  FactoryList|null $exceptions
      *         the functions to call when we want to throw an exception
-     * @return RequireValidRequirements
+     * @return RequireValidChecks
      */
     public static function apply(FactoryList $exceptions = null);
 
@@ -102,12 +104,12 @@ class RequireValidRequirements implements ListRequirement
 
 ## Requirements Enforced
 
-`RequireValidRequirements` enforces the following:
+`RequireValidChecks` enforces the following:
 
-1. `$requirements` must be a list
-1. every value in `$requirements` must implement the `Requirement` interface
+1. `$fieldOrVar` must be a list
+1. every value in `$fieldOrVar` must implement the `Check` interface
 
-If any of the requirements aren't met, `RequireValidRequirements` will throw an exception.
+If any of the requirements aren't met, `RequireValidChecks` will throw an exception.
 
 ## How To Use
 
@@ -116,25 +118,25 @@ If any of the requirements aren't met, `RequireValidRequirements` will throw an 
 Use the `::apply()->toList()` pattern:
 
 ```php
-$requirements = [
-    // a list of objects that implement the 'Requirement' interface
+$assurances = [
+    // a list of objects that implement the 'Check' interface
 ];
-RequireValidRequirements::apply()->toList($requirements, '$requirements');
+RequireValidChecks::apply()->toList($checks, '$checks');
 ```
 
-If any of the requirements aren't met, `RequireValidRequirements` will throw an exception.
+If any of the requirements aren't met, `RequireValidChecks` will throw an exception.
 
 ## Class Contract
 
 Here is the contract for this class:
 
-    GanbaroDigital\Defensive\V1\Requirements\RequireValidRequirements
+    GanbaroDigital\Defensive\V1\Requirements\RequireValidChecks
      [x] Can instantiate
      [x] is ListRequirement
      [x] Can use as object
      [x] Can call statically
-     [x] Must provide list of requirements
-     [x] List of requirements can contain only requirements
+     [x] Must provide list of checks
+     [x] List of checks can contain only checks
      [x] can apply to a data list
      [x] throws InvalidArgumentException if non list passed to toList
 
@@ -167,14 +169,7 @@ If you:
 
 None at this time.
 
-## Changelog
-
-### v1.2016081301
-
-* Implements `ListRequirement` instead of `Requirement`
-
-  We feel this is a more accurate description of what this function class does.
 
 ## See Also
 
-* [`Requirement` interface](../Interfaces/Requirement.html)
+* [`ListCheck` interface](../Interfaces/ListCheck.html)
