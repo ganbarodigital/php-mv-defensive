@@ -9,8 +9,8 @@ pageflow_next_text: IsAnyOneOf class
 
 # IsAllOf
 
-<div class="callout warning" markdown="1">
-Not in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016082401
 </div>
 
 ## Description
