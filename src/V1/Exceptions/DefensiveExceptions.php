@@ -59,6 +59,8 @@ class DefensiveExceptions extends FactoryListContainer
             'BadAssurancesList::newFromVar' => [ BadAssurancesList::class, 'newFromVar' ],
             'BadCallable::newFromInputParameter' => [ BadCallable::class, 'newFromInputParameter' ],
             'BadCallable::newFromVar' => [ BadCallable::class, 'newFromVar' ],
+            'BadCheckArgs::newFromInputParameter' => [ BadCheckArgs::class, 'newFromInputParameter' ],
+            'BadCheckArgs::newFromVar' => [ BadCheckArgs::class, 'newFromVar' ],
             'EmptyAssurancesList::newFromInputParameter' => [ EmptyAssurancesList::class, 'newFromInputParameter' ],
             'EmptyAssurancesList::newFromVar' => [ EmptyAssurancesList::class, 'newFromVar' ],
             'BadRequirement::newFromInputParameter' => [ BadRequirement::class, 'newFromInputParameter' ],

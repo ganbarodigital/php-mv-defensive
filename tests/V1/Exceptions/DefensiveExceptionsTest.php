@@ -47,6 +47,7 @@ use GanbaroDigital\Defensive\V1\Exceptions\BadAssurance;
 use GanbaroDigital\Defensive\V1\Exceptions\BadAssuranceArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\BadAssurancesList;
 use GanbaroDigital\Defensive\V1\Exceptions\BadCallable;
+use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
@@ -320,6 +321,50 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertInstanceOf(BadCallable::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCheckArgs_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCheckArgs::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCheckArgs::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCheckArgs_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCheckArgs::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCheckArgs::class, $exception);
     }
 
     /**

@@ -80,6 +80,10 @@ Here is the contract for this class:
      [x] has factory for BadAssurancesList newFromVar
      [x] has factory for EmptyAssurancesList newFromInputParameter
      [x] has factory for EmptyAssurancesList newFromVar
+     [x] has factory for BadCallable newFromInputParameter
+     [x] has factory for BadCallable newFromVar
+     [x] has factory for BadCheckArgs newFromInputParameter
+     [x] has factory for BadCheckArgs newFromVar
      [x] has factory for BadRequirement newFromInputParameter
      [x] has factory for BadRequirement newFromVar
      [x] has factory for BadRequirementArgs newFromInputParameter
