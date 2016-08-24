@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: interfaces
 pageflow_prev_url: Inspection.html
 pageflow_prev_text: Inspection interface
-pageflow_next_url: ListInspection.html
-pageflow_next_text: ListInspection interface
+pageflow_next_url: ListCheck.html
+pageflow_next_text: ListCheck interface
 ---
 
 # ListAssurance

@@ -40,6 +40,7 @@ pageflow_next_text: Contributing
   - `BadRequirement` exception message now includes the type of the bad requirement
 * Added support for Checks
   - added `Check` interface
+  - added `ListCheck` interface
 
 ## v1.2016062801
 
