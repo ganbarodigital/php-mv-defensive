@@ -15,7 +15,7 @@ Since v1.2016052101
 
 ## Description
 
-`BadRequirement` is an exception. It is thrown when one of the requirements passed into `RequireAllOf` or `RequireAnyOneOf` isn't callable.
+`BadRequirement` is an exception. It is thrown when one of the requirements passed into `RequireAllOf` or `RequireAnyOneOf` isn't a `Requirement`.
 
 ## Public Interface
 
