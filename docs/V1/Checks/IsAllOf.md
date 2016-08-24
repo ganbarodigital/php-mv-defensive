@@ -116,7 +116,7 @@ function doSomething($arg1)
 }
 ```
 
-If any of the Checks aren't met, the Check will throw an exception.
+If any of the Checks aren't met, `IsAllOf::inspect()` will return `false`.
 
 ### Applying Checks To Lists Of Data
 
@@ -154,7 +154,7 @@ function doSomething($arg1, $arg2)
 }
 ```
 
-If any of the Checks aren't met, the Check will throw an exception.
+If any of the Checks aren't met, `IsAllOf::inspectList()` will return `false`.
 
 ## Class Contract
 
