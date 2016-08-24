@@ -42,6 +42,11 @@ pageflow_next_text: Contributing
   - added `Check` interface
   - added `ListCheck` interface
 
+### Fixes
+
+* Stop reusing `BadXXX` exceptions when we're reporting problems with a `callable`
+  - added `BadCallable` exception
+
 ## v1.2016062801
 
 ### New

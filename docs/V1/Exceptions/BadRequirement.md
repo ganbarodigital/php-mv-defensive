@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadAssurancesList.html
-pageflow_prev_text: BadAssurancesList class
+pageflow_prev_url: BadCallable.html
+pageflow_prev_text: BadCallable class
 pageflow_next_url: BadRequirementArgs.html
 pageflow_next_text: BadRequirementArgs class
 ---

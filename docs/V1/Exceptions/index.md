@@ -35,6 +35,7 @@ Class | Description
 
 Class | Description
 ------|------------
+[`BadCallable`](BadCallable.html) | thrown when you pass a non-callable into something that is expecting a valid PHP `callable`
 [`UnreachableCodeExecuted`](UnreachableCodeExecuted.html) | thrown when `switch` or `if` / `else` logic reaches a branch that should never be reached
 [`UnsupportedType`](UnsupportedType.html) | thrown when you pass the wrong data type into one of the [Requirements](../Requirements/index.html) classes
 [`UnsupportedValue`](UnsupportedValue.html) | thrown when you pass in a parameter that has the right data type, but a value that can't be accepted
