@@ -16,6 +16,7 @@ pageflow_next_text: Contributing
   - added `Check` interface
   - added `ListCheck` interface
   - added `BadCheckArgs` exception
+  - added `ComposableCheck`
 
 ### Fixes
 
