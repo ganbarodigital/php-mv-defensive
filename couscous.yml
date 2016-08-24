@@ -83,6 +83,8 @@ menu:
                         relativeUrl: V1/Checks/ComposableCheck.html
                     IsAllOf:
                         relativeUrl: V1/Checks/IsAllOf.html
+                    IsAnyOneOf:
+                        relativeUrl: V1/Checks/IsAnyOneOf.html
 
             exceptions:
                 text: Exceptions
