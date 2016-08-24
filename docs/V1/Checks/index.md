@@ -25,5 +25,8 @@ Click on the name of an interface to see full details.
 Class | Description
 ------|------------
 [`ComposableCheck`](ComposableCheck.html) | convert any callable into a `Check` that is composable
+[`IsAllOf`](IsAllOf.html) | a value must pass all of the checks in the list
+[`IsAnyOneOf`](IsAnyOneOf.html) | a value must pass at least one of the checks in the list
+[`ListableCheck`](ListableCheck.html) | convenience trait to provide the `toList()` and `inspectList()` methods of the `ListCheck` interface
 
 Click on the name of a class to see full details.

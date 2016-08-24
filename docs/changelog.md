@@ -22,6 +22,7 @@ pageflow_next_text: Contributing
   - added `ComposableCheck`
   - added `IsAllOf`
   - added `IsAnyOneOf`
+  - added `ListableCheck`
   - added `RequireValidChecks`
 
 ### Fixes
