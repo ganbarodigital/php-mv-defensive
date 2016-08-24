@@ -21,6 +21,7 @@ pageflow_next_text: Contributing
   - added `EmptyChecksList` exception
   - added `ComposableCheck`
   - added `IsAllOf`
+  - added `IsAnyOneOf`
   - added `RequireValidChecks`
 
 ### Fixes
