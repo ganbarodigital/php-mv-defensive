@@ -51,27 +51,7 @@ interface Check
     /**
      * does a value pass inspection?
      *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     * @return bool
-     *         TRUE if the inspection passes
-     *         FALSE otherwise
-     */
-    public static function check($fieldOrVar);
-
-    /**
-     * does a value pass inspection?
-     *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     * @return bool
-     *         TRUE if the inspection passes
-     *         FALSE otherwise
-     */
-    public function __invoke($fieldOrVar);
-
-    /**
-     * does a value pass inspection?
+     * this is an alias of ::to() for readability
      *
      * @param  mixed $fieldOrVar
      *         the data to be examined

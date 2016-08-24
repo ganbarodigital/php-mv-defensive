@@ -48,63 +48,49 @@ interface Check
      *         TRUE if the inspection passes
      *         FALSE otherwise
      */
-    public static function check($fieldOrVar);
-
-    /**
-     * does a value pass inspection?
-     *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     * @return bool
-     *         TRUE if the inspection passes
-     *         FALSE otherwise
-     */
-    public function __invoke($fieldOrVar);
-
-    /**
-     * does a value pass inspection?
-     *
-     * @param  mixed $fieldOrVar
-     *         the data to be examined
-     * @return bool
-     *         TRUE if the inspection passes
-     *         FALSE otherwise
-     */
     public function inspect($fieldOrVar);
 }
 ```
 
+`Check` also has the following informal interface:
+
+```php
+interface Check
+{
+    /**
+     * does a value pass inspection?
+     *
+     * @param  mixed $fieldOrVar
+     *         the data to be examined
+     * @return bool
+     *         TRUE if the inspection passes
+     *         FALSE otherwise
+     */
+    public static function check($fieldOrVar, <additional params>);
+}
+```
+
+_Informal interfaces_ contain methods that you must implement. However, due to PHP limitations, we can't add these methods to the `interface` at this time.
+
 ## How To Use
 
-Every `Check` can be used in three ways:
+Every `Check` can be used in two ways:
 
 * a static call to `::check()` for convenience,
-* as an object, as a PHP `callable`
 * as an object, calling the `->inspect()` method
-
-<div class="callout info" markdown="1">
-#### Why Do We Need So Many Ways To Use A Check?
-
-It's all about being able to write a Check once, and use it wherever you want / need to.
-
-Most of the time, you'll simply call the static `::check()` method. It's quick, it's convenient, and it's very easy for other people to follow.
-
-There'll be times when you want to apply a list of Checks to the same piece of data. You do this by creating an array of Check objects. Each Check object is a valid PHP `callable`.
-
-Not every editor, IDE or developer is comfortable with using a variable as a PHP `callable`. If this is true for you, you can instantiate your Check object and call the `->inspect()` method.
-</div>
 
 ### Scaffolding
 
 Every Check starts with a bit of boilerplate code:
 
+* add `use GanbaroDigital\Defensive\V1\Interfaces\Check` to your PHP file
 * add `implements Check` to your class
 
 ### The Check Pattern
 
 Every `Check` implements the `Check::check()` pattern:
 
-* add a `public static function check()` method to your class. This method inspects `$data`. If you're happy with `$data`, return `true`. If you're not happy with `$data`, return `false`.
+* add a `public static function check()` method to your class. This method inspects `$fieldOrVar`. If you're happy with `$fieldOrVar`, return `true`. If you're not happy with `$data`, return `false`.
 * if your check needs additional input parameters, pass these in as additional parameters to the `check()` method.
 
 ### Making It Usable As An Object
@@ -112,7 +98,6 @@ Every `Check` implements the `Check::check()` pattern:
 Every `Check` can be used as an object:
 
 * add a `public function __construct()` if your check needs additional input parameters
-* add a `public function __invoke()` which calls your static `::check()` method
 * add a `public function inspect()` which calls your static `::check()` method
 
 ### Putting It All Together
@@ -157,21 +142,7 @@ class IsInRange implements Check
      *         TRUE if the data is in range
      *         FALSE otherwise
      */
-    public function __invoke($data)
-    {
-        return static::check($data, $this->min, $this->max);
-    }
-
-    /**
-     * is $data within the require range?
-     *
-     * @param  int $data
-     *         the value to check
-     * @return bool
-     *         TRUE if the data is in range
-     *         FALSE otherwise
-     */
-    public function __inspect($data)
+    public function inspect($data)
     {
         return static::check($data, $this->min, $this->max);
     }
@@ -207,13 +178,9 @@ To use this example check, you can do:
 
 ```php
 // a static call is often the most convenient
-var_dump(IsInRange::check($data, 10, 20));
+var_dump(IsInRange::check($data, 10,20));
 
-// as a callable
+// as an object
 $callable = new IsInRange(10, 20);
-var_dump($callable($data));
-
-// you can do this for readability too
-$callable = new IsInRange(10, 20);
-var_dump($callable->inspect($data));
+var_dump($rangeCheck->inspect($data));
 ```
