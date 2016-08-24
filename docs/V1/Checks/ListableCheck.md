@@ -7,8 +7,8 @@ pageflow_prev_text: IsAnyOneOf trait
 
 # ListableCheck
 
-<div class="callout warning" markdown="1">
-Not yet in a tagged release
+<div class="callout info" markdown="1">
+Since v1.2016082401
 </div>
 
 ## Description
