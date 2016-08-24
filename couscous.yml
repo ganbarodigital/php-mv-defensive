@@ -81,6 +81,8 @@ menu:
                 contents:
                     ComposableCheck:
                         relativeUrl: V1/Checks/ComposableCheck.html
+                    IsAllOf:
+                        relativeUrl: V1/Checks/IsAllOf.html
 
             exceptions:
                 text: Exceptions
