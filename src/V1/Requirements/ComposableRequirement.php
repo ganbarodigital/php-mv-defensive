@@ -111,7 +111,7 @@ class ComposableRequirement implements Requirement, ListRequirement
 
         // robustness!
         if (!is_callable($requirement)) {
-            throw $this->exceptions['BadRequirement::newFromInputParameter']($requirement, '$requirement');
+            throw $this->exceptions['BadCallable::newFromInputParameter']($requirement, '$requirement');
         }
         if (!is_array($extra)) {
             throw $this->exceptions['BadRequirementArgs::newFromInputParameter']($extra, '$extra');

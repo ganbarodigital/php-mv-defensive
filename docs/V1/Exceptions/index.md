@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_next_url: BadRequirement.html
-pageflow_next_text: BadRequirement class
+pageflow_next_url: BadAssurance.html
+pageflow_next_text: BadAssurance class
 ---
 
 # Exceptions
@@ -17,10 +17,19 @@ These are the exceptions that this library can throw.
 
 Class | Description
 ------|------------
-[`BadAssurance`](BadAssurance.html) | thrown when you pass something that isn't an assurnace into one of the [Assurance](../Assurances/index.html) classes
+[`BadAssurance`](BadAssurance.html) | thrown when you pass something that isn't an assurance into one of the [Assurance](../Assurances/index.html) classes
 [`BadAssuranceArgs`](BadAssuranceArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Assurance](../Assurances/index.html) classes
 [`BadAssurancesList`](BadAssurancesList.html) | thrown when you pass something that isn't a list of assurances into one of the [Assurance](../Assurances/index.html) classes
 [`EmptyAssurancesList`](EmptyAssurancesList.html) | thrown when you pass an empty list into one of the [Assurance](../Assurances/index.html) classes
+
+### Check Exceptions
+
+Class | Description
+------|------------
+[`BadCheck`](BadCheck.html) | thrown when you pass something that isn't a check into one of the [Checks](../Check/index.html) classes
+[`BadCheckArgs`](BadCheckArgs.html) | thrown when you pass something that isn't a list of arguments into one of the [Checks](../Checks/index.html) classes
+[`BadChecksList`](BadChecksList.html) | thrown when you pass something that isn't a list of checks into one of the [Checks](../Checks/index.html) classes
+[`EmptyChecksList`](EmptyChecksList.html) | thrown when you pass an empty list into one of the [Checks](../Checks/index.html) classes
 
 ### Requirements Exceptions
 
@@ -35,6 +44,7 @@ Class | Description
 
 Class | Description
 ------|------------
+[`BadCallable`](BadCallable.html) | thrown when you pass a non-callable into something that is expecting a valid PHP `callable`
 [`UnreachableCodeExecuted`](UnreachableCodeExecuted.html) | thrown when `switch` or `if` / `else` logic reaches a branch that should never be reached
 [`UnsupportedType`](UnsupportedType.html) | thrown when you pass the wrong data type into one of the [Requirements](../Requirements/index.html) classes
 [`UnsupportedValue`](UnsupportedValue.html) | thrown when you pass in a parameter that has the right data type, but a value that can't be accepted

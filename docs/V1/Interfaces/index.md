@@ -16,8 +16,10 @@ These are the interfaces defined by this library.
 Interface | Description
 ----------|------------
 [`Assurance`](Assurance.html) | inspect a returned value, or a calculated / generated value
+[`Check`](Check.html) | interface for `true` / `false` inspections
 [`Inspection`](Inspection.html) | common standard for all assurances and requirements
 [`ListAssurance`](ListAssurance.html) | inspect a list of returned values, or a list of calculated / generated values
+[`ListCheck`](ListCheck.html) | interface for `true` / `false` inspections of lists
 [`ListInspection`](ListInspection.html) | inspect every element of a list
 [`ListRequirement`](ListRequirement.html) | inspect a list of input values
 [`Requirement`](Requirement.html) | inspect an input value

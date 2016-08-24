@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: BadAssurancesList.html
-pageflow_prev_text: BadAssurancesList class
+pageflow_prev_url: BadChecksList.html
+pageflow_prev_text: BadChecksList class
 pageflow_next_url: BadRequirementArgs.html
 pageflow_next_text: BadRequirementArgs class
 ---
@@ -15,7 +15,7 @@ Since v1.2016052101
 
 ## Description
 
-`BadRequirement` is an exception. It is thrown when one of the requirements passed into `RequireAllOf` or `RequireAnyOneOf` isn't callable.
+`BadRequirement` is an exception. It is thrown when one of the requirements passed into `RequireAllOf` or `RequireAnyOneOf` isn't a `Requirement`.
 
 ## Public Interface
 

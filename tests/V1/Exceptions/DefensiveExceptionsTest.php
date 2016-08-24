@@ -46,11 +46,16 @@ namespace GanbaroDigitalTest\Defensive\V1\Exceptions;
 use GanbaroDigital\Defensive\V1\Exceptions\BadAssurance;
 use GanbaroDigital\Defensive\V1\Exceptions\BadAssuranceArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\BadAssurancesList;
+use GanbaroDigital\Defensive\V1\Exceptions\BadCallable;
+use GanbaroDigital\Defensive\V1\Exceptions\BadCheck;
+use GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs;
+use GanbaroDigital\Defensive\V1\Exceptions\BadChecksList;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirement;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirements;
 use GanbaroDigital\Defensive\V1\Exceptions\BadRequirementArgs;
 use GanbaroDigital\Defensive\V1\Exceptions\DefensiveExceptions;
 use GanbaroDigital\Defensive\V1\Exceptions\EmptyAssurancesList;
+use GanbaroDigital\Defensive\V1\Exceptions\EmptyChecksList;
 use GanbaroDigital\Defensive\V1\Exceptions\EmptyRequirementsList;
 use GanbaroDigital\Defensive\V1\Exceptions\UnreachableCodeExecuted;
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
@@ -280,6 +285,138 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::offsetGet
      */
+    public function test_has_factory_for_BadCallable_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCallable::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCallable::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCallable_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCallable::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCallable::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCheckArgs_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCheckArgs::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCheckArgs::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCheck_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCheck::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCheck::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCheck_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCheck::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCheck::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadCheckArgs_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadCheckArgs::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadCheckArgs::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
     public function test_has_factory_for_BadRequirement_newFromInputParameter()
     {
         // ----------------------------------------------------------------
@@ -297,6 +434,94 @@ class DefensiveExceptionsTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertInstanceOf(BadRequirement::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadChecksList_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadChecksList::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadChecksList::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_BadChecksList_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['BadChecksList::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(BadChecksList::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_EmptyChecksList_newFromInputParameter()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['EmptyChecksList::newFromInputParameter'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(EmptyChecksList::class, $exception);
+    }
+
+    /**
+     * @covers ::offsetGet
+     */
+    public function test_has_factory_for_EmptyChecksList_newFromVar()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $unit = new DefensiveExceptions;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $factory = $unit['EmptyChecksList::newFromVar'];
+        $exception = $factory(false, '$data');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertInstanceOf(EmptyChecksList::class, $exception);
     }
 
     /**

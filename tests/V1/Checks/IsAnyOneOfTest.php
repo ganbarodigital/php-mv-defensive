@@ -34,25 +34,27 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Assurances
+ * @package   Defensive/V1/Checks
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigitalTest\Defensive\V1\Assurances;
+namespace GanbaroDigitalTest\Defensive\V1\Checks;
 
 use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance;
-use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Checks\IsAnyOneOf;
+use GanbaroDigital\Defensive\V1\Checks\ListableCheck;
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
 use PHPUnit_Framework_TestCase;
 use stdClass;
+use GanbaroDigital\DIContainers\V1\Interfaces\FactoryList;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Checks\IsAnyOneOf
  */
-class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
+class IsAnyOneOfTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -65,18 +67,18 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new IsAnyOneOf([ new IsAnyOneOfTest_IsNull ]);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(ComposableAssurance::class, $unit);
+        $this->assertInstanceOf(IsAnyOneOf::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testIsAssurance()
+    public function test_is_Check()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -84,114 +86,158 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new IsAnyOneOf([ new IsAnyOneOfTest_IsNull ]);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(Assurance::class, $unit);
+        $this->assertInstanceOf(Check::class, $unit);
     }
 
     /**
-     * @covers ::__construct
-     * @covers ::__invoke
+     * @covers ::inspect
      */
     public function testCanUseAsObject()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = [ 1, 2, 3 ];
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $checks = [
+            new IsAnyOneOfTest_IsNull,
+            new IsAnyOneOfTest_IsNumeric,
+        ];
+
+        $unit = new IsAnyOneOf($checks);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit($data);
+        $actualResult = $unit->inspect(1.0);
 
         // ----------------------------------------------------------------
         // test the results
 
+        $this->assertTrue($actualResult);
     }
 
     /**
-     * @covers ::apply
-     * @covers ::to
+     * @covers ::using
+     * @covers ::inspect
      */
     public function testCanCallStatically()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = [ 1, 2, 3 ];
+        $checks = [
+            new IsAnyOneOfTest_IsNull,
+            new IsAnyOneOfTest_IsNumeric,
+        ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        ComposableAssurance::apply(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10])->to($data);
+        $actualResult = IsAnyOneOf::using($checks)->inspect(1.0);
 
         // ----------------------------------------------------------------
         // test the results
+
+        $this->assertTrue($actualResult);
     }
 
     /**
      * @covers ::__construct
-     * @dataProvider provideBadAssurances
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCallable
+     * @covers ::inspect
+     * @dataProvider provideBadChecks
+     * @expectedException InvalidArgumentException
      */
-    public function testMustProvideACallable($badAssurance)
+    public function testMustProvideAListOfChecks($checks)
     {
         // ----------------------------------------------------------------
         // setup your test
 
+
         // ----------------------------------------------------------------
         // perform the change
 
-        new ComposableAssurance($badAssurance, []);
-
-        // ----------------------------------------------------------------
-        // test the results
+        IsAnyOneOf::using($checks)->inspect([]);
     }
 
     /**
+     * @covers ::using
      * @covers ::__construct
-     * @dataProvider provideBadParameters
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssuranceArgs
+     * @dataProvider provideInvalidChecks
+     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCheck
      */
-    public function testMustProvideArrayOfExtraParameters($badParameters)
+    public function testChecksListMustContainValidChecks($checks)
     {
         // ----------------------------------------------------------------
         // setup your test
 
+
         // ----------------------------------------------------------------
         // perform the change
 
-        new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, $badParameters);
-
-        // ----------------------------------------------------------------
-        // test the results
+        IsAnyOneOf::using($checks)->check([]);
     }
 
     /**
-     * @covers ::__construct
+     * @covers ::using
+     * @covers ::inspect
      */
-    public function testArrayOfExtraParametersCanBeEmpty()
+    public function testWillMatchAnyCheckGiven()
     {
         // ----------------------------------------------------------------
         // setup your test
 
+        // this group accepts null and numerics
+        $checks = [
+            new IsAnyOneOfTest_IsNull,
+            new IsAnyOneOfTest_IsNumeric
+        ];
+
         // ----------------------------------------------------------------
         // perform the change
 
-        new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, []);
+        $actualResult1 = IsAnyOneOf::using($checks)->inspect(null);
+        $actualResult2 = IsAnyOneOf::using($checks)->inspect(1.0);
 
         // ----------------------------------------------------------------
         // test the results
+
+        $this->assertTrue($actualResult1);
+        $this->assertTrue($actualResult2);
     }
 
     /**
-     * @covers ::__construct
-     * @covers ::apply
+     * @covers ::using
+     * @covers ::inspect
+     * @dataProvider provideGroup2NoMatches
+     */
+    public function test_returns_false_if_no_checks_pass($item)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // this group accepts null and strings
+        $checks = [
+            new IsAnyOneOfTest_IsNull,
+            new IsAnyOneOfTest_IsString
+        ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = IsAnyOneOf::using($checks)->inspect($item);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertFalse($actualResult);
+    }
+
+    /**
+     * @covers ::using
      * @covers ::inspectList
      */
     public function test_can_apply_to_a_data_list()
@@ -199,104 +245,125 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
+        $checks = [
+            new IsAnyOneOfTest_IsString,
+            new IsAnyOneOfTest_IsNumeric,
+        ];
+
         $list = [
-            [],
-            []
+            "0",
+            "1.0",
+            "100"
         ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $assurance->inspectList($list);
+        $actualResult = IsAnyOneOf::using($checks)->inspectList($list);
 
         // ----------------------------------------------------------------
         // test the results
+
+        $this->assertTrue($actualResult);
     }
 
     /**
-     * @covers ::apply
+     * @covers ::using
      * @covers ::inspectList
-     * @dataProvider provideNonListsToTest
+     * @dataProvider provideNonLists
      * @expectedException InvalidArgumentException
      */
-    public function test_throws_InvalidArgumentException_if_non_list_passed_to_inspectList($list)
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
+        $checks = [
+            new IsAnyOneOfTest_IsString,
+            new IsAnyOneOfTest_IsNumeric,
+        ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $assurance->inspectList($list);
+        IsAnyOneOf::using($checks)->inspectList($list);
     }
 
-    public function provideBadAssurances()
+    public function provideBadChecks()
     {
         return [
             [ null ],
-            [ [] ],
-            [ true ],
             [ false ],
-            [ 0.0 ],
+            [ true ],
             [ 3.1415927 ],
-            [ 0 ],
             [ 100 ],
-            [ new \stdClass ],
-            [ STDIN ],
-            [ "hello, world!" ]
         ];
     }
 
-    public function provideBadParameters()
+    public function provideInvalidChecks()
     {
         return [
-            [ null ],
-            [ true ],
-            [ false ],
-            [ function(){} ],
-            [ 0.0 ],
-            [ 3.1415927 ],
-            [ 0 ],
-            [ 100 ],
-            [ new \stdClass ],
-            [ STDIN ],
-            [ "hello, world!" ]
+            [ [1, 2, 3] ],
         ];
     }
 
-    public function provideNonListsToTest()
+    public function provideBadCheckData()
     {
         return [
             [ null ],
-            [ true ],
             [ false ],
-            [ function() {} ],
-            [ 0.0 ],
+            [ true ],
             [ 3.1415927 ],
-            [ 0 ],
             [ 100 ],
-            [ STDIN ],
+            [ new stdClass ],
             [ "hello, world!" ],
+        ];
+    }
+
+    public function provideGroup2NoMatches()
+    {
+        return [
+            [ false ],
+            [ true ],
+            [ STDIN ],
+            [ new stdClass ]
+        ];
+    }
+
+    public function provideNonLists()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ STDIN ],
+            [ "hello, world!" ]
         ];
     }
 }
 
-class ComposableAssuranceTest_EnsureArrayOfSize
+class IsAnyOneOfTest_IsNull implements Check
 {
-    public function __invoke($item, $min, $max)
+    public function inspect($item)
     {
-        if (!is_array($item)) {
-            throw new \RuntimeException("item is not an array");
-        }
-        $len = count($item);
-        if ($len < $min) {
-            throw new \RuntimeException("item is too small");
-        }
-        if ($len > $max) {
-            throw new \RuntimeException("item is too large");
-        }
+        return is_null($item);
+    }
+}
+
+class IsAnyOneOfTest_IsNumeric implements Check
+{
+    public function inspect($item)
+    {
+        return is_numeric($item);
+    }
+}
+
+class IsAnyOneOfTest_IsString implements Check
+{
+    public function inspect($item)
+    {
+        return is_string($item);
     }
 }

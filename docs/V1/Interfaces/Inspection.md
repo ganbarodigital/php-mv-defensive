@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: interfaces
-pageflow_prev_url: Assurance.html
-pageflow_prev_text: Assurance interface
+pageflow_prev_url: Check.html
+pageflow_prev_text: Check interface
 pageflow_next_url: ListAssurance.html
 pageflow_next_text: ListAssurance interface
 ---

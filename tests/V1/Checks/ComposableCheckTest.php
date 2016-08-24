@@ -34,25 +34,24 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Assurances
+ * @package   Defensive/V1/Checks
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigitalTest\Defensive\V1\Assurances;
+namespace GanbaroDigitalTest\Defensive\V1\Checks;
 
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance;
-use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
+use GanbaroDigital\Defensive\V1\Checks\ComposableCheck;
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
 use PHPUnit_Framework_TestCase;
 use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Checks\ComposableCheck
  */
-class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
+class ComposableCheckTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -65,18 +64,18 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new ComposableCheck($this->provideFunctionToCompose(), [1, 10]);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(ComposableAssurance::class, $unit);
+        $this->assertInstanceOf(ComposableCheck::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testIsAssurance()
+    public function testIsCheck()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -84,17 +83,17 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new ComposableCheck($this->provideFunctionToCompose(), [1, 10]);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(Assurance::class, $unit);
+        $this->assertInstanceOf(Check::class, $unit);
     }
 
     /**
      * @covers ::__construct
-     * @covers ::__invoke
+     * @covers ::inspect
      */
     public function testCanUseAsObject()
     {
@@ -102,44 +101,24 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $data = [ 1, 2, 3 ];
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new ComposableCheck($this->provideFunctionToCompose(), [1, 10]);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit($data);
+        $unit->inspect($data);
 
         // ----------------------------------------------------------------
         // test the results
 
-    }
-
-    /**
-     * @covers ::apply
-     * @covers ::to
-     */
-    public function testCanCallStatically()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $data = [ 1, 2, 3 ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        ComposableAssurance::apply(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10])->to($data);
-
-        // ----------------------------------------------------------------
-        // test the results
     }
 
     /**
      * @covers ::__construct
-     * @dataProvider provideBadAssurances
+     * @dataProvider provideBadChecks
      * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCallable
      */
-    public function testMustProvideACallable($badAssurance)
+    public function testMustProvideACallable($badCheck)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -147,7 +126,7 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        new ComposableAssurance($badAssurance, []);
+        new ComposableCheck($badCheck, []);
 
         // ----------------------------------------------------------------
         // test the results
@@ -156,7 +135,7 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @dataProvider provideBadParameters
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssuranceArgs
+     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCheckArgs
      */
     public function testMustProvideArrayOfExtraParameters($badParameters)
     {
@@ -166,7 +145,7 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, $badParameters);
+        new ComposableCheck($this->provideFunctionToCompose(), $badParameters);
 
         // ----------------------------------------------------------------
         // test the results
@@ -183,7 +162,7 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, []);
+        new ComposableCheck($this->provideFunctionToCompose(), []);
 
         // ----------------------------------------------------------------
         // test the results
@@ -191,7 +170,6 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__construct
-     * @covers ::apply
      * @covers ::inspectList
      */
     public function test_can_apply_to_a_data_list()
@@ -199,7 +177,7 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
+        $Check = new ComposableCheck($this->provideFunctionToCompose(), [0, 1]);
         $list = [
             [],
             []
@@ -208,14 +186,14 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $assurance->inspectList($list);
+        $Check->inspectList($list);
 
         // ----------------------------------------------------------------
         // test the results
     }
 
     /**
-     * @covers ::apply
+     * @covers ::__construct
      * @covers ::inspectList
      * @dataProvider provideNonListsToTest
      * @expectedException InvalidArgumentException
@@ -225,15 +203,15 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
+        $Check = new ComposableCheck($this->provideFunctionToCompose(), [0, 1]);
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $assurance->inspectList($list);
+        $Check->inspectList($list);
     }
 
-    public function provideBadAssurances()
+    public function provideBadChecks()
     {
         return [
             [ null ],
@@ -282,21 +260,23 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
             [ "hello, world!" ],
         ];
     }
-}
 
-class ComposableAssuranceTest_EnsureArrayOfSize
-{
-    public function __invoke($item, $min, $max)
+    public function provideFunctionToCompose()
     {
-        if (!is_array($item)) {
-            throw new \RuntimeException("item is not an array");
-        }
-        $len = count($item);
-        if ($len < $min) {
-            throw new \RuntimeException("item is too small");
-        }
-        if ($len > $max) {
-            throw new \RuntimeException("item is too large");
-        }
+        return function($item, $min, $max)
+        {
+            if (!is_array($item)) {
+                throw new \RuntimeException("item is not an array");
+            }
+            $len = count($item);
+            if ($len < $min) {
+                return false;
+            }
+            if ($len > $max) {
+                return false;
+            }
+
+            return true;
+        };
     }
 }

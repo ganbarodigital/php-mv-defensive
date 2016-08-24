@@ -34,25 +34,25 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   Defensive/V1/Assurances
+ * @package   Defensive/V1/Requirements
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://ganbarodigital.github.io/php-mv-defensive
  */
 
-namespace GanbaroDigitalTest\Defensive\V1\Assurances;
-
-use GanbaroDigital\Defensive\V1\Exceptions\UnsupportedType;
-use GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance;
-use GanbaroDigital\Defensive\V1\Interfaces\Assurance;
-use PHPUnit_Framework_TestCase;
+namespace GanbaroDigitalTest\Defensive\V1\Requirements;
 use stdClass;
+use PHPUnit_Framework_TestCase;
+use GanbaroDigital\Defensive\V1\Requirements\RequireValidChecks;
+use GanbaroDigital\Defensive\V1\Interfaces\Check;
+use GanbaroDigital\Defensive\V1\Interfaces\Requirement;
+use GanbaroDigital\Defensive\V1\Interfaces\ListRequirement;
 
 /**
- * @coversDefaultClass GanbaroDigital\Defensive\V1\Assurances\ComposableAssurance
+ * @coversDefaultClass GanbaroDigital\Defensive\V1\Requirements\RequireValidChecks
  */
-class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
+class RequireValidChecksTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -65,18 +65,18 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new RequireValidChecks;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(ComposableAssurance::class, $unit);
+        $this->assertInstanceOf(RequireValidChecks::class, $unit);
     }
 
     /**
      * @covers ::__construct
      */
-    public function testIsAssurance()
+    public function test_is_ListRequirement()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -84,38 +84,49 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $unit = new RequireValidChecks;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertInstanceOf(Assurance::class, $unit);
+        $this->assertInstanceOf(ListRequirement::class, $unit);
     }
 
     /**
      * @covers ::__construct
-     * @covers ::__invoke
+     * @covers ::inspectList
+     * @covers ::toList
+     * @covers ::to
      */
     public function testCanUseAsObject()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = [ 1, 2, 3 ];
-        $unit = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10]);
+        $checks = [
+            new RequireValidChecksTest_IsNumeric,
+            new RequireValidChecksTest_IsString,
+            new RequireValidChecksTest_IsType('string')
+        ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $unit($data);
+        $unit = new RequireValidChecks;
+        $unit->inspectList($checks);
 
         // ----------------------------------------------------------------
         // test the results
+        //
+        // we use a simple assertion here so that this doesn't get flagged
+        // as a 'useless' test
 
+        $this->assertTrue(true);
     }
 
     /**
      * @covers ::apply
+     * @covers ::toList
      * @covers ::to
      */
     public function testCanCallStatically()
@@ -123,92 +134,91 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = [ 1, 2, 3 ];
+        $checks = [
+            new RequireValidChecksTest_IsNumeric,
+            new RequireValidChecksTest_IsString,
+            new RequireValidChecksTest_IsType('string')
+        ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        ComposableAssurance::apply(new ComposableAssuranceTest_EnsureArrayOfSize, [1, 10])->to($data);
+        RequireValidChecks::apply()->toList($checks);
 
         // ----------------------------------------------------------------
         // test the results
+        //
+        // we use a simple assertion here so that this doesn't get flagged
+        // as a 'useless' test
+
+        $this->assertTrue(true);
     }
 
     /**
-     * @covers ::__construct
-     * @dataProvider provideBadAssurances
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCallable
-     */
-    public function testMustProvideACallable($badAssurance)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        new ComposableAssurance($badAssurance, []);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
-     * @dataProvider provideBadParameters
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadAssuranceArgs
-     */
-    public function testMustProvideArrayOfExtraParameters($badParameters)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, $badParameters);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
-     */
-    public function testArrayOfExtraParametersCanBeEmpty()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, []);
-
-        // ----------------------------------------------------------------
-        // test the results
-    }
-
-    /**
-     * @covers ::__construct
      * @covers ::apply
-     * @covers ::inspectList
+     * @covers ::toList
+     * @covers ::to
+     * @dataProvider provideNonArraysToTest
+     * @expectedException InvalidArgumentException
+     */
+    public function testMustProvideListOfChecks($checks)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireValidChecks::apply()->toList($checks);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @covers ::to
+     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCheck
+     * @dataProvider provideNonArraysToTest
+     */
+    public function testListOfChecksCanContainOnlyChecks($check)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $checks = [ $check ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireValidChecks::apply()->toList($checks);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+    }
+
+    /**
+     * @covers ::apply
+     * @covers ::toList
+     * @covers ::to
      */
     public function test_can_apply_to_a_data_list()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
         $list = [
-            [],
-            []
+            new RequireValidChecksTest_IsNumeric(),
+            new RequireValidChecksTest_IsString(),
         ];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $assurance->inspectList($list);
+        RequireValidChecks::apply()->toList($list);
 
         // ----------------------------------------------------------------
         // test the results
@@ -216,54 +226,35 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::apply
-     * @covers ::inspectList
+     * @covers ::toList
+     * @covers ::to
      * @dataProvider provideNonListsToTest
      * @expectedException InvalidArgumentException
      */
-    public function test_throws_InvalidArgumentException_if_non_list_passed_to_inspectList($list)
+    public function test_throws_InvalidArgumentException_if_non_list_passed_to_toList($list)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $assurance = new ComposableAssurance(new ComposableAssuranceTest_EnsureArrayOfSize, [0, 1]);
-
         // ----------------------------------------------------------------
         // perform the change
 
-        $assurance->inspectList($list);
+        RequireValidChecks::apply()->toList($list);
     }
 
-    public function provideBadAssurances()
-    {
-        return [
-            [ null ],
-            [ [] ],
-            [ true ],
-            [ false ],
-            [ 0.0 ],
-            [ 3.1415927 ],
-            [ 0 ],
-            [ 100 ],
-            [ new \stdClass ],
-            [ STDIN ],
-            [ "hello, world!" ]
-        ];
-    }
-
-    public function provideBadParameters()
+    public function provideNonArraysToTest()
     {
         return [
             [ null ],
             [ true ],
             [ false ],
-            [ function(){} ],
+            [ function() {} ],
             [ 0.0 ],
             [ 3.1415927 ],
             [ 0 ],
             [ 100 ],
-            [ new \stdClass ],
             [ STDIN ],
-            [ "hello, world!" ]
+            [ "hello, world!" ],
         ];
     }
 
@@ -284,19 +275,31 @@ class ComposableAssuranceTest extends PHPUnit_Framework_TestCase
     }
 }
 
-class ComposableAssuranceTest_EnsureArrayOfSize
+class RequireValidChecksTest_IsNumeric implements Check
 {
-    public function __invoke($item, $min, $max)
+    public function inspect($item)
     {
-        if (!is_array($item)) {
-            throw new \RuntimeException("item is not an array");
-        }
-        $len = count($item);
-        if ($len < $min) {
-            throw new \RuntimeException("item is too small");
-        }
-        if ($len > $max) {
-            throw new \RuntimeException("item is too large");
-        }
+        return is_numeric($item);
+    }
+}
+
+class RequireValidChecksTest_IsString implements Check
+{
+    public function inspect($item)
+    {
+        return is_string($item);
+    }
+}
+
+class RequireValidChecksTest_IsType implements Check
+{
+    public function __construct($type)
+    {
+        $this->type = $type;
+    }
+
+    public function inspect($item)
+    {
+        return (gettype($item) === $this->type);
     }
 }

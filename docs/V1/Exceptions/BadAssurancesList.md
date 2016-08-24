@@ -3,8 +3,8 @@ currentSection: v1
 currentItem: exceptions
 pageflow_prev_url: BadAssuranceArgs.html
 pageflow_prev_text: BadAssuranceArgs class
-pageflow_next_url: BadRequirement.html
-pageflow_next_text: BadRequirement class
+pageflow_next_url: BadCallable.html
+pageflow_next_text: BadCallable class
 ---
 
 # BadAssurancesList

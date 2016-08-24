@@ -10,6 +10,32 @@ pageflow_next_text: Contributing
 
 ## develop branch
 
+## v1.2016082401
+
+### New
+
+* Added support for Checks
+  - added `Check` interface
+  - added `ListCheck` interface
+  - added `BadCheck` exception
+  - added `BadCheckArgs` exception
+  - added `BadChecksList` exception
+  - added `EmptyChecksList` exception
+  - added `ComposableCheck`
+  - added `IsAllOf`
+  - added `IsAnyOneOf`
+  - added `ListableCheck`
+  - added `RequireValidChecks`
+
+### Fixes
+
+* Stop reusing `BadXXX` exceptions when we're reporting problems with a `callable`
+  - added `BadCallable` exception
+  - `ComposableAssurance` now throws `BadCallable` instead of `BadAssurance`
+  - `ComposableRequirement` now throws `BadCallable` instead of `BadRequirement`
+
+## v1.2016081301
+
 ### New
 
 * Tweaks and changes to improve readabilty of your code

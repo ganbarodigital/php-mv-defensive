@@ -278,6 +278,12 @@ None at this time.
 
 ## Changelog
 
+### v1.2016082401
+
+* now throws a `BadCallable` if you pass a non-callable into the constructor
+
+  Previously, we threw a `BadRequirement`.
+
 ### v1.2016081301
 
 * Added support for `ListRequirement` interface

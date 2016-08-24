@@ -104,7 +104,7 @@ class ComposableAssurance implements Assurance, ListAssurance
 
         // robustness!
         if (!is_callable($assurance)) {
-            throw $this->exceptions['BadAssurance::newFromInputParameter']($assurance, '$assurance');
+            throw $this->exceptions['BadCallable::newFromInputParameter']($assurance, '$assurance');
         }
         if (!is_array($extra)) {
             throw $this->exceptions['BadAssuranceArgs::newFromInputParameter']($extra, '$extra');

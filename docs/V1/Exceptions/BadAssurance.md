@@ -15,7 +15,7 @@ Since v1.2016062801
 
 ## Description
 
-`BadAssurance` is an exception. It is thrown when one of the assurances passed into `EnsureAllOf` or `EnsureAnyOneOf` isn't callable.
+`BadAssurance` is an exception. It is thrown when one of the assurances passed into `EnsureAllOf` or `EnsureAnyOneOf` isn't an `Assurance`.
 
 ## Public Interface
 

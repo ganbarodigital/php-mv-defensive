@@ -260,6 +260,12 @@ None at this time.
 
 ## Changelog
 
+### v1.2016082401
+
+* now throws a `BadCallable` if you pass a non-callable into the constructor
+
+  Previously, we threw a `BadAssurance`.
+
 ### v1.2016081301
 
 * now implements `ListAssurance`

@@ -1,8 +1,8 @@
 ---
 currentSection: v1
 currentItem: exceptions
-pageflow_prev_url: EmptyAssurancesList.html
-pageflow_prev_text: EmptyAssurancesList class
+pageflow_prev_url: EmptyChecksList.html
+pageflow_prev_text: EmptyChecksList class
 pageflow_next_url: UnreachableCodeExecuted.html
 pageflow_next_text: UnreachableCodeExecuted class
 ---

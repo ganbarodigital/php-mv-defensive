@@ -138,7 +138,7 @@ class ComposableRequirementTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::__construct
      * @dataProvider provideBadRequirements
-     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadRequirement
+     * @expectedException GanbaroDigital\Defensive\V1\Exceptions\BadCallable
      */
     public function testMustProvideACallable($badRequirement)
     {

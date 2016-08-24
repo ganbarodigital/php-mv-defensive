@@ -1,6 +1,7 @@
 ---
 template:
-    url: https://github.com/ganbarodigital/couscous-gd-docs
+    # url: https://github.com/ganbarodigital/couscous-gd-docs
+    directory: ../couscous-gd-docs
 
 include:
     - docs
@@ -62,12 +63,107 @@ menu:
             assurances:
                 text: Assurances
                 relativeUrl: V1/Assurances/index.html
+                contents:
+                    ComposableAssurance:
+                        relativeUrl: V1/Assurances/ComposableAssurance.html
+                    EnsureAllOf:
+                        relativeUrl: V1/Assurances/EnsureAllOf.html
+                    EnsureAnyOneOf:
+                        relativeUrl: V1/Assurances/EnsureAnyOneOf.html
+                    InvokeableAssurance:
+                        relativeUrl: V1/Assurances/InvokeableAssurance.html
+                    ListableAssurance:
+                        relativeUrl: V1/Assurances/ListableAssurance.html
+
+            checks:
+                text: Checks
+                relativeUrl: V1/Checks/index.html
+                contents:
+                    ComposableCheck:
+                        relativeUrl: V1/Checks/ComposableCheck.html
+                    IsAllOf:
+                        relativeUrl: V1/Checks/IsAllOf.html
+                    IsAnyOneOf:
+                        relativeUrl: V1/Checks/IsAnyOneOf.html
+                    ListableCheck:
+                        relativeUrl: V1/Checks/ListableCheck.html
+
             exceptions:
                 text: Exceptions
                 relativeUrl: V1/Exceptions/index.html
+                contents:
+                    BadAssurance:
+                        relativeUrl: V1/Exceptions/BadAssurance.html
+                    BadAssuranceArgs:
+                        relativeUrl: V1/Exceptions/BadAssuranceArgs.html
+                    BadAssurancesList:
+                        relativeUrl: V1/Exceptions/BadAssurancesList.html
+                    BadCallable:
+                        relativeUrl: V1/Exceptions/BadCallable.html
+                    BadCheck:
+                        relativeUrl: V1/Exceptions/BadCheck.html
+                    BadCheckArgs:
+                        relativeUrl: V1/Exceptions/BadCheckArgs.html
+                    BadChecksList:
+                        relativeUrl: V1/Exceptions/BadChecksList.html
+                    BadRequirement:
+                        relativeUrl: V1/Exceptions/BadRequirement.html
+                    BadRequirementArgs:
+                        relativeUrl: V1/Exceptions/BadRequirementArgs.html
+                    BadRequirements:
+                        relativeUrl: V1/Exceptions/BadRequirements.html
+                    EmptyAssurancesList:
+                        relativeUrl: V1/Exceptions/EmptyAssurancesList.html
+                    EmptyChecksList:
+                        relativeUrl: V1/Exceptions/EmptyChecksList.html
+                    EmptyRequirementsList:
+                        relativeUrl: V1/Exceptions/EmptyRequirementsList.html
+                    UnreachableCodeExecuted:
+                        relativeUrl: V1/Exceptions/UnreachableCodeExecuted.html
+                    UnsupportedType:
+                        relativeUrl: V1/Exceptions/UnsupportedType.html
+                    UnsupportedValue:
+                        relativeUrl: V1/Exceptions/UnsupportedValue.html
+                    DefensiveExceptions:
+                        relativeUrl: V1/Exceptions/DefensiveExceptions.html
             interfaces:
                 text: Interfaces
                 relativeUrl: V1/Interfaces/index.html
+                contents:
+                    Assurance:
+                        relativeUrl: V1/Interfaces/Assurance.html
+                    Check:
+                        relativeUrl: V1/Interfaces/Check.html
+                    Inspection:
+                        relativeUrl: V1/Interfaces/Inspection.html
+                    ListAssurance:
+                        relativeUrl: V1/Interfaces/ListAssurance.html
+                    ListCheck:
+                        relativeUrl: V1/Interfaces/ListCheck.html
+                    ListInspection:
+                        relativeUrl: V1/Interfaces/ListInspection.html
+                    ListRequirement:
+                        relativeUrl: V1/Interfaces/ListRequirement.html
+                    Requirement:
+                        relativeUrl: V1/Interfaces/Requirement.html
+
             requirements:
                 text: Requirements
                 relativeUrl: V1/Requirements/index.html
+                contents:
+                    ComposableRequirement:
+                        relativeUrl: V1/Requirements/ComposableRequirement.html
+                    InvokeableRequirement:
+                        relativeUrl: V1/Requirements/InvokeableRequirement.html
+                    ListableRequirement:
+                        relativeUrl: V1/Requirements/ListableRequirement.html
+                    RequireAllOf:
+                        relativeUrl: V1/Requirements/RequireAllOf.html
+                    RequireAnyOneOf:
+                        relativeUrl: V1/Requirements/RequireAnyOneOf.html
+                    RequireValidAssurances:
+                        relativeUrl: V1/Requirements/RequireValidAssurances.html
+                    RequireValidChecks:
+                        relativeUrl: V1/Requirements/RequireValidChecks.html
+                    RequireValidRequirements:
+                        relativeUrl: V1/Requirements/RequireValidRequirements.html
