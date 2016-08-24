@@ -51,8 +51,6 @@ interface Check
     /**
      * does a value pass inspection?
      *
-     * this is an alias of ::to() for readability
-     *
      * @param  mixed $fieldOrVar
      *         the data to be examined
      * @return bool
